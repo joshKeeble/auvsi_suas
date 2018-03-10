@@ -1,2 +1,2 @@
-# auvsi_suas
-AUVSI SUAS UAV Software
+# AUVSI SUAS 2018 Software
+## Clark Aerospace
