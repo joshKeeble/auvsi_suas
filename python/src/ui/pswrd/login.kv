@@ -1,0 +1,48 @@
+#:include connected.kv
+
+<Login>:
+    BoxLayout
+        id: login_layout
+        orientation: 'vertical'
+        padding: [10,50,10,50]
+        spacing: 10
+
+        Label:
+            text: 'SKYNET SECURITY LOGIN'
+            font_size: 100
+            bold: True
+            color: [1,0,0,1]
+
+        BoxLayout:
+            orientation: 'vertical'
+
+            Label:
+                text: 'Username'
+                font_size: 50
+                halign: 'left'
+                text_size: root.width-20, 50
+
+            TextInput:
+                id: login
+                multiline:False
+                font_size: 50
+
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: 'Password'
+                halign: 'left'
+                font_size: 50
+                text_size: root.width-20, 50
+
+            TextInput:
+                id: password
+                multiline:False
+                password:True
+                font_size: 50
+
+        Button:
+            text: 'Login'
+            font_size: 50
+
+            on_press: root.do_login(login.text,password.text)

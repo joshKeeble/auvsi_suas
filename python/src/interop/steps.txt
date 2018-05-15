@@ -1,0 +1,49 @@
+Check In:
+
+	At check in, we get the following:
+
+		Static IP address:	10.10.130.100
+
+			Unique to team so that it can connect to the system.
+
+		DHCP IP Address range:
+
+			A common range that is given automatically by the router.
+
+			The router:
+
+				Subnet: 10.10.130.XXX
+
+				Subnet mask: 255.255.255.0
+
+
+		Server IP Address and Port:
+
+			http://10.10.130.2:8000
+
+
+		Username and Password:
+
+			The interop server login credentials.
+
+			Sample:
+
+				testuser, testpass
+
+-------------------------------------------------------------------------
+
+	Interop Router: 10.10.130.1				Team Router: 192.168.1.1
+
+		LAB 1: 10.10.130.3 ---------------------- WLAN: 10.10.130.3
+				|											|
+				|											|
+		LAN 0: 10.10.130.2                        LAN 0: 192.168.1.2
+				|											|
+				|											|
+	Interop Server: 10.10.130.2				Team Computer: 192.168.1.2
+
+
+
+
+
+

@@ -1,3 +1,3 @@
 from __future__ import absolute_import
 
-import testing.test2
+import auvsi_suas.python.testing.communications_tests.tcp_test

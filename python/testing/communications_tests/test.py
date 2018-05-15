@@ -3,8 +3,8 @@ from __future__ import division
 from __future__ import print_function
 import os
 import sys
-
-import tcp_test
+'''
+#import tcp_test
 
 def import_fix():
     id        = "auvsi_suas"
@@ -13,8 +13,8 @@ def import_fix():
     dir_path  = os.path.sep.join(path_list[:path_list.index(id)+1])
     sys.path.append(dir_path)
 
-import_fix()
+#import_fix()
 
 print(sys.path)
-
-import auvsi_suas.python.testing.test2
+'''
+#import auvsi_suas.python.testing.test2

@@ -14,6 +14,7 @@ import threading
 import pickle
 import socket
 import types
+import time
 import zlib
 import sys
 import os
@@ -21,6 +22,48 @@ import re
 
 __author__ = "hal112358"
 
+"""
+===============================================================================
+TCP MESSAGE OBJECT
+===============================================================================
+"""
+
+class TCPMessage(object): ##################################################### FIX
+
+	def __new__(self,data):
+		data = self.process_type(data)
+		return data
+
+	#--------------------------------------------------------------------------
+
+	def __name__(self):
+		return 'TCPMessage'
+
+	#--------------------------------------------------------------------------
+
+	def process_type(self,data):
+		data_dict = {
+			type(str).__name__			:	self.cnvrt_str,
+			type(int).__name__			:	self.cnvrt_int,
+			type(float).__name__		:	self.cnvrt_float,
+			type(np.ndarray).__name__	:	self.cnvrt_str,
+		}
+		return data_dict[type(data).__name__]()
+
+	#--------------------------------------------------------------------------
+
+	def compress(self,data):
+		return zlib.compress(pickle.dumps(data,pickle.HIGHEST_PROTOCOL),9)
+
+	#--------------------------------------------------------------------------
+
+	def cnvrt_str(self,str_data):
+		return b'\x00'+self.compress(str_data)
+
+	#--------------------------------------------------------------------------
+
+	def cnvrt_int(self,int_data):
+		return b'\x01'+bytes([int_data])
 
 
 """
@@ -45,8 +88,7 @@ class TCPClient(object):
 		self.buffer    = 1024
 		self.timeout   = 10
 		self.connected = False
-
-		#self.init_socket()
+		self.init_socket()
 
 	#--------------------------------------------------------------------------
 
@@ -69,17 +111,27 @@ class TCPClient(object):
 
 	#--------------------------------------------------------------------------
 
-	def send_data(self,data,close=True):
-		self.init_socket()
+	def send_data(self,data,close=False):
+
 		if isinstance(data,str):
 			data = self.str_compress(data)
-			print(data)
-		if not self.connected:
-			print(self.host,self.port)
-			self.client_socket.connect((self.host,self.port))
 
-		self.client_socket.send(data)
-		#server_data = self.client_socket.recv(self.buffer)
+		if not (self.connected):
+			start_time = time.time()
+			while (time.time()-start_time<=self.timeout):
+				print(self.host,self.port)
+				try:
+					self.client_socket.connect((self.host,self.port))
+					self.connected = True
+					break
+				except Exception as e:
+					print("Error connecting: {}".format(e),file=sys.stderr)
+		try:
+			self.client_socket.send(data)
+			server_data = self.client_socket.recv(self.buffer)
+		except SocketError:
+			self.client_socket.close()
+			self.connected = False
 		if close:
 			self.client_socket.close()
 
@@ -106,6 +158,7 @@ class TCPServer(object):
 		self.buffer    = 1024
 		self.timeout   = 10
 		self.connected = False
+		self.server_thread = None
 
 	#--------------------------------------------------------------------------
 
@@ -115,7 +168,7 @@ class TCPServer(object):
 		self.server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
 		self.server_socket.settimeout(self.timeout)
 		self.server_socket.bind((self.host,self.port))
-		print("server bound at address ({}:{})".format(self.host,self.port),
+		print("Server bound at address ({}:{})".format(self.host,self.port),
 			file=sys.stderr)
 
 	#--------------------------------------------------------------------------
@@ -128,32 +181,27 @@ class TCPServer(object):
 
 			while True:
 				data = connection.recv(self.buffer)
+				client_message = handle(data,handle_args)
 				if not data:
 					break
-				#connection.send(data)
+				if not isinstance(client_message,bytes):
+					print("Non-byte client message type:{}".format(
+						type(client_message).__name__))
+					connection.send(b'\x00')
+				else:
+					connection.send(client_message)
 			connection.close()
 
-def test_handle(x,handle_args):
-	print(x)
+	#--------------------------------------------------------------------------
 
-def activate_server():
-	host = "127.0.0.1"
-	port = 5005
+	def create_thread(self,handle,handle_args):
+		self.server_thread = threading.Thread(target=self.listen,
+			args=(handle,handle_args))
+		self.server_thread.daemon = True
 
-	server = TCPServer(host,port)
-	server.listen(test_handle,42)
+	#--------------------------------------------------------------------------
 
-def activate_server_thread():
-	server_thread = threading.Thread(target=activate_server,args=())
-	server_thread.daemon = True
-	server_thread.start()
-
-def main():
-	activate_server_thread()
-
-	c = TCPClient('127.0.0.1',5005)
-	for i in range(1000):
-		c.send_data("{}".format(i))
-
-if __name__ == "__main__":
-	main()
+	def activate_thread(self,handle,handle_args):
+		if not self.server_thread():
+			self.create_thread(handle,handle_args)
+		self.server_thread.start()

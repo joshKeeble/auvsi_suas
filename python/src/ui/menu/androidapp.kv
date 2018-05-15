@@ -1,0 +1,166 @@
+#:kivy 1.8.0
+
+<SidePanel>:
+    orientation: 'vertical'
+    spacing: 15
+
+    MenuItem:
+        text: 'Home'
+
+    MenuItem:
+        text: 'Interopability'
+
+    MenuItem:
+        text: 'Stealth Mode'
+
+    MenuItem:
+        text: 'Target Mode'
+
+    MenuItem:
+        text: 'Destroy Mode'
+
+
+<AppActionBar>:
+    pos_hint: {'top':1}
+    ActionView:
+        use_separator: True
+        ActionMenu:
+            title: 'SKYNET'
+            with_previous: False
+            app_icon: 'atlas://data/images/defaulttheme/splitter_grip'
+            on_press: self.menu()
+        ActionOverflow:
+
+<MainPanel>:
+    orientation: 'vertical'
+    spacing: 1
+
+    AppActionBar:
+        size_hint: (1., 0.1)
+
+    GridLayout:
+        cols: 2
+        rows: 2
+        row_force_default: True
+        row_default_height: 40
+        padding: [10,10,10,10]
+
+    AppButton:
+        id: bottone
+        nome_bottone: bottone
+        text: 'Test'
+        on_press: self.app_pushed()
+        on_release: self.app_pushed()
+
+<interoperability>:
+    AppActionBar:
+        size_hint: (1., 0.1)
+
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'horizontal'
+            Label:
+                text: 'Input1:'
+            TextInput:
+                text: 'Default Text1'
+            Button:
+                text: 'Press Me1'
+        BoxLayout:
+            orientation: 'horizontal'
+            Label:
+                text: 'Input2:'
+            TextInput:
+                text: 'Default Text2'
+            Button:
+                text: 'Press Me2'
+        BoxLayout:
+            orientation: 'horizontal'
+            Label:
+                text: 'Input3:'
+            TextInput:
+                text: 'Default Text3'
+            Button:
+                text: 'Press Me3'
+
+<stealth>:
+    orientation: 'vertical'
+    spacing: 1
+
+    AppActionBar:
+        size_hint: (1., 0.1)
+
+    Image:
+        source: 'kivy.jpg'
+
+<seek>:
+    AppActionBar:
+        size_hint: (1., 0.1)
+
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'horizontal'
+            Label:
+                text: 'Input1:'
+            TextInput:
+                text: 'Default Text1'
+            Button:
+                text: 'Press Me1'
+        BoxLayout:
+            orientation: 'horizontal'
+            Label:
+                text: 'Input2:'
+            TextInput:
+                text: 'Default Text2'
+            Button:
+                text: 'Press Me2'
+        BoxLayout:
+            orientation: 'horizontal'
+            Label:
+                text: 'Input3:'
+            TextInput:
+                text: 'Default Text3'
+            Button:
+                text: 'Press Me3'
+
+<seek>:
+    AppActionBar:
+        size_hint: (1., 0.1)
+
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'horizontal'
+            Label:
+                text: 'Input1:'
+            TextInput:
+                text: 'Default Text1'
+            Button:
+                text: 'Press Me1'
+        BoxLayout:
+            orientation: 'horizontal'
+            Label:
+                text: 'Input2:'
+            TextInput:
+                text: 'Default Text2'
+            Button:
+                text: 'Press Me2'
+        BoxLayout:
+            orientation: 'horizontal'
+            Label:
+                text: 'Input3:'
+            TextInput:
+                text: 'Default Text3'
+            Button:
+                text: 'Press Me3'
+
+<destroy>:
+    orientation: 'vertical'
+    spacing: 1
+
+    AppActionBar:
+        size_hint: (1., 0.1)
+
+    Label:
+        text: 'applicazione'
