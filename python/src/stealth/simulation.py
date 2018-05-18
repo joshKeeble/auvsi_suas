@@ -14,6 +14,8 @@ import cv2
 import sys
 import os
 
+import RRT
+"""
 class UAVSimulation(object):
 
     def __init__(self):
@@ -41,6 +43,85 @@ class UAVSimulation(object):
             self.create_path()
             if self.DISPLAY:
                 self.draw_update()
+"""
+from mpl_toolkits import mplot3d
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+
+fig = plt.figure()
+ax = plt.axes(projection='3d')
+#ax = plt.axes(projection='3d')
+
+# Data for a three-dimensional line
+#zline = np.linspace(0, 15, 1000)
+#xline = np.sin(zline)
+#yline = np.cos(zline)
+#ax.plot3D(xline, yline, zline, 'gray')
+
+# Data for three-dimensional scattered points
+#zdata = 15 * np.random.random(100)
+#xdata = np.sin(zdata) + 0.1 * np.random.randn(100)
+#ydata = np.cos(zdata) + 0.1 * np.random.randn(100)
+#ax.scatter3D(xdata, ydata, zdata, c=zdata, cmap='Greens')
+
+# plt.axis([0, 10, 0, 1])
+
+obstacleList = [
+        #(5, 5, 1),
+        #(3, 6, 2),
+        #(3, 8, 2),
+        #(3, 10, 2),
+        (7, 5, 2),
+        (9, 5, 2)
+    ]  # [x,y,size]
+
+
+
+
+
+for i in range(100):
+    plt.cla()
+    xline = []
+    yline = []
+    #y = np.random.random()
+    #plt.scatter(i, y)
+    #zdata = 15 * np.random.random(i)
+    #xdata = np.sin(zdata) + 0.1 * np.random.randn(i)
+    #ydata = np.cos(zdata) + 0.1 * np.random.randn(i)
+    #ax.scatter3D(xdata, ydata, zdata, c=zdata, cmap='Greens')
+    u = np.linspace(0, 2 * np.pi, 100)
+    v = np.linspace(0, np.pi, 100)
+    x = 10 * np.outer(np.cos(u), np.sin(v))
+    y = 10 * np.outer(np.sin(u), np.sin(v))
+    z = 10 * np.outer(np.ones(np.size(u)), np.cos(v))
+
+    # Plot the surface
+    ax.plot_surface(x, y, z, color='b')
+    rrt = RRT.RRT(start=[0, 0], goal=[5, 10],
+              randArea=[-20, 15], obstacleList=obstacleList)
+    path = rrt.Planning(animation=False)
+    print(path)
+    for (x,y) in path:
+        xline.append(x)
+        yline.append(y)
+    #print(path)
+    zline = np.ones(len(path))
+    #print(zline)
+    #xline = np.sin(zline)
+    #yline = np.cos(zline)
+    print(len(xline))
+    print(len(yline))
+    print('\n\n\n\n\n')
+    ax.plot3D(xline, yline, zline, 'gray')
+    plt.pause(0.05)
+
+plt.show()
+
+
+
+
 
 
 

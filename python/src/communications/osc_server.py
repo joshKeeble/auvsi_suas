@@ -77,6 +77,13 @@ class OSCServer(object):
     def listen(self):
         self.server.serve_forever()
 
+    #--------------------------------------------------------------------------
+
+    def activate_listen_thread(self):
+        self.listen_thread = threading.Thread(target=self.listen,args=())
+        self.listen_thread.daemon = True
+        self.listen_thread.start()
+
 #------------------------------------------------------------------------------
 
 def main():
