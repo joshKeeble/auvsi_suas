@@ -21,7 +21,7 @@ import os
 
 import auvsi_suas.config as config
 
-__author__ = "hal112358"
+__author__ = "gndctrl2mjrtm"
 
 """
 ===============================================================================

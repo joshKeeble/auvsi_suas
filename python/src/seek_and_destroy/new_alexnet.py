@@ -60,8 +60,8 @@ class Dataset():
                 self.label_names.remove(n)
 
         # Save file paths
-        self.data_path        = "data.p"
-        self.label_path       = "labels.p"
+        self.data_path        = "/home/hal/Desktop/generated_data/letter_data.p"
+        self.label_path       = "/home/hal/Desktop/generated_data/letter_labels.p"
         
         # 1 Hot Envdoing Vector generation
         HEV_fnct              = lambda a,b: 1. if a==b else 0.
@@ -135,7 +135,8 @@ class Dataset():
             self.data = pickle.load(data_file)
         
         for i,n in enumerate(self.data):
-            self.data[i] = cv2.resize(n,(227,227))
+            
+            self.data[i] = np.expand_dims(cv2.cvtColor(cv2.resize(n,(50,50)),cv2.COLOR_BGR2GRAY), axis=2)
         
         with open(self.label_path,"rb") as labels_file:
             self.labels = pickle.load(labels_file)
@@ -171,78 +172,95 @@ class Dataset():
 
 
 
-class TFAlexNet(object):
+class SmallAlexNet(object):
 
-    def __init__(self,training_data,training_labels,testing_data,testing_labels):
+    def __init__(self,training_data,training_labels,
+            testing_data,testing_labels):
+        #----------------------------------------------------------------------
+        # Load training and testing data
         self.verify_input_dataset(training_data,"training_data")
         self.training_data    = training_data
-
         self.training_labels  = training_labels
 
         self.verify_input_dataset(testing_data,"testing_data")
         self.testing_data     = testing_data
-
         self.testing_labels   = testing_labels
 
+        # Save for Tensorboard visualization
         self.use_tensorboard  = True
 
+        #----------------------------------------------------------------------
         # Training Parameters
         self.learning_rate    = 0.001
-        self.num_steps        = 100000
+        self.num_steps        = 100
         self.batch_size       = 128
-        self.display_step     = 100
+        self.display_step     = 10
         self.epochs           = 1
         self.leaky_relu_alpha = 0.2
         self.dropout_prob     = 0.5
 
-        self.model_path       = "/tmp/model.ckpt"
-        
-        now                   = datetime.now()
+        #----------------------------------------------------------------------
+        # File Paths
 
-        self.logs_path        = "/tmp/tensorflow_logs/{}/".format(now.strftime("%Y%m%d-%H%M%S"))
+        # File path for the trained model
+        self.model_path       = "/tmp/model.ckpt"
+
+        # File path for tensorboard graph
+        self.logs_path        = "/tmp/tensorflow_logs/{}/".format(
+                                    datetime.now().strftime("%Y%m%d-%H%M%S"))
+        #----------------------------------------------------------------------
+
+        # Number of classifications
         self.num_classes      = len(training_labels[0])
-        self.x                = tf.placeholder(tf.float32, [None,227,227,3],name='x')
-        self.y                = tf.placeholder(tf.float32, [None, self.num_classes],name='y')
-        self.keep_prob        = tf.placeholder(tf.float32,name='keep_prob') # dropout_layer (keep probability)
+
+        # Input placeholder
+        self.x                = tf.placeholder(tf.float32,
+                                    [None,50,50,1],name='x')
+        # Output placeholder
+        self.y                = tf.placeholder(tf.float32,
+                                    [None, self.num_classes],name='y')
+        # Dropout probability
+        self.keep_prob        = tf.placeholder(tf.float32,name='keep_prob')
+
 
         with tf.name_scope('Weights'):
             self.weights      = {
                 'wc1': tf.Variable(
-                    tf.random_normal([11,11,3,96]),name='wc1'),
+                    tf.random_normal([5,5,1,32]),name='wc1'),
                 'wc2': tf.Variable(
-                    tf.random_normal([5,5,96,256]),name='wc2'),
+                    tf.random_normal([3,3,32,64]),name='wc2'),
                 'wc3': tf.Variable(
-                    tf.random_normal([3,3,256,384]),name='wc3'),
+                    tf.random_normal([3,3,64,128]),name='wc3'),
                 'wc4': tf.Variable(
-                    tf.random_normal([3,3,384,384]),name='wc4'),
+                    tf.random_normal([3,3,128,128]),name='wc4'),
                 'wc5': tf.Variable(
-                    tf.random_normal([3,3,384,256]),name='wc5'),
+                    tf.random_normal([3,3,128,64]),name='wc5'),
                 'wf1': tf.Variable(
-                    tf.random_normal([2304,4096]),name='wf1'),
+                    tf.random_normal([9216,100]),name='wf1'),
                 'wf2': tf.Variable(
-                    tf.random_normal([4096,4096]),name='wf2'),
+                    tf.random_normal([100,100]),name='wf2'),
                 'wf3': tf.Variable(
-                    tf.random_normal([4096,self.num_classes]),name='wf3'),
+                    tf.random_normal([100,self.num_classes]),name='wf3'),
             }
         with tf.name_scope('Biases'):
             self.biases       = {
                 'bc1': tf.Variable(
-                    tf.random_normal([96]),name='bc1'),
+                    tf.random_normal([32]),name='bc1'),
                 'bc2': tf.Variable(
-                    tf.random_normal([256]),name='bc2'),
+                    tf.random_normal([64]),name='bc2'),
                 'bc3': tf.Variable(
-                    tf.random_normal([384]),name='bc3'),
+                    tf.random_normal([128]),name='bc3'),
                 'bc4': tf.Variable(
-                    tf.random_normal([384]),name='bc4'),
+                    tf.random_normal([128]),name='bc4'),
                 'bc5': tf.Variable(
-                    tf.random_normal([256]),name='bc5'),
+                    tf.random_normal([64]),name='bc5'),
                 'bf1': tf.Variable(
-                    tf.random_normal([4096]),name='bf1'),
+                    tf.random_normal([100]),name='bf1'),
                 'bf2': tf.Variable(
-                    tf.random_normal([4096]),name='bf2'),
+                    tf.random_normal([100]),name='bf2'),
                 'bf3': tf.Variable(
                     tf.random_normal([self.num_classes]),name='bf3')
-            }
+                }
 
     #--------------------------------------------------------------------------
 
@@ -255,9 +273,9 @@ class TFAlexNet(object):
             if not isinstance(n,np.ndarray):
                 raise TypeError("{}, Incorrect type:{} index:{}".format(
                     name,type(n).__name__),i)
-            if not (n.ndim == 3):
-                raise Exception("Incorrect n-dim:{}, index:{}:{}".format(
-                    name,i,n.ndim))
+            #if not (n.ndim == 1):
+            #    raise Exception("Incorrect n-dim:{}, index:{}:{}".format(
+            #        name,i,n.ndim))
             if not (np.issubdtype(n.dtype,np.number)):
                 raise Exception("{}, Non-number ndarray:{}".format(
                     name,n.dtype.__name__))
@@ -266,27 +284,32 @@ class TFAlexNet(object):
 
     def alexnet(self,x):
         conv1 = self.conv2d(x,self.weights["wc1"],self.biases["bc1"],
-            x_stride=4,y_stride=4,padding="VALID",name="conv1")
+            x_stride=1,y_stride=1,
+            padding="VALID",name="conv1")
         lrn1 = self.local_response_normalization(conv1,2,2e-05,0.75,"norm1")
         pool1 = self.maxpool_layer_2d(lrn1,k_width=3,k_height=3,x_stride=2,
             y_stride=2,padding="VALID",name="pool1")
 
         conv2 = self.conv2d(pool1,self.weights["wc2"],self.biases["bc2"],
-            x_stride=1,y_stride=1,padding="VALID",name="conv2")
+            x_stride=1,y_stride=1,
+            padding="VALID",name="conv2")
         lrn2 = self.local_response_normalization(conv2,2,2e-05,0.75,"norm2")
-        pool2 = self.maxpool_layer_2d(lrn2,k_width=3,k_height=3,x_stride=2,
-            y_stride=2,padding="VALID",name="pool2")
+        pool2 = self.maxpool_layer_2d(lrn2,k_width=3,k_height=3,x_stride=1,
+            y_stride=1,padding="VALID",name="pool2")
 
         conv3 = self.conv2d(pool2,self.weights["wc3"],self.biases["bc3"],
-            x_stride=1,y_stride=1,padding="VALID",name="conv3")
+            x_stride=1,y_stride=1,
+            padding="VALID",name="conv3")
 
         conv4 = self.conv2d(conv3,self.weights["wc4"],self.biases["bc4"],
-            x_stride=1,y_stride=1,padding="VALID",name="conv4")
+            x_stride=1,y_stride=1,
+            padding="VALID",name="conv4")
 
         conv5 = self.conv2d(conv3,self.weights["wc5"],self.biases["bc5"],
-            x_stride=1,y_stride=1,padding="VALID",name="conv5")
-        pool5 = self.maxpool_layer_2d(conv5,k_width=3,k_height=3,x_stride=2,
-            y_stride=2,padding="VALID",name="pool5")
+            x_stride=1,y_stride=1,
+            padding="VALID",name="conv5")
+        pool5 = self.maxpool_layer_2d(conv5,k_width=3,k_height=3,x_stride=1,
+            y_stride=1,padding="VALID",name="pool5")
 
         pool_shape = pool5.get_shape().as_list()
         fully_connected_input = tf.reshape(pool5,[-1,
@@ -342,7 +365,6 @@ class TFAlexNet(object):
 
     def maxpool_layer_2d(self,x, k_width=2,k_height=2,x_stride=2,y_stride=2,
             padding="SAME",name="hidden"):
-        # MaxPool2D wrapper
         with tf.name_scope(name):
             return tf.nn.max_pool(x, ksize=[1,k_height,k_width,1],
                 strides=[1,y_stride,x_stride,1],padding=padding)
@@ -351,7 +373,7 @@ class TFAlexNet(object):
 
     def init_cost(self):
         reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
-        reg_constant = 0.01  # Choose an appropriate one.
+        reg_constant = 0.01
         print(self.logits,self.y)
         sftmx = tf.reduce_mean(
             tf.nn.softmax_cross_entropy_with_logits_v2(
@@ -397,11 +419,13 @@ class TFAlexNet(object):
 
     def fetch_batch(self,data,labels,batch_size):
         """Return randomized batches of data"""
-        index = list(range(len(data)))
+        index = list(range(min(len(data),len(data))))
+        print("1'")
         random.shuffle(index)
         index = index[:batch_size]
         batch_x = [data[i] for i in index]
         batch_y = [labels[i] for i in index]
+        print('2')
         return batch_x,batch_y
 
     #--------------------------------------------------------------------------
@@ -414,6 +438,7 @@ class TFAlexNet(object):
             # Retrain the model
             for epoch in range(self.epochs):
                 for step in range(self.num_steps):
+
 
                     # Fetch data batches
                     batch_x,batch_y = self.fetch_batch(self.training_data,
@@ -436,7 +461,7 @@ class TFAlexNet(object):
                             (epoch*self.num_steps + step))
 
                     # Print training data step updates
-                    if (step % self.display_step == 0) or (step == 1):
+                    if not (step % self.display_step):
                         loss,acc = sess.run([self.cost, self.accuracy],
                             feed_dict={self.x:batch_x,self.y:batch_y,
                             self.keep_prob:self.dropout_prob})
@@ -467,7 +492,6 @@ class TFAlexNet(object):
 
     def learn(self):
         with tf.Session() as sess:
-            # Initialize variables
             sess.run(self.init)
             self.train(sess)
 
@@ -596,25 +620,40 @@ def prepare_dataset(data):
 #------------------------------------------------------------------------------
 
 def main():
-    data_root = "/Users/rosewang/Desktop/Programming/generated_data/letters"
+    data_root = "/home/hal/Desktop/generated_data"
     letter_data = Dataset(data_root)
 
     letter_data.load_data()
 
-
     training_data   = letter_data.training_data()
+
     training_labels = letter_data.training_labels()
     testing_data    = letter_data.testing_data()
     testing_labels  = letter_data.testing_labels()
 
-    cnn = TFAlexNet(training_data,training_labels,testing_data,testing_labels)
+    for data in training_data:
+        cv2.imshow("data",data)
+        cv2.waitKey(0)
+
+    cnn = SmallAlexNet(training_data,training_labels,testing_data,testing_labels)
+    del training_data
+    del training_labels
+    del testing_data
+    del testing_labels
     cnn.init_network()
     cnn.learn()
+
+def process_dataset():
+    data_root = "/home/hal/Desktop/generated_data/shapes"
+    shape_data = Dataset(data_root)
+    shape_data.process_dataset()
+    shape_data.save_data()
 
 #------------------------------------------------------------------------------
 
 if __name__ == "__main__":
     # dataset_test()
+    # process_dataset()
     main()
 
 

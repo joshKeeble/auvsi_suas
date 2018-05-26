@@ -77,10 +77,15 @@ obstacleList = [
         (9, 5, 2)
     ]  # [x,y,size]
 
+waypoints = [
+    
+    (0,0,0),
+    (10,10,10),
+    (-10,-10,2)
+]
 
 
-
-
+current_height = 0
 for i in range(100):
     plt.cla()
     xline = []
@@ -91,11 +96,12 @@ for i in range(100):
     #xdata = np.sin(zdata) + 0.1 * np.random.randn(i)
     #ydata = np.cos(zdata) + 0.1 * np.random.randn(i)
     #ax.scatter3D(xdata, ydata, zdata, c=zdata, cmap='Greens')
-    u = np.linspace(0, 2 * np.pi, 100)
-    v = np.linspace(0, np.pi, 100)
-    x = 10 * np.outer(np.cos(u), np.sin(v))
-    y = 10 * np.outer(np.sin(u), np.sin(v))
-    z = 10 * np.outer(np.ones(np.size(u)), np.cos(v))
+    radius = 1
+    u = np.linspace(0, 2 * np.pi, radius)
+    v = np.linspace(0, np.pi, radius)
+    x = radius * np.outer(np.cos(u), np.sin(v))
+    y = radius * np.outer(np.sin(u), np.sin(v))
+    z = radius * np.outer(np.ones(np.size(u)), np.cos(v))
 
     # Plot the surface
     ax.plot_surface(x, y, z, color='b')

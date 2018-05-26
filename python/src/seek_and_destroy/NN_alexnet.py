@@ -208,15 +208,15 @@ class TFAlexNet(object):
         with tf.name_scope('Weights'):
             self.weights      = {
                 'wc1': tf.Variable(
-                    tf.random_normal([11,11,3,96]),name='wc1'),
+                    tf.random_normal([5,5,3,32]),name='wc1'),
                 'wc2': tf.Variable(
-                    tf.random_normal([5,5,96,256]),name='wc2'),
+                    tf.random_normal([3,3,32,64]),name='wc2'),
                 'wc3': tf.Variable(
-                    tf.random_normal([3,3,256,384]),name='wc3'),
+                    tf.random_normal([2,2,64,384]),name='wc3'),
                 'wc4': tf.Variable(
-                    tf.random_normal([3,3,384,384]),name='wc4'),
+                    tf.random_normal([2,2,384,384]),name='wc4'),
                 'wc5': tf.Variable(
-                    tf.random_normal([3,3,384,256]),name='wc5'),
+                    tf.random_normal([2,2,384,256]),name='wc5'),
                 'wf1': tf.Variable(
                     tf.random_normal([2304,4096]),name='wf1'),
                 'wf2': tf.Variable(
@@ -227,9 +227,9 @@ class TFAlexNet(object):
         with tf.name_scope('Biases'):
             self.biases       = {
                 'bc1': tf.Variable(
-                    tf.random_normal([96]),name='bc1'),
+                    tf.random_normal([32]),name='bc1'),
                 'bc2': tf.Variable(
-                    tf.random_normal([256]),name='bc2'),
+                    tf.random_normal([64]),name='bc2'),
                 'bc3': tf.Variable(
                     tf.random_normal([384]),name='bc3'),
                 'bc4': tf.Variable(

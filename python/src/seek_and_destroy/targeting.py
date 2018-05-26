@@ -175,12 +175,41 @@ class Targeting(object):
         video_data = cv2.VideoCapture(0)
         while True:
             _,frame = video_data.read()
+            print(frame.shape)
+            frame = cv2.resize(frame,(1080,952))
             display_frame,candidates = self.roi_process(frame)
             cv2.imshow("frame",display_frame)
             k = cv2.waitKey(1)
             if (k == ord('q')):
                 break
         cv2.destroyAllWindows()
+
+    #--------------------------------------------------------------------------
+
+    def video_save_test(self):
+        video_data = cv2.VideoCapture(0)
+        while True:
+            _,frame = video_data.read()
+            #print(frame.shape)
+            frame = cv2.resize(frame,(1080,952))
+            display_frame,candidates = self.roi_process(frame)
+            for roi in candidates:
+                if not isinstance(roi,np.ndarray):
+
+                    #subframe = frame[]
+                    print(roi)
+                else:
+                    print(roi)
+                    #cv2.imshow("roi",roi)
+                    #cv2.waitKey(1)
+                #cv2.waitKey(0)
+            cv2.imshow("frame",display_frame)
+            k = cv2.waitKey(1)
+            if (k == ord('q')):
+                break
+        cv2.destroyAllWindows()
+
+
 
     #--------------------------------------------------------------------------
 
@@ -198,7 +227,7 @@ class Targeting(object):
 def main():
     trgt = Targeting()
     # trgt.frame_test()
-    trgt.video_test()
+    trgt.video_save_test()
 
 #------------------------------------------------------------------------------
 

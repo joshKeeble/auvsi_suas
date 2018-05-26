@@ -11,24 +11,40 @@ from __future__ import print_function
 from __future__ import division
 from PIL import Image, ImageTk
 from tkinter import ttk
+import requests
+import unittest
 import tkinter
 import sys
 import os
 
-
+import auvsi_suas.python.src.communications.osc_client as osc_client
+import auvsi_suas.python.src.communications.osc_server as osc_server
 import auvsi_suas.python.src.communications.test_link as tcp_test
+import auvsi_suas.python.src.interop.client as client
 import auvsi_suas.config as config
+
+
  
 class AUVSIUserInterface(ttk.Frame):
     """The adders gui and functions."""
     def __init__(self, parent, *args, **kwargs):
         ttk.Frame.__init__(self, parent, *args, **kwargs)
-        self.root = parent
-        self.CONFIG_ROWSPAN = 1
-        self.CONFIG_HEIGHT = 10
-        self.CONFIG_COLUMNSPAN = 2
-        self.CONFIG_WIDTH = 28
-        self.CONFIG_STICK = 'ew'
+        self.root           = parent
+        screen_width        = self.root.winfo_screenwidth()
+        screen_height       = self.root.winfo_screenheight()
+        self.width_ratio    = screen_width/2200
+        self.height_ratio   = screen_height/1200
+
+        self.interop_logged_in = False
+
+        self.root.geometry("{}x{}".format(
+            int(1090*self.width_ratio),int(460*self.height_ratio)))
+
+        self.CONFIG_ROWSPAN     = 1
+        self.CONFIG_HEIGHT      = int(10*self.height_ratio) # FIX
+        self.CONFIG_COLUMNSPAN  = 2
+        self.CONFIG_WIDTH       = int(28*self.width_ratio)+23
+        self.CONFIG_STICK       = 'ew'
         self.messages = {
 
             "interop"   :   {
@@ -61,10 +77,50 @@ class AUVSIUserInterface(ttk.Frame):
         self.init_gui()
     
     #--------------------------------------------------------------------------
+
+    def activate_obstacle_avoidance(self):
+        if self.interop_logged_in:
+            async_missions = self.interop_client.get_missions().result()
+            print(async_missions)
+            self.oa_answer_label['text'] = "System activated"
+        else:
+            self.oa_answer_label['text'] = "Interoperability not connnected"
+
+
+    #--------------------------------------------------------------------------
  
     def on_quit(self):
         """Exits program."""
         quit()
+
+    #--------------------------------------------------------------------------
+
+    def activate_skynet(self):
+        if self.interop_login:
+            missions = self.interop_client.get_mission().result()
+            help(missions)
+
+    #--------------------------------------------------------------------------
+
+    def interop_login(self):
+        """Login into the interoperability system"""
+        timeout = 0.1
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+        interop_url = self.url_entry.get()
+        if isinstance(username,str):
+            if isinstance(password,str):
+                if isinstance(interop_url,str):
+                    try:
+                        self.interop_client = client.AsyncClient(
+                            interop_url,username,password,timeout=timeout)
+                        self.interop_answer_label['text'] = "Login Successful"
+                        self.interop_logged_in = True
+                        self.activate_skynet()
+                    except Exception as e:
+                        self.interop_answer_label['text'] = "Failed Login"
+                        print(e,file=sys.stderr)
+
 
     #--------------------------------------------------------------------------
 
@@ -100,10 +156,12 @@ class AUVSIUserInterface(ttk.Frame):
     def init_gui(self):
         """Builds GUI."""
         style = ttk.Style()
-        style.configure("Output.TLabel",borderwidth=2, foreground="red")
+        style.configure("Output.TLabel",borderwidth=2,size=50, foreground="red",bg='black')
         self.root.title('AUVSI SUAS User Interface')
         self.root.option_add('*tearOff', 'FALSE')
-        self.root.geometry("1090x460")
+        
+        
+        #self.root.geometry("1090x460")
  
         self.grid(column=0,row=0,sticky=self.CONFIG_STICK)
  
@@ -118,12 +176,6 @@ class AUVSIUserInterface(ttk.Frame):
         self.menubar.add_cascade(menu=self.menu_edit, label='Edit')
  
         self.root.config(menu=self.menubar)
- 
-        # self.num1_entry = ttk.Entry(self, width=5)
-        # self.num1_entry.grid(column=1, row = 2)
- 
-        # self.num2_entry = ttk.Entry(self, width=5)
-        # self.num2_entry.grid(column=3, row=2)
 
         #----------------------------------------------------------------------
         # Interoperability System Login
@@ -136,7 +188,9 @@ class AUVSIUserInterface(ttk.Frame):
             column=current_column,
             row=current_row,
             columnspan=self.CONFIG_COLUMNSPAN,
-            rowspan=self.CONFIG_ROWSPAN,sticky=self.CONFIG_STICK)
+            rowspan=self.CONFIG_ROWSPAN,
+            sticky=self.CONFIG_STICK
+            )
 
         # Interopability System Separator
         current_row += 1
@@ -225,20 +279,20 @@ class AUVSIUserInterface(ttk.Frame):
 
         # Submit Interopability Login Credentials
         current_row += 1
-        self.calc_button = ttk.Button(self,
+        self.login_button = ttk.Button(self,
             text='Login',
-            command=self.calculate,
+            command=self.interop_login,
             width=self.CONFIG_WIDTH*2
             )
-        self.calc_button.grid(column=current_column,row=5,columnspan=self.CONFIG_COLUMNSPAN,rowspan=self.CONFIG_ROWSPAN,sticky=self.CONFIG_STICK)
+        self.login_button.grid(column=current_column,row=5,columnspan=self.CONFIG_COLUMNSPAN,rowspan=self.CONFIG_ROWSPAN,sticky=self.CONFIG_STICK)
  
         # Interopabi lity Login Notification Label
         current_row += 1
-        self.answer_frame = ttk.LabelFrame(self,
+        self.interop_answer_frame = ttk.LabelFrame(self,
             text='Status'
             )
 
-        self.answer_frame.grid(
+        self.interop_answer_frame.grid(
             column=current_column,
             row=current_row,
             columnspan=self.CONFIG_COLUMNSPAN,
@@ -248,12 +302,12 @@ class AUVSIUserInterface(ttk.Frame):
  
         # Interopability Login Notification
         current_row += 1
-        self.answer_label = ttk.Label(
-            self.answer_frame,
-            text=self.messages['interop']['n']
+        self.interop_answer_label = ttk.Label(
+            self.interop_answer_frame,
+            text=self.messages['interop']['n'],
             )
-        self.answer_label.configure(style="Output.TLabel")
-        self.answer_label.grid(
+        self.interop_answer_label.configure(style="Output.TLabel")
+        self.interop_answer_label.grid(
             column=0,
             row=current_row
             )
@@ -639,7 +693,7 @@ class AUVSIUserInterface(ttk.Frame):
         current_row += 1
         self.oa_button = ttk.Button(self,
             text='Activate',
-            command=self.calculate
+            command=self.activate_obstacle_avoidance
             )
         self.oa_button.grid(
             column=current_column,
@@ -755,7 +809,8 @@ class AUVSIUserInterface(ttk.Frame):
         for child in self.winfo_children():
             child.grid_configure(padx=5, pady=5)
  
+
 if __name__ == '__main__':
     root = tkinter.Tk()
-    AU(root)
+    AUVSIUserInterface(root)
     root.mainloop()

@@ -39,7 +39,7 @@ _______________________________________________________________________________
 	Description:
 
 		Setup the ip addresses and networking to work with the specifications
-		required by the interoperability system through a tkinter pop up.
+		required by the interoperability system through a Tkinter pop up.
 
 	---------------------------------------------------------------------------
 

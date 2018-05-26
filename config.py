@@ -133,10 +133,12 @@ COMMUNICATION
 # Mission Planner Host
 MISSION_PLANNER_HOST = '127.0.0.1'
 # Mission Planner Port
-MISSION_PLANNER_PORT = 11235
+MISSION_PLANNER_PORT = 5005
 #------------------------------------------------------------------------------
 # Payload Host
 PAYLOAD_HOST = '127.0.0.1'
 # Mission Planner Port
-PAYLOAD_PORT = 12358
+PAYLOAD_PORT = 5006
 #------------------------------------------------------------------------------
+GIMBAL_HOST = '127.0.0.1'
+GIMBAL_PORT = 5007
