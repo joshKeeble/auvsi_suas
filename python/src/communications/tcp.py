@@ -111,7 +111,7 @@ class TCPClient(object):
 
 	#--------------------------------------------------------------------------
 
-	def send_data(self,data,close=False):
+	def send_data(self,data,handle=lambda x:_,close=False):
 
 		if isinstance(data,str):
 			data = self.str_compress(data)
@@ -129,6 +129,7 @@ class TCPClient(object):
 		try:
 			self.client_socket.send(data)
 			server_data = self.client_socket.recv(self.buffer)
+			return handle(server_data)
 		except SocketError:
 			self.client_socket.close()
 			self.connected = False

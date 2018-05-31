@@ -34,7 +34,8 @@ class TestMission(unittest.TestCase):
             ],
             home_pos=GpsPosition(latitude=39, longitude=-77),
             mission_waypoints=[
-                Waypoint(order=1, latitude=37, longitude=-70, altitude_msl=10)
+                Waypoint(order=1, latitude=37, longitude=-70, altitude_msl=10),
+                Waypoint(order=2, latitude=38, longitude=-69, altitude_msl=10)
             ],
             off_axis_odlc_pos=GpsPosition(latitude=37, longitude=-75),
             emergent_last_known_pos=GpsPosition(latitude=34, longitude=-75),

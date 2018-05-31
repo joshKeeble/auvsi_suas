@@ -14,7 +14,7 @@ import cv2
 import sys
 import os
 
-import RRT
+import smoothed_RRT
 """
 class UAVSimulation(object):
 
@@ -105,7 +105,7 @@ for i in range(100):
 
     # Plot the surface
     ax.plot_surface(x, y, z, color='b')
-    rrt = RRT.RRT(start=[0, 0], goal=[5, 10],
+    rrt = smoothed_RRT.RRT(start=[0, 0], goal=[5, 10],
               randArea=[-20, 15], obstacleList=obstacleList)
     path = rrt.Planning(animation=False)
     print(path)

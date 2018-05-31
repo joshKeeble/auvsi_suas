@@ -9,8 +9,10 @@ AUVSI SUAS User Interface
 """
 from __future__ import print_function
 from __future__ import division
+from tkinter.messagebox import showinfo
 from PIL import Image, ImageTk
 from tkinter import ttk
+import threading
 import requests
 import unittest
 import tkinter
@@ -20,6 +22,7 @@ import os
 import auvsi_suas.python.src.communications.osc_client as osc_client
 import auvsi_suas.python.src.communications.osc_server as osc_server
 import auvsi_suas.python.src.communications.test_link as tcp_test
+import auvsi_suas.python.src.stealth.stealth_mode as stealth
 import auvsi_suas.python.src.interop.client as client
 import auvsi_suas.config as config
 
@@ -36,6 +39,9 @@ class AUVSIUserInterface(ttk.Frame):
         self.height_ratio   = screen_height/1200
 
         self.interop_logged_in = False
+        self.stealth_mode_activated = False
+
+        self.stealth_mode = stealth.StealthMode()
 
         self.root.geometry("{}x{}".format(
             int(1090*self.width_ratio),int(460*self.height_ratio)))
@@ -81,14 +87,62 @@ class AUVSIUserInterface(ttk.Frame):
     def activate_obstacle_avoidance(self):
         if self.interop_logged_in:
             async_missions = self.interop_client.get_missions().result()
-            print(async_missions)
             self.oa_answer_label['text'] = "System activated"
+            self.stealth_mode_activated = True
         else:
             self.oa_answer_label['text'] = "Interoperability not connnected"
+
+    #--------------------------------------------------------------------------
+
+    @staticmethod
+    def mp_handle(data):
+        print(data)
+        ####################################################################### Change to send data to stealth mode
+
+    #--------------------------------------------------------------------------
+
+    def run_stealth_mode(self):
+        output_path = self.stealth_mode.find_path()
+        try:
+            self.stealth_mode.mp_client.send_data(output_path)
+        except:
+            self.popup("Mission Planner server not connected at {}:{}".format(
+                config.MISSION_PLANNER_HOST,config.MISSION_PLANNER_PORT))
+            self.stealth_mode.init_mp_client()
+
+
+    #--------------------------------------------------------------------------
+
+    def interop_mission_parser(self):
+        mission = self.interop_client.get_missions().result()[0]
+        #print(mission)
+        self.stealth_mode.init_mp_client()
+        self.stealth_mode.set_home_location(mission.home_pos)
+        self.stealth_mode.update_waypoints(mission.mission_waypoints)
+        while True:
+            #missions = self.interop_client.get_missions().result()
+            #print(missions)
+            async_future = self.interop_client.get_obstacles()
+            async_stationary, async_moving = async_future.result()
+            all_obstacles = async_stationary+async_moving
+            if self.stealth_mode_activated:
+                self.stealth_mode.update_obstacles(all_obstacles)
+                self.run_stealth_mode()
+
+
+
+    #--------------------------------------------------------------------------
+
+    def activate_interop_mission_parser(self):
+        interop_mission_thread = threading.Thread(
+            target=self.interop_mission_parser,args=())
+        interop_mission_thread.daemon = True
+        interop_mission_thread.start()
 
 
     #--------------------------------------------------------------------------
  
+
     def on_quit(self):
         """Exits program."""
         quit()
@@ -97,8 +151,17 @@ class AUVSIUserInterface(ttk.Frame):
 
     def activate_skynet(self):
         if self.interop_login:
-            missions = self.interop_client.get_mission().result()
-            help(missions)
+            self.activate_interop_mission_parser()
+            '''
+            missions = self.interop_client.get_missions().result()
+            print(missions)
+            async_future = self.interop_client.get_obstacles()
+            async_stationary, async_moving = async_future.result()
+            print(async_stationary,async_moving)
+            '''
+
+    def popup(self,title,message):
+        showinfo("{}".format(title),"{}".format(message))
 
     #--------------------------------------------------------------------------
 
@@ -119,6 +182,7 @@ class AUVSIUserInterface(ttk.Frame):
                         self.activate_skynet()
                     except Exception as e:
                         self.interop_answer_label['text'] = "Failed Login"
+                        self.popup("Login Error","{}".format(e))
                         print(e,file=sys.stderr)
 
 
@@ -131,16 +195,19 @@ class AUVSIUserInterface(ttk.Frame):
             self.mp_answer_label['text'] = "Success, Mission Planner connected"
         else:
             self.mp_answer_label['text'] = "Failure, cannot connect to Mission Planner"
+            self.popup("Login Error","Cannot connect to {}:{}".format(
+                config.MISSION_PLANNER_HOST,config.MISSION_PLANNER_PORT))
 
     #--------------------------------------------------------------------------
 
     def payload_test_connection(self):
         """Test TCP connection to payload"""
-        if tcp_test.tcp_connection_test(config.MISSION_PLANNER_HOST,
-            config.MISSION_PLANNER_PORT):
+        if tcp_test.tcp_connection_test(config.UAV_HOST,config.UAV_PORT):
             self.pld_answer_label['text'] = "Success, Payload connected"
         else:
             self.pld_answer_label['text'] = "Failure, cannot connect to Payload"
+            self.popup("Login Error","Cannot connect to {}:{}".format(
+                config.UAV_HOST,config.UAV_PORT))
 
     #--------------------------------------------------------------------------
  
@@ -151,7 +218,7 @@ class AUVSIUserInterface(ttk.Frame):
         num3 = num1 + num2
         self.answer_label['text'] = num3
 
-    #--------------------------------------------------------------------------
+    #-------------------------------f-------------------------------------------
  
     def init_gui(self):
         """Builds GUI."""

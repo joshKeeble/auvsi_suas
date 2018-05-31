@@ -58,7 +58,8 @@ class DataGeneration(object):
             'W' :   9,
             'X' :   8,
             'Y' :   8,
-            'Z' :   8
+            'Z' :   8,
+            'Noise' : 0
         }
         self.fonts = (
             cv2.FONT_HERSHEY_SIMPLEX,
@@ -74,6 +75,7 @@ class DataGeneration(object):
             "circle"        :   self.create_circle,
             "cross"         :   self.create_cross,
             "diamond"       :   self.create_diamond,
+            "noise"         :   self.create_noise,
             "pentagon"      :   self.create_pentagon,
             "semicircle"    :   self.create_semicircle,
             "star"          :   self.create_star,
@@ -83,6 +85,7 @@ class DataGeneration(object):
         }
         self.ohev = lambda arg,target: 1. if (arg==target) else 0.
         self.letter_list = list(string.ascii_uppercase)
+        self.letter_list.append("Noise")
 
         self.init_system()
         self.load_backgrounds()
@@ -91,7 +94,7 @@ class DataGeneration(object):
 
     def init_system(self):
         """Initialize the system file paths"""
-        self.data_dir_path = "../../../../../generated_data"
+        self.data_dir_path = "../../../../../generated_data" #-############### CLEAN UP
         self.shape_data_dir = os.path.join(self.data_dir_path,"shapes")
         self.letter_data_dir = os.path.join(self.data_dir_path,"letters")
         if not os.path.exists(self.data_dir_path):
@@ -141,7 +144,7 @@ class DataGeneration(object):
                 background_images_dir))
         for file in os.listdir(background_images_dir):
             full_path = os.path.join(background_images_dir,file)
-            if full_path.endswith(".jpg"):
+            if full_path.endswith((".jpg",".png")):
                 self.backgrounds.append(cv2.imread(full_path))
 
     #--------------------------------------------------------------------------
@@ -260,13 +263,18 @@ class DataGeneration(object):
 
     #--------------------------------------------------------------------------
 
+    def create_noise(self,frame,center,color):
+        return frame
+
+    #--------------------------------------------------------------------------
+
     def create_trapezoid(self,frame,center,color):
-        (cx,cy) = center
-        short_side = 15
-        long_side = 30
-        height = 14
-        y_shift = 5
-        rshift = 3
+        (cx,cy)     = center
+        short_side  = 15
+        long_side   = 30
+        height      = 14
+        y_shift     = 5
+        rshift      = 3
         points = (
             (cx-short_side+random.randrange(-rshift,rshift),
             cy-height-y_shift+random.randrange(-rshift,rshift)),
@@ -417,6 +425,7 @@ class DataGeneration(object):
         subframe_margin = int(60*(2**0.5))
         n_background    = len(self.backgrounds)
         letters         = list(string.ascii_uppercase)
+        letters.append("Noise")
         count = 0
         for letter in letters:
             for n_shape_image in range(config.N_GENERATED_DATA):
@@ -439,9 +448,10 @@ class DataGeneration(object):
                     shape_color = (random.randrange(10,250),
                         random.randrange(10,250),random.randrange(10,250))
 
-                    background_subframe = self.shape_fncs[shape](background_subframe,
-                        (cx+random.randrange(-3,3),cy+random.randrange(-3,3)),
-                        shape_color)
+                    if not ((shape == "Noise") or (letter == "Noise")):
+                        background_subframe = self.shape_fncs[shape](background_subframe,
+                            (cx+random.randrange(-3,3),cy+random.randrange(-3,3)),
+                            shape_color)
 
                     background_subframe = self.rotate(background_subframe,random.randrange(0,360))
 
@@ -450,11 +460,12 @@ class DataGeneration(object):
 
                     letter_shift = 3
 
-                    background_subframe = self.create_letter(
-                        background_subframe,letter,
-                        (cx+random.randrange(-letter_shift,letter_shift),
-                        cy+random.randrange(-letter_shift,letter_shift)),
-                        letter_color)
+                    if not ((letter == "Noise") or (shape == "Noise")):
+                        background_subframe = self.create_letter(
+                            background_subframe,letter,
+                            (cx+random.randrange(-letter_shift,letter_shift),
+                            cy+random.randrange(-letter_shift,letter_shift)),
+                            letter_color)
 
                     background_subframe = self.rotate(background_subframe,random.randrange(0,360))
 
