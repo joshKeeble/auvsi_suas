@@ -12,10 +12,14 @@ from __future__ import division
 from tkinter.messagebox import showinfo
 from PIL import Image, ImageTk
 from tkinter import ttk
+import numpy as np
 import threading
 import requests
 import unittest
 import tkinter
+import pickle
+import time
+import zlib
 import sys
 import os
 
@@ -32,6 +36,8 @@ class AUVSIUserInterface(ttk.Frame):
     """The adders gui and functions."""
     def __init__(self, parent, *args, **kwargs):
         ttk.Frame.__init__(self, parent, *args, **kwargs)
+        global current_position
+        current_position    = (38.147404206618816,-76.4277855321988)
         self.root           = parent
         screen_width        = self.root.winfo_screenwidth()
         screen_height       = self.root.winfo_screenheight()
@@ -47,9 +53,9 @@ class AUVSIUserInterface(ttk.Frame):
             int(1090*self.width_ratio),int(460*self.height_ratio)))
 
         self.CONFIG_ROWSPAN     = 1
-        self.CONFIG_HEIGHT      = int(10*self.height_ratio) # FIX
+        self.CONFIG_HEIGHT      = int(10*self.height_ratio) ######################### FIX
         self.CONFIG_COLUMNSPAN  = 2
-        self.CONFIG_WIDTH       = int(28*self.width_ratio)+23
+        self.CONFIG_WIDTH       = int(28*self.width_ratio)+23 ####################### FIX
         self.CONFIG_STICK       = 'ew'
         self.messages = {
 
@@ -86,7 +92,6 @@ class AUVSIUserInterface(ttk.Frame):
 
     def activate_obstacle_avoidance(self):
         if self.interop_logged_in:
-            async_missions = self.interop_client.get_missions().result()
             self.oa_answer_label['text'] = "System activated"
             self.stealth_mode_activated = True
         else:
@@ -94,42 +99,85 @@ class AUVSIUserInterface(ttk.Frame):
 
     #--------------------------------------------------------------------------
 
-    @staticmethod
-    def mp_handle(data):
-        print(data)
-        ####################################################################### Change to send data to stealth mode
+    def run_stealth_mode(self):
+        i = 0
+        gs2mp_client = osc_client.OSCClient(config.GROUND_STATION_HOST,
+            config.GROUND_STATION2MISSION_PLANNER_PORT)
+        gs2mp_client.init_client()
+        while True:
+            if self.stealth_mode_activated:
+                obstacles = []
+                for n in self.all_obstacles:
+                    try:
+                        obstacles.append((n.latitude,n.longitude,n.cylinder_radius))
+                    except:
+                        obstacles.append((n.latitude,n.longitude,n.sphere_radius))
+    
+                optimal_path = self.stealth_mode.find_path(obstacles,
+                    self.stealth_mode.mission_waypoints,
+                    self.stealth_mode.current_position)
+                compressed_data = zlib.compress(pickle.dumps(np.asarray(optimal_path)))
+                gs2mp_client.send_data(compressed_data)
+                print(current_position)
+                i += 1
+            else:
+                time.sleep(1e-2)
 
     #--------------------------------------------------------------------------
 
-    def run_stealth_mode(self):
-        output_path = self.stealth_mode.find_path()
-        try:
-            self.stealth_mode.mp_client.send_data(output_path)
-        except:
-            self.popup("Mission Planner server not connected at {}:{}".format(
-                config.MISSION_PLANNER_HOST,config.MISSION_PLANNER_PORT))
-            self.stealth_mode.init_mp_client()
+    @staticmethod
+    def mp2gs_handle(channel,data):
+        global current_position
+        data = zlib.decompress(data)
+        data = pickle.loads(data)
+        data = np.asarray(data,dtype=np.float32)
+        (current_lat,current_lng) = data
+        current_position = (current_lat,current_lng)
+        #print(data)
 
+    #--------------------------------------------------------------------------
+
+    def init_telemetry_server(self):
+        self.mp2gs_server = osc_server.OSCServer(config.MISSION_PLANNER_HOST,
+            config.MISSION_PLANNER2GROUND_STATION_PORT)
+        self.mp2gs_server.init_server(self.mp2gs_handle)
+        self.mp2gs_server.activate_listen_thread()
 
     #--------------------------------------------------------------------------
 
     def interop_mission_parser(self):
-        mission = self.interop_client.get_missions().result()[0]
-        #print(mission)
-        self.stealth_mode.init_mp_client()
+        self.init_telemetry_server()
+        if config.INTEROP_USE_ASYNC:
+            mission = self.interop_client.get_missions().result()[0]
+        else:
+            mission = self.interop_client.get_missions()[0]
         self.stealth_mode.set_home_location(mission.home_pos)
         self.stealth_mode.update_waypoints(mission.mission_waypoints)
-        while True:
-            #missions = self.interop_client.get_missions().result()
-            #print(missions)
+        if config.INTEROP_USE_ASYNC:
             async_future = self.interop_client.get_obstacles()
             async_stationary, async_moving = async_future.result()
-            all_obstacles = async_stationary+async_moving
-            if self.stealth_mode_activated:
-                self.stealth_mode.update_obstacles(all_obstacles)
-                self.run_stealth_mode()
+            self.all_obstacles = async_stationary+async_moving
+        else:
+            obstacle_list = self.interop_client.get_obstacles()
+            stationary,moving = obstacle_list
+            self.all_obstacles = stationary+moving
+        self.stealth_mode.update_obstacles(self.all_obstacles)
 
+        stealth_thread = threading.Thread(target=self.run_stealth_mode,args=())
+        stealth_thread.daemon = True
+        stealth_thread.start()
 
+        while True:
+            if config.INTEROP_USE_ASYNC:
+                async_future = self.interop_client.get_obstacles()
+                async_stationary, async_moving = async_future.result()
+                self.all_obstacles = async_stationary+async_moving
+            else:
+                obstacle_list = self.interop_client.get_obstacles()
+                stationary,moving = obstacle_list
+                self.all_obstacles = stationary+moving
+            self.stealth_mode.update_obstacles(self.all_obstacles)
+            self.stealth_mode.set_current_position(current_position)
 
     #--------------------------------------------------------------------------
 
@@ -158,7 +206,11 @@ class AUVSIUserInterface(ttk.Frame):
             async_future = self.interop_client.get_obstacles()
             async_stationary, async_moving = async_future.result()
             print(async_stationary,async_moving)
+
+
             '''
+
+    #--------------------------------------------------------------------------
 
     def popup(self,title,message):
         showinfo("{}".format(title),"{}".format(message))
@@ -175,8 +227,12 @@ class AUVSIUserInterface(ttk.Frame):
             if isinstance(password,str):
                 if isinstance(interop_url,str):
                     try:
-                        self.interop_client = client.AsyncClient(
-                            interop_url,username,password,timeout=timeout)
+                        if config.INTEROP_USE_ASYNC:
+                            self.interop_client = client.AsyncClient(
+                                interop_url,username,password,timeout=timeout)
+                        else:
+                            self.interop_client = client.Client(
+                                interop_url,username,password,timeout=timeout)
                         self.interop_answer_label['text'] = "Login Successful"
                         self.interop_logged_in = True
                         self.activate_skynet()

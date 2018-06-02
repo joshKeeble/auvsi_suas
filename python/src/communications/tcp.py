@@ -112,7 +112,7 @@ class TCPClient(object):
 	#--------------------------------------------------------------------------
 
 	def send_data(self,data,handle=lambda x:_,close=False):
-
+		self.init_socket()
 		if isinstance(data,str):
 			data = self.str_compress(data)
 
@@ -130,7 +130,7 @@ class TCPClient(object):
 			self.client_socket.send(data)
 			server_data = self.client_socket.recv(self.buffer)
 			return handle(server_data)
-		except SocketError:
+		except Exception:
 			self.client_socket.close()
 			self.connected = False
 		if close:
@@ -167,8 +167,8 @@ class TCPServer(object):
 		self.server_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 		self.server_socket.setsockopt(socket.IPPROTO_TCP,socket.TCP_NODELAY,1)
 		self.server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-		self.server_socket.settimeout(self.timeout)
 		self.server_socket.bind((self.host,self.port))
+		self.server_socket.settimeout(self.timeout)
 		print("Server bound at address ({}:{})".format(self.host,self.port),
 			file=sys.stderr)
 
@@ -178,20 +178,23 @@ class TCPServer(object):
 		self.init_socket()
 		while True:
 			self.server_socket.listen(1)
-			connection,addr = self.server_socket.accept()
+			try:
+				connection,addr = self.server_socket.accept()
 
-			while True:
-				data = connection.recv(self.buffer)
-				client_message = handle(data,handle_args)
-				if not data:
-					break
-				if not isinstance(client_message,bytes):
-					print("Non-byte client message type:{}".format(
-						type(client_message).__name__))
-					connection.send(b'\x00')
-				else:
-					connection.send(client_message)
-			connection.close()
+				while True:
+					data = connection.recv(self.buffer)
+					client_message = handle(data,handle_args)
+					if not data:
+						break
+					if not isinstance(client_message,bytes):
+						print("Non-byte client message type:{}".format(
+							type(client_message).__name__))
+						connection.send(b'\x00')
+					else:
+						connection.send(client_message)
+				connection.close()
+			except Exception as e:
+				print("Warning:{}".format(e),file=sys.stderr)
 
 	#--------------------------------------------------------------------------
 

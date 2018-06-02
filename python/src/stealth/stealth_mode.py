@@ -18,10 +18,14 @@ import time
 import sys
 import os
 
+import auvsi_suas.python.src.communications.osc_server as osc_server
+import auvsi_suas.python.src.communications.osc_client as osc_client
 import auvsi_suas.python.src.stealth.smoothed_RRT as smoothed_RRT
+
 import auvsi_suas.python.src.communications.tcp as tcp
 import auvsi_suas.python.src.stealth.rdp as rdp
 import auvsi_suas.config as config
+
 
 """
 ===============================================================================
@@ -54,10 +58,13 @@ class StealthMode(object):
 
     #--------------------------------------------------------------------------
 
-    def init_mp_client(self):
+    def init_gs2mp_client(self):
         """Initialize mission planner TCP client"""
-        self.mp_client = tcp.TCPClient(config.MISSION_PLANNER_HOST,
-            config.MISSION_PLANNER_PORT)
+        print("{}:{}".format(config.GROUND_STATION_HOST,config.GROUND_STATION2MISSION_PLANNER_PORT))
+        self.gs2mp_client = osc_client.OSCClient(config.GROUND_STATION_HOST,
+            config.MISSION_PLANNER2GROUND_STATION_PORT)
+        self.gs2mp_client.init_client()
+        
 
     #--------------------------------------------------------------------------
 
@@ -175,11 +182,11 @@ class StealthMode(object):
 
     #--------------------------------------------------------------------------
 
-    def check_waypoints_obstacles(self):
+    def check_waypoints_obstacles(self,mission_waypoints,obstacles):
         """Check for waypoints within obstacles"""
-        updated_mission_waypoints = self.mission_waypoints.copy()
+        updated_mission_waypoints = mission_waypoints.copy()
         for i,n in enumerate(updated_mission_waypoints):
-            for j,o in enumerate(self.obstacles):
+            for j,o in enumerate(obstacles):
                 if (np.equal(o[:2],n).all()):
                     if (i != len(updated_mission_waypoints)-1):
                         dx = updated_mission_waypoints[i+1][0]-o[0]
@@ -206,25 +213,27 @@ class StealthMode(object):
 
     #--------------------------------------------------------------------------
 
-    def find_path(self):
+    def find_path(self,obstacles,mission_waypoints,current_position):
         """Find the optimal path"""
-        if not isinstance(self.current_position,np.ndarray):
+        if not isinstance(current_position,np.ndarray):
             while True:
-                if isinstance(self.current_position,np.ndarray):
+                if isinstance(current_position,np.ndarray):
                     break
                 else:
                     time.sleep(1e-2)
 
         start_time              = time.time()
 
-        self.mission_waypoints  = np.insert(self.mission_waypoints,0,
-            self.current_position,axis=0)
+        mission_waypoints  = np.insert(mission_waypoints,0,
+            current_position,axis=0)
 
-        self.mission_waypoints = self.eliminate_waypoints(
-            self.mission_waypoints)/self.path_scale
+        mission_waypoints = self.eliminate_waypoints(
+            mission_waypoints)/self.path_scale
 
         if len(self.obstacles):
-            updated_mission_waypoints = self.check_waypoints_obstacles()
+            updated_mission_waypoints = self.check_waypoints_obstacles(
+                mission_waypoints,obstacles)
+            output_path = []
 
             for i in range(len(updated_mission_waypoints)-1):
 
@@ -240,20 +249,21 @@ class StealthMode(object):
                             randArea=[int(-5280/self.path_scale),
                                 int(5280/self.path_scale)],
                             obstacleList=list(np.asarray(
-                                self.obstacles)/self.path_scale))
+                                obstacles)/self.path_scale))
                     path = rrt.Planning(animation=False)
 
                     smoothedPath = smoothed_RRT.PathSmoothing(path,
-                        self.max_iterations,self.obstacles)
+                        self.max_iterations,obstacles)
 
                     rdp_path = rdp.rdp(smoothedPath)
 
-                    path = rdp_path
+                    output_path = rdp_path
 
                 else:
-                    path = updated_mission_waypoints
-        else:
-            path = self.mission_waypoints
+                    output_path = updated_mission_waypoints
 
-        path = np.asarray(path)*self.path_scale
-        return [self.ft2latlng(lat,lng) for (lat,lng) in path]
+        else:
+            output_path = mission_waypoints
+
+        output_path = np.asarray(output_path)*self.path_scale
+        return [self.ft2latlng(lat,lng) for (lat,lng) in output_path]
