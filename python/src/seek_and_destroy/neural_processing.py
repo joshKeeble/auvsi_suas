@@ -67,8 +67,8 @@ class Dataset():
                 self.label_names.remove(n)
         save_dir = os.path.dirname(self.root)
         # Save file paths
-        self.data_path        = os.path.join(save_dir,"letter_data.p")
-        self.label_path       = os.path.join(save_dir,"letter_labels.p")
+        self.data_path        = os.path.join(save_dir,"shape_data.p")
+        self.label_path       = os.path.join(save_dir,"shape_labels.p")
         
         # 1 Hot Envdoing Vector generation
         HEV_fnct              = lambda a,b: 1. if a==b else 0.
@@ -232,15 +232,16 @@ class SmallAlexNet(object):
             testing_data,testing_labels):
         #----------------------------------------------------------------------
         # Load training and testing data
-        self.verify_input_dataset(training_data,"training_data")
-        self.training_data    = self.process_dataset(training_data)
-        self.training_labels  = training_labels
+        try:
+            self.verify_input_dataset(training_data,"training_data")
+            self.training_data    = self.process_dataset(training_data)
+            self.training_labels  = training_labels
 
-
-
-        self.verify_input_dataset(testing_data,"testing_data")
-        self.testing_data     = self.process_dataset(testing_data)
-        self.testing_labels   = testing_labels
+            self.verify_input_dataset(testing_data,"testing_data")
+            self.testing_data     = self.process_dataset(testing_data)
+            self.testing_labels   = testing_labels
+        except Exception as e:
+            print(e)
 
         # Save for Tensorboard visualization
         self.use_tensorboard  = True

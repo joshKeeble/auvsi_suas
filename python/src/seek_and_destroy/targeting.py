@@ -11,12 +11,20 @@ from __future__ import print_function
 from __future__ import division
 from skimage.feature import blob_doh
 import numpy as np
-import sel_search
 import cv2
 import sys
 import os
 
-import auvsi_suas.config as config
+try:
+    import auvsi_suas.python.src.seek_and_destroy.sel_search as sel_search
+    import auvsi_suas.config as config
+    
+except ModuleNotFoundError as e:
+    cwd = os.getcwd().split(os.path.sep)
+    project_dir = os.path.sep.join(cwd[:cwd.index("auvsi_suas")])
+    print('{}\n\nRun "export PYTHONPATH=$PYTHONPATH:{}"'.format(e,
+                project_dir),file=sys.stderr)
+
 
 __author__ = "hal112358"
 
@@ -224,6 +232,30 @@ class Targeting(object):
 
 #------------------------------------------------------------------------------
 
+def video_test():
+    file_name = '/media/hal/3863-3031/VIDEO/20180602_163921.MOV'
+    roi_finder = Targeting()
+    if os.path.exists(file_name):
+        video_data = cv2.VideoCapture(file_name)
+        i = 0
+        while True:
+            _,frame = video_data.read()
+
+            if not True:
+                display_frame,candidates = roi_finder.roi_process(frame)
+                cv2.imshow("display_frame",display_frame)
+                cv2.waitKey(1)
+            i += 1
+            if (i>50000):
+                cv2.imshow("display_frame",frame)
+                cv2.waitKey(1)
+        video_data.release()
+        cv2.destroyAllWindows()
+
+
+
+#------------------------------------------------------------------------------
+
 def main():
     trgt = Targeting()
     # trgt.frame_test()
@@ -232,4 +264,5 @@ def main():
 #------------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    main()
+    video_test()
+    #main()

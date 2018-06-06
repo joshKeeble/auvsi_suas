@@ -11,7 +11,6 @@ from __future__ import print_function
 from __future__ import division
 from pythonosc import dispatcher
 from pythonosc import osc_server
-from Crypto.Cipher import AES
 import numpy as np
 import threading
 import pickle

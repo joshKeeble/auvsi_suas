@@ -30,6 +30,8 @@ import auvsi_suas.python.src.stealth.stealth_mode as stealth
 import auvsi_suas.python.src.interop.client as client
 import auvsi_suas.config as config
 
+help(stealth)
+
 
  
 class AUVSIUserInterface(ttk.Frame):
@@ -37,7 +39,8 @@ class AUVSIUserInterface(ttk.Frame):
     def __init__(self, parent, *args, **kwargs):
         ttk.Frame.__init__(self, parent, *args, **kwargs)
         global current_position
-        current_position    = (38.147404206618816,-76.4277855321988)
+
+        current_position    = (38.14792,-76.427995)
         self.root           = parent
         screen_width        = self.root.winfo_screenwidth()
         screen_height       = self.root.winfo_screenheight()
@@ -94,31 +97,39 @@ class AUVSIUserInterface(ttk.Frame):
         if self.interop_logged_in:
             self.oa_answer_label['text'] = "System activated"
             self.stealth_mode_activated = True
+            stealth_mode_thread = threading.Thread(target=self.run_stealth_mode,args=())
+            stealth_mode_thread.daemon = True
+            stealth_mode_thread.start()
         else:
             self.oa_answer_label['text'] = "Interoperability not connnected"
 
     #--------------------------------------------------------------------------
 
     def run_stealth_mode(self):
+        global current_position
         i = 0
         gs2mp_client = osc_client.OSCClient(config.GROUND_STATION_HOST,
             config.GROUND_STATION2MISSION_PLANNER_PORT)
         gs2mp_client.init_client()
+        print("Ground Station to Mission Planner Client activated",
+            file=sys.stderr)
         while True:
             if self.stealth_mode_activated:
                 obstacles = []
-                for n in self.all_obstacles:
+                for n in self.stealth_mode.obstacles:
                     try:
-                        obstacles.append((n.latitude,n.longitude,n.cylinder_radius))
+                        obstacles.append((n[0],n[1],n[2]))
                     except:
-                        obstacles.append((n.latitude,n.longitude,n.sphere_radius))
-    
+                        obstacles.append((n[0],n[1],n[2]))
+                # print(obstacles)
                 optimal_path = self.stealth_mode.find_path(obstacles,
                     self.stealth_mode.mission_waypoints,
-                    self.stealth_mode.current_position)
-                compressed_data = zlib.compress(pickle.dumps(np.asarray(optimal_path)))
-                gs2mp_client.send_data(compressed_data)
-                print(current_position)
+                    self.stealth_mode.current_position,
+                    self.stealth_mode.boundaries)
+                #print("?"*80)
+                #compressed_data = zlib.compress(pickle.dumps(np.asarray(optimal_path)))
+                #gs2mp_client.send_data(compressed_data)
+                # print(current_position)
                 i += 1
             else:
                 time.sleep(1e-2)
@@ -138,6 +149,7 @@ class AUVSIUserInterface(ttk.Frame):
     #--------------------------------------------------------------------------
 
     def init_telemetry_server(self):
+        """Initialize the server hosted on mission planner"""
         self.mp2gs_server = osc_server.OSCServer(config.MISSION_PLANNER_HOST,
             config.MISSION_PLANNER2GROUND_STATION_PORT)
         self.mp2gs_server.init_server(self.mp2gs_handle)
@@ -146,13 +158,18 @@ class AUVSIUserInterface(ttk.Frame):
     #--------------------------------------------------------------------------
 
     def interop_mission_parser(self):
-        self.init_telemetry_server()
+        """Main function for processing interop data"""
+        #self.init_telemetry_server()
         if config.INTEROP_USE_ASYNC:
             mission = self.interop_client.get_missions().result()[0]
         else:
             mission = self.interop_client.get_missions()[0]
+
         self.stealth_mode.set_home_location(mission.home_pos)
         self.stealth_mode.update_waypoints(mission.mission_waypoints)
+        self.stealth_mode.set_boundaries(mission.fly_zones)
+
+        # Create initial obstacles
         if config.INTEROP_USE_ASYNC:
             async_future = self.interop_client.get_obstacles()
             async_stationary, async_moving = async_future.result()
@@ -163,25 +180,34 @@ class AUVSIUserInterface(ttk.Frame):
             self.all_obstacles = stationary+moving
         self.stealth_mode.update_obstacles(self.all_obstacles)
 
-        stealth_thread = threading.Thread(target=self.run_stealth_mode,args=())
-        stealth_thread.daemon = True
-        stealth_thread.start()
+        # Set the current position of the vehicle
+        self.stealth_mode.set_current_position(current_position)
 
         while True:
             if config.INTEROP_USE_ASYNC:
+                mission = self.interop_client.get_missions().result()[0]
+            else:
+                mission = self.interop_client.get_missions()[0]
+            self.stealth_mode.update_waypoints(mission.mission_waypoints)
+
+            # Update obstacles
+            if config.INTEROP_USE_ASYNC:
                 async_future = self.interop_client.get_obstacles()
                 async_stationary, async_moving = async_future.result()
-                self.all_obstacles = async_stationary+async_moving
+                all_obstacles = async_stationary+async_moving
             else:
                 obstacle_list = self.interop_client.get_obstacles()
                 stationary,moving = obstacle_list
-                self.all_obstacles = stationary+moving
-            self.stealth_mode.update_obstacles(self.all_obstacles)
+                all_obstacles = stationary+moving
+            self.stealth_mode.update_obstacles(all_obstacles)
+
+            # Set the current position of the vehicle
             self.stealth_mode.set_current_position(current_position)
 
     #--------------------------------------------------------------------------
 
     def activate_interop_mission_parser(self):
+        """Start the thread that processes the data from interop"""
         interop_mission_thread = threading.Thread(
             target=self.interop_mission_parser,args=())
         interop_mission_thread.daemon = True
@@ -198,17 +224,16 @@ class AUVSIUserInterface(ttk.Frame):
     #--------------------------------------------------------------------------
 
     def activate_skynet(self):
-        if self.interop_login:
-            self.activate_interop_mission_parser()
-            '''
-            missions = self.interop_client.get_missions().result()
-            print(missions)
-            async_future = self.interop_client.get_obstacles()
-            async_stationary, async_moving = async_future.result()
-            print(async_stationary,async_moving)
+        self.activate_interop_mission_parser()
+        '''
+        missions = self.interop_client.get_missions().result()
+        print(missions)
+        async_future = self.interop_client.get_obstacles()
+        async_stationary, async_moving = async_future.result()
+        print(async_stationary,async_moving)
 
 
-            '''
+        '''
 
     #--------------------------------------------------------------------------
 
@@ -233,13 +258,21 @@ class AUVSIUserInterface(ttk.Frame):
                         else:
                             self.interop_client = client.Client(
                                 interop_url,username,password,timeout=timeout)
+
+                        print("Login successful",file=sys.stderr)
                         self.interop_answer_label['text'] = "Login Successful"
                         self.interop_logged_in = True
+
                         self.activate_skynet()
+
                     except Exception as e:
                         self.interop_answer_label['text'] = "Failed Login"
                         self.popup("Login Error","{}".format(e))
-                        print(e,file=sys.stderr)
+                        exc_type,exc_obj,exc_tb = sys.exc_info()
+                        fname = os.path.split(
+                            exc_tb.tb_frame.f_code.co_filename)[1]
+                        print(exc_type,fname,exc_tb.tb_lineno,e,
+                            file=sys.stderr)
 
 
     #--------------------------------------------------------------------------
@@ -274,7 +307,7 @@ class AUVSIUserInterface(ttk.Frame):
         num3 = num1 + num2
         self.answer_label['text'] = num3
 
-    #-------------------------------f-------------------------------------------
+    #--------------------------------------------------------------------------
  
     def init_gui(self):
         """Builds GUI."""
@@ -316,7 +349,7 @@ class AUVSIUserInterface(ttk.Frame):
             )
 
         # Interopability System Separator
-        current_row += 1
+        current_row +=  1
         self.interop_line = ttk.Separator(self,orient='horizontal')
         self.interop_line.grid(
             column=current_column,

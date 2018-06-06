@@ -128,17 +128,44 @@ N_GENERATED_DATA            = 100
 -------------------------------------------------------------------------------
 COMMUNICATION
 -------------------------------------------------------------------------------
+
+	System Overview:
+		   						 PAYLOAD      ------ INTEROP
+		                            |		  |
+		      					    |         |
+		MISSION PLANNER ---- GROUND STATION---- 	  GIMBAL
+			   |										|
+			   ------------------------------------------
+
+	Each connection is over OSC in order to minimize connection error handling
+
 """
 #------------------------------------------------------------------------------
 # Mission Planner Host
-MISSION_PLANNER_HOST = '127.0.0.1'
+MISSION_PLANNER_HOST 				= '127.0.0.1'
 # Mission Planner Port
-MISSION_PLANNER_PORT = 5005
+MISSION_PLANNER2GROUND_STATION_PORT = 5005
+
+MISSION_PLANNER2GIMBAL_PORT 		= 5006
 #------------------------------------------------------------------------------
 # Payload Host
-PAYLOAD_HOST = '127.0.0.1'
-# Mission Planner Port
-PAYLOAD_PORT = 5006
+GROUND_STATION_HOST 				= '127.0.0.1'
+# Ground station to send data to mission planner
+# Sends waypoint commands for autonomous flight
+GROUND_STATION2MISSION_PLANNER_PORT = 5007
+# Ground station to payload port
+# Sends commands to change payload modes
+GROUND_STATION2PAYLOAD_PORT 		= 5008
 #------------------------------------------------------------------------------
-GIMBAL_HOST = '127.0.0.1'
-GIMBAL_PORT = 5007
+GIMBAL_HOST 						= '127.0.0.1'
+
+#------------------------------------------------------------------------------
+PAYLOAD_HOST 						= '127.0.0.1'
+PAYLOAD2GROUND_STATION 				= 5009
+
+"""
+-------------------------------------------------------------------------------
+INTEROPERABILITY SYSTEM
+-------------------------------------------------------------------------------
+"""
+INTEROP_USE_ASYNC = False

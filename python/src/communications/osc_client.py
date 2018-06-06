@@ -11,7 +11,6 @@ from __future__ import print_function
 from __future__ import division
 from pythonosc import osc_message_builder
 from pythonosc import udp_client
-from Crypto.Cipher import AES
 import argparse
 import random
 import pickle
