@@ -82,18 +82,20 @@ REGION OF INTEREST FILTERING
 SELS_SIZE_FILTER            = False
 # Minimum size of regions of interest
 SELS_MIN_ROI_SIZE           = 196
+
+
 #------------------------------------------------------------------------------
 # Filter rois by size compared to size of frame
-SELS_RELATIVE_SIZE_FILTER   = False
+SELS_RELATIVE_SIZE_FILTER   = True
 # Ratio of roi to size of frame
 # Smaller values mean that roi will be smaller
-SELS_N_PIXEL_RATIO          = 0.7
+SELS_N_PIXEL_RATIO          = 0.3
 #------------------------------------------------------------------------------
 # Filter by the ratio of side lengths
-SELS_SIDE_RATIO_FILTER      = False
+SELS_SIDE_RATIO_FILTER      = True
 # Minimum ratio of sides of region of interest
 # Smaller ratios mean rois will be more square
-SELS_MIN_SIDE_RATIO         = 1.5
+SELS_MIN_SIDE_RATIO         = 2
 
 #------------------------------------------------------------------------------
 # Filter overlapping roi by L2 distance

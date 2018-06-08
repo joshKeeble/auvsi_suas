@@ -229,19 +229,33 @@ class Dataset():
 class SmallAlexNet(object):
 
     def __init__(self,training_data,training_labels,
-            testing_data,testing_labels):
-        #----------------------------------------------------------------------
-        # Load training and testing data
-        try:
-            self.verify_input_dataset(training_data,"training_data")
-            self.training_data    = self.process_dataset(training_data)
-            self.training_labels  = training_labels
+            testing_data,testing_labels,mode='training',n_classes=10,name='cnn'):
 
-            self.verify_input_dataset(testing_data,"testing_data")
-            self.testing_data     = self.process_dataset(testing_data)
-            self.testing_labels   = testing_labels
-        except Exception as e:
-            print(e)
+        self.model_name = name
+        #----------------------------------------------------------------------
+        
+        if (mode=='training'):
+            try:
+                # Load training and testing data
+                self.verify_input_dataset(training_data,"training_data")
+                self.training_data    = self.process_dataset(training_data)
+                self.training_labels  = training_labels
+
+                self.verify_input_dataset(testing_data,"testing_data")
+                self.testing_data     = self.process_dataset(testing_data)
+                self.testing_labels   = testing_labels
+
+                # Number of classifications
+                self.num_classes      = len(training_labels[0])
+
+            except Exception as e:
+                print(e)
+
+        elif (mode == 'inference'):
+            self.num_classes = n_classes
+
+        else:
+            raise Exception("Unsupported mode:{}".format(mode),file=sys.stderr)
 
         # Save for Tensorboard visualization
         self.use_tensorboard  = True
@@ -261,68 +275,83 @@ class SmallAlexNet(object):
         now = datetime.now().strftime("%Y%m%d-%H%M%S")
         # File path for the trained model
         if ON_DEVCLOUD:
-            self.model_path = "/home/u14092/auvsi/saved_models/model_{}.ckpt".format(now)
+            self.model_path = "/home/u14092/auvsi/saved_models/{}_model_{}.ckpt".format(self.model_name,now)
         else:
-            self.model_path = "../saved_models/model_{}.ckpt".format(now)
+            self.model_path = "../saved_models/{}_model_{}.ckpt".format(self.model_name,now)
 
         # File path for tensorboard graph
         if ON_DEVCLOUD:
-            self.logs_path = "/home/u14092/auvsi/tensorflow_logs/{}/".format(now)
+            self.logs_path = "/home/u14092/auvsi/tensorflow_logs/{}_{}/".format(self.model_name,now)
 
         else:
             self.logs_path = "../tensorflow_logs/{}/".format(now)
         #----------------------------------------------------------------------
 
-        # Number of classifications
-        self.num_classes      = len(training_labels[0])
-
         # Input placeholder
         self.x                = tf.placeholder(tf.float32,
-                                    [None,50,50,1],name='x')
+                                    [None,50,50,1],name='{}_x'.format(self.model_name))
         # Output placeholder
         self.y                = tf.placeholder(tf.float32,
-                                    [None, self.num_classes],name='y')
+                                    [None, self.num_classes],name='{}_y'.format(
+                                        self.model_name))
         # Dropout probability
-        self.keep_prob        = tf.placeholder(tf.float32,name='keep_prob')
+        self.keep_prob        = tf.placeholder(tf.float32,name='{}_keep_prob'.format(
+                                    self.model_name))
 
 
         with tf.name_scope('Weights'):
             self.weights      = {
                 'wc1': tf.Variable(
-                    tf.random_normal([5,5,1,64]),name='wc1'),
+                    tf.random_normal([5,5,1,64]),name='{}_wc1'.format(
+                        self.model_name)),
                 'wc2': tf.Variable(
-                    tf.random_normal([3,3,64,64]),name='wc2'),
+                    tf.random_normal([3,3,64,64]),name='{}_wc2'.format(
+                        self.model_name)),
                 'wc3': tf.Variable(
-                    tf.random_normal([3,3,64,128]),name='wc3'),
+                    tf.random_normal([3,3,64,128]),name='{}_wc3'.format(
+                        self.model_name)),
                 'wc4': tf.Variable(
-                    tf.random_normal([3,3,128,128]),name='wc4'),
+                    tf.random_normal([3,3,128,128]),name='{}_wc4'.format(
+                        self.model_name)),
                 'wc5': tf.Variable(
-                    tf.random_normal([3,3,128,64]),name='wc5'),
+                    tf.random_normal([3,3,128,64]),name='{}_wc5'.format(
+                        self.model_name)),
                 'wf1': tf.Variable(
-                    tf.random_normal([9216,1000]),name='wf1'),
+                    tf.random_normal([87616,1000]),name='{}_wf1'.format(
+                        self.model_name)),
                 'wf2': tf.Variable(
-                    tf.random_normal([1000,100]),name='wf2'),
+                    tf.random_normal([1000,100]),name='{}_wf2'.format(
+                        self.model_name)),
                 'wf3': tf.Variable(
-                    tf.random_normal([100,self.num_classes]),name='wf3'),
+                    tf.random_normal([100,self.num_classes]),name='{}_wf3'.format(
+                        self.model_name)),
             }
         with tf.name_scope('Biases'):
             self.biases       = {
                 'bc1': tf.Variable(
-                    tf.random_normal([64]),name='bc1'),
+                    tf.random_normal([64]),name='{}_bc1'.format(
+                        self.model_name)),
                 'bc2': tf.Variable(
-                    tf.random_normal([64]),name='bc2'),
+                    tf.random_normal([64]),name='{}_bc2'.format(
+                        self.model_name)),
                 'bc3': tf.Variable(
-                    tf.random_normal([128]),name='bc3'),
+                    tf.random_normal([128]),name='{}_bc3'.format(
+                        self.model_name)),
                 'bc4': tf.Variable(
-                    tf.random_normal([128]),name='bc4'),
+                    tf.random_normal([128]),name='{}_bc4'.format(
+                        self.model_name)),
                 'bc5': tf.Variable(
-                    tf.random_normal([64]),name='bc5'),
+                    tf.random_normal([64]),name='{}_bc5'.format(
+                        self.model_name)),
                 'bf1': tf.Variable(
-                    tf.random_normal([1000]),name='bf1'),
+                    tf.random_normal([1000]),name='{}_bf1'.format(
+                        self.model_name)),
                 'bf2': tf.Variable(
-                    tf.random_normal([100]),name='bf2'),
+                    tf.random_normal([100]),name='{}_bf2'.format(
+                        self.model_name)),
                 'bf3': tf.Variable(
-                    tf.random_normal([self.num_classes]),name='bf3')
+                    tf.random_normal([self.num_classes]),name='{}_bf3'.format(
+                        self.model_name))
                 }
     #--------------------------------------------------------------------------
 
@@ -334,6 +363,13 @@ class SmallAlexNet(object):
             temp_dataset.append(np.expand_dims(n,axis=2)/255.)
         del dataset
         return temp_dataset
+
+    #--------------------------------------------------------------------------
+
+    def load_model_path(self,path):
+        if isinstance(path,str):
+            if os.path.exists(path):
+                self.model_path = path
 
     #--------------------------------------------------------------------------
 
@@ -356,52 +392,111 @@ class SmallAlexNet(object):
     #--------------------------------------------------------------------------
 
     def alexnet(self,x):
-        conv1 = self.conv2d(x,self.weights["wc1"],self.biases["bc1"],
-            x_stride=1,y_stride=1,
-            padding="VALID",name="conv1")
+        """Small alexnet implmentation"""
+        # Convolutional Layer 1
+        conv1 = self.conv2d(x,
+            self.weights["wc1"],
+            self.biases["bc1"],
+            x_stride=1,
+            y_stride=1,
+            padding="VALID",
+            name="{}_conv1".format(self.model_name)
+            )
         lrn1 = self.local_response_normalization(conv1,2,2e-05,0.75,"norm1")
-        pool1 = self.maxpool_layer_2d(lrn1,k_width=3,k_height=3,x_stride=2,
-            y_stride=2,padding="VALID",name="pool1")
+        # Maxpool Layer 1
+        pool1 = self.maxpool_layer_2d(lrn1,
+            k_width=2,
+            k_height=2,
+            x_stride=1,
+            y_stride=1,
+            padding="VALID",
+            name="{}_pool1".format(self.model_name)
+            )
 
-        conv2 = self.conv2d(pool1,self.weights["wc2"],self.biases["bc2"],
-            x_stride=1,y_stride=1,
-            padding="VALID",name="conv2")
+        # Convolutional Layer 2
+        conv2 = self.conv2d(pool1,
+            self.weights["wc2"],
+            self.biases["bc2"],
+            x_stride=1,
+            y_stride=1,
+            padding="VALID",
+            name="{}_conv2".format(self.model_name)
+            )
         lrn2 = self.local_response_normalization(conv2,2,2e-05,0.75,"norm2")
-        pool2 = self.maxpool_layer_2d(lrn2,k_width=3,k_height=3,x_stride=1,
-            y_stride=1,padding="VALID",name="pool2")
+        # Maxpool Layer 2
+        pool2 = self.maxpool_layer_2d(lrn2,
+            k_width=2,
+            k_height=2,
+            x_stride=1,
+            y_stride=1,
+            padding="VALID",
+            name="{}_pool2".format(self.model_name)
+            )
+        # Convolutional Layer 3
+        conv3 = self.conv2d(pool2,
+            self.weights["wc3"],
+            self.biases["bc3"],
+            x_stride=1,
+            y_stride=1,
+            padding="VALID",
+            name="{}_conv3".format(self.model_name)
+            )
 
-        conv3 = self.conv2d(pool2,self.weights["wc3"],self.biases["bc3"],
-            x_stride=1,y_stride=1,
-            padding="VALID",name="conv3")
+        # Convolutional Layer 4
+        conv4 = self.conv2d(conv3,
+            self.weights["wc4"],
+            self.biases["bc4"],
+            x_stride=1,
+            y_stride=1,
+            padding="VALID",
+            name="{}_conv4".format(self.model_name)
+            )
 
-        conv4 = self.conv2d(conv3,self.weights["wc4"],self.biases["bc4"],
-            x_stride=1,y_stride=1,
-            padding="VALID",name="conv4")
-
-        conv5 = self.conv2d(conv3,self.weights["wc5"],self.biases["bc5"],
-            x_stride=1,y_stride=1,
-            padding="VALID",name="conv5")
-        pool5 = self.maxpool_layer_2d(conv5,k_width=3,k_height=3,x_stride=1,
-            y_stride=1,padding="VALID",name="pool5")
+        # Convolutional Layer 5
+        conv5 = self.conv2d(conv3,
+            self.weights["wc5"],
+            self.biases["bc5"],
+            x_stride=1,
+            y_stride=1,
+            padding="VALID",
+            name="{}_conv5".format(self.model_name)
+            )
+        pool5 = self.maxpool_layer_2d(conv5,
+            k_width=2,
+            k_height=2,
+            x_stride=1,
+            y_stride=1,
+            padding="VALID",
+            name="{}_pool5".format(self.model_name)
+            )
 
         pool_shape = pool5.get_shape().as_list()
         fully_connected_input = tf.reshape(pool5,[-1,
             pool_shape[1]*pool_shape[2]*pool_shape[3]])
 
         fully_connected1 = self.fully_connected_layer(fully_connected_input,
-            self.weights["wf1"],self.biases["bf1"],name="ff1")
+            self.weights["wf1"],
+            self.biases["bf1"],
+            name="{}_ff1".format(self.model_name)
+            )
         fully_connected1 = tf.nn.leaky_relu(fully_connected1,
             alpha=self.leaky_relu_alpha)
         dropout1 = self.dropout_layer(fully_connected1)
 
         fully_connected2 = self.fully_connected_layer(dropout1,
-            self.weights["wf2"],self.biases["bf2"],name="ff2")
+            self.weights["wf2"],
+            self.biases["bf2"],
+            name="{}_ff2".format(self.model_name)
+            )
         fully_connected2 = tf.nn.leaky_relu(fully_connected2,
             alpha=self.leaky_relu_alpha)
         dropout2 = self.dropout_layer(fully_connected2)
 
         fully_connected3 = self.fully_connected_layer(dropout2,
-            self.weights["wf3"],self.biases["bf3"],name="ff3")
+            self.weights["wf3"],
+            self.biases["bf3"],
+            name="{}_ff3".format(self.model_name)
+            )
         fully_connected3 = tf.nn.leaky_relu(fully_connected3,
             alpha=self.leaky_relu_alpha)
 
@@ -426,11 +521,14 @@ class SmallAlexNet(object):
     #--------------------------------------------------------------------------
 
     def dropout_layer(self,x,name=None):
+        """Dropout weight layer"""
         return tf.nn.dropout(x,self.keep_prob,name)
 
     #--------------------------------------------------------------------------
 
-    def local_response_normalization(self,x,radius,alpha,beta,name=None,bias=1.0):
+    def local_response_normalization(self,x,radius,alpha,beta,
+        name=None,bias=1.0):
+        """Local response normalization layer"""
         return tf.nn.local_response_normalization(x,depth_radius=radius,
             alpha=alpha,beta=beta,bias=bias,name=name)
 
@@ -447,7 +545,6 @@ class SmallAlexNet(object):
     def init_cost(self):
         reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
         reg_constant = 0.005
-        print(self.logits,self.y)
         sftmx = tf.reduce_mean(
             tf.nn.softmax_cross_entropy_with_logits_v2(
             logits=self.logits,labels=self.y))

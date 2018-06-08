@@ -217,7 +217,7 @@ class StealthMode(object):
     #--------------------------------------------------------------------------
 
     def check_waypoints_obstacles(self,mission_waypoints,obstacles,
-        buffer_zone=(10/30)):
+        moving_obstacle_direction,buffer_zone=1):
         """
         Check for waypoints within obstacles
 
@@ -242,27 +242,85 @@ class StealthMode(object):
 
                     # If there is a point next, point towards that waypoint
                     if (i != len(updated_mission_waypoints)-1):
-                        dx      = updated_mission_waypoints[i+1][0]-o[0]
-                        dy      = updated_mission_waypoints[i+1][1]-o[1]
-                        alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
+                        if np.equal(moving_obstacle_direction[j],[0.0]).all():
+                        #if True:
+                            dx      = updated_mission_waypoints[i+1][0]-o[0]
+                            dy      = updated_mission_waypoints[i+1][1]-o[1]
+                            alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
+                        else:
+                            dx      = updated_mission_waypoints[i+1][0]-o[0]
+                            dy      = updated_mission_waypoints[i+1][1]-o[1]
+                            alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
+                            v_dx    = moving_obstacle_direction[j][0]
+                            v_dy    = moving_obstacle_direction[j][1]
+                            v_alpha = np.arctan(max(v_dy,1e-3)/max(v_dx,1e-3))
+                            if (v_alpha >= 180):
+                                v_alpha_flip = v_alpha-180
+                            else:
+                                v_alpha_flip = v_alpha+180
+                            if not (abs(alpha-v_alpha_flip)<90):
+                                alpha = v_alpha_flip
+                            #if not (abs(v_alpha-alpha)<=90):
+                            #    if (alpha > v_alpha):
+                            #        alpha =
+                        print(alpha)
+
                         new_x   = o[0]+(o[2]+buffer_zone)*np.cos(alpha)
                         new_y   = o[1]+(o[2]+buffer_zone)*np.sin(alpha)
                         updated_mission_waypoints[i] = [new_x,new_y]
 
                     # If at end, point towards previous waypoint
                     else:
-                        dx      = updated_mission_waypoints[i-1][0]-o[0]
-                        dy      = updated_mission_waypoints[i-1][1]-o[1]
-                        alpha   = np.arctan(dy/max(dx,1e-2))
+                        if np.equal(moving_obstacle_direction[j],[0.0]).all():
+                        #if True:
+                            dx      = updated_mission_waypoints[i+1][0]-o[0]
+                            dy      = updated_mission_waypoints[i+1][1]-o[1]
+                            alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
+                        else:
+                            dx      = updated_mission_waypoints[i+1][0]-o[0]
+                            dy      = updated_mission_waypoints[i+1][1]-o[1]
+                            alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
+                            v_dx    = moving_obstacle_direction[j][0]
+                            v_dy    = moving_obstacle_direction[j][1]
+                            v_alpha = np.arctan(max(v_dy,1e-3)/max(v_dx,1e-3))
+                            
+                            if (v_alpha >= 180):
+                                v_alpha_flip = v_alpha-180
+                            else:
+                                v_alpha_flip = v_alpha+180
+                            
+                            if not (abs(alpha-v_alpha)<90):
+                                alpha = v_alpha_flip
+
+                        print(alpha)
+                            
                         new_x   = o[0]+(o[2]+buffer_zone)*np.cos(alpha)
                         new_y   = o[1]+(o[2]+buffer_zone)*np.sin(alpha)
                         updated_mission_waypoints[i] = [new_x,new_y]
 
                 # If not in center, move to closest point to waypoint
                 elif (np.linalg.norm((n[1]-o[1],n[0]-o[0]))<=o[2]):
-                    dx      = n[0]-o[0]
-                    dy      = n[1]-o[1]
-                    alpha   = np.arctan(dy/max(dx,1e-2))
+                    if np.equal(moving_obstacle_direction[j],[0.0]).all():
+                    #if True:
+                        dx      = updated_mission_waypoints[i+1][0]-o[0]
+                        dy      = updated_mission_waypoints[i+1][1]-o[1]
+                        alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
+                    else:
+                        dx      = updated_mission_waypoints[i+1][0]-o[0]
+                        dy      = updated_mission_waypoints[i+1][1]-o[1]
+                        alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
+                        v_dx    = moving_obstacle_direction[j][0]
+                        v_dy    = moving_obstacle_direction[j][1]
+                        v_alpha = np.arctan(max(v_dy,1e-3)/max(v_dx,1e-3))
+                        if (v_alpha >= 180):
+                            v_alpha_flip = v_alpha-180
+                        else:
+                            v_alpha_flip = v_alpha+180
+                        if not (abs(alpha-v_alpha_flip)<90):
+                            alpha = v_alpha_flip
+
+                    print(alpha)
+                            
                     new_x   = o[0]+(o[2]+buffer_zone)*np.cos(alpha)
                     new_y   = o[1]+(o[2]+buffer_zone)*np.sin(alpha)
                     updated_mission_waypoints[i] = [new_x,new_y]
@@ -323,6 +381,8 @@ class StealthMode(object):
             for n in sel:
                 segments[i].append(n)
 
+        return segments
+        '''
         print('-'*80)
         print("temp_waypoints")
         for n in temp_waypoints:
@@ -334,7 +394,7 @@ class StealthMode(object):
         for n in segments:
             print(n)
         print('-'*80)
-
+        #'''
 
     #--------------------------------------------------------------------------
 
@@ -463,7 +523,7 @@ class StealthMode(object):
             (x,y) = self.latlng2ft(n.latitude,n.longitude)
             boundary_points.append((x,y))
 
-        boundary_points = [[-2000,-2000],[3000,-3000],
+        boundary_points = [[-2000,-2000],[3000,-3000], ####### FIX!
             [3000,4000],[-2000,1700]]
         # print(boundary_points)
 
@@ -501,8 +561,6 @@ class StealthMode(object):
         steps = len(current_waypoints)-1
 
         # Check the waypoints to see if inside obstacle
-        current_waypoints = self.check_waypoints_obstacles(current_waypoints,
-            current_obstacles)
 
         # Cycle through steps
         for i in range(steps):
@@ -532,11 +590,12 @@ class StealthMode(object):
                         r = np.linalg.norm(np.asarray(prev_o[:2])-np.asarray(n[:2]))
                         moving_obstacle_direction[i][0] = (n[0]-prev_o[0])
                         moving_obstacle_direction[i][1] = (n[1]-prev_o[1])
+                        # print(moving_obstacle_direction[i])
 
                         # Find velocity end point
-                        dir_line_point = tuple(list(map(int,np.asarray(
-                            n[:2])+self.path_scale*r*np.asarray(
-                            moving_obstacle_direction[i]))))
+                        dir_line_point = tuple(list(map(int,np.add(np.asarray(
+                            n[:2]),self.path_scale*r*np.asarray(
+                            moving_obstacle_direction[i])))))
 
                         dir_line = self.fetch_line(n[:2],
                             dir_line_point,stride=8)
@@ -545,64 +604,103 @@ class StealthMode(object):
                             #temp_obstacles.append([d[0]/self.path_scale,d[1]/self.path_scale,n[2]/self.path_scale])
                             # temp_obstacles.append(list(map(rescale_down,d)))
 
+        for i,n in enumerate(current_obstacles):
+            if not np.equal(moving_obstacle_direction[i],[0,0]).all():
+                current_obstacles[i][2] = 8
+
+        current_waypoints = self.check_waypoints_obstacles(current_waypoints,
+            current_obstacles,moving_obstacle_direction)
+
+        for i in range(steps):
+            start = current_waypoints[i]
+            goal = current_waypoints[i+1]
                 # current_obstacles = temp_obstacles
+                
 
+            # Check if obstacle in way
+            if self.check_if_collision(start,goal,current_obstacles):
+                #print('Start:',start,'\tGoal',goal)
+                #print(current_waypoints)
+                '''
+                rrt = smoothed_RRT.RRT(
+                        start=start,
+                        goal=goal,
+                        randArea=[int(-5280/self.path_scale),
+                            int(5280/self.path_scale)],
+                        obstacleList=current_obstacles)
 
-                # Check if obstacle in way
-                if self.check_if_collision(start,goal,current_obstacles):
-                    print('Start:',start,'\tGoal',goal)
-                    #print(current_waypoints)
-                    '''
-                    rrt = smoothed_RRT.RRT(
-                            start=start,
-                            goal=goal,
-                            randArea=[int(-5280/self.path_scale),
-                                int(5280/self.path_scale)],
-                            obstacleList=current_obstacles)
+                path = rrt.Planning(animation=False)      
 
-                    path = rrt.Planning(animation=False)      
+                # Smoothen the path
+                smoothedPath = smoothed_RRT.PathSmoothing(path,
+                    self.max_iterations,obstacles)
 
-                    # Smoothen the path
-                    smoothedPath = smoothed_RRT.PathSmoothing(path,
-                        self.max_iterations,obstacles)
+                rdp_path = rdp.rdp(smoothedPath)
+                print("FULL PATH")
 
-                    rdp_path = rdp.rdp(smoothedPath)
-                    print("FULL PATH")
+                print(full_path)
+                print('*'*80)
 
-                    print(full_path)
-                    print('*'*80)
+                print(rdp_path)
+                
 
-                    print(rdp_path)
-                    
-
-                    # Fix
-                    for p in rdp_path:
-                        if len(full_path):
-                            if not (np.equal(p,full_path[-1]).all()):
-                                full_path.append(p)
-                        else:
+                # Fix
+                for p in rdp_path:
+                    if len(full_path):
+                        if not (np.equal(p,full_path[-1]).all()):
                             full_path.append(p)
-                    print('*'*80)
-                    print("FULL PATH")
-                    print(full_path)
-                    '''
-
-                    if len(full_path):
-                        if not (np.equal(start,full_path[-1]).all()):
-                            full_path.append(list(start))
                     else:
-                        full_path.append(list(start))
+                        full_path.append(p)
+                print('*'*80)
+                print("FULL PATH")
+                print(full_path)
+                '''
 
-                    full_path.append(list(goal))
-                    #'''
+                if len(full_path):
+                    if not (np.equal(start,full_path[-1]).all()):
+                        full_path.append(list(start))
                 else:
-                    if len(full_path):
-                        if not (np.equal(start,full_path[-1]).all()):
-                            full_path.append(list(start))
-                    else:
-                        full_path.append(list(start))
+                    full_path.append(list(start))
 
-                    full_path.append(list(goal))
+                full_path.append(list(goal))
+                #'''
+            else:
+                if len(full_path):
+                    if not (np.equal(start,full_path[-1]).all()):
+                        full_path.append(list(start))
+                else:
+                    full_path.append(list(start))
+
+                full_path.append(list(goal))
+
+        segmented_path = self.segment_path(current_waypoints,primary_waypoints)
+
+        
+        for i,n in enumerate(segmented_path):
+            segmented_path[i] = rdp.rdp(segmented_path[i])
+
+        path_placeholder = []
+        for i,n in enumerate(segmented_path):
+            for p in n:
+                path_placeholder.append(list(p))
+        # print(full_path)
+        # print(path_placeholder)
+        full_path = path_placeholder
+
+        # print(primary_waypoints)
+        primary_indexes = np.zeros((len(primary_waypoints)))
+        for j,checkpoint in enumerate(primary_waypoints):
+            distance = 1e4
+            index = -1
+            for i,n in enumerate(full_path):
+                waypoint_distance = np.linalg.norm(np.subtract(checkpoint,n))
+                if waypoint_distance<distance:
+                    distance = waypoint_distance
+                    index = i
+            primary_indexes[j] = index
+        # print(primary_indexes)
+
+        #sys.exit()
 
         self.prev_path = full_path
 
@@ -633,27 +731,32 @@ class StealthMode(object):
 
         if self.display:
 
+            display_size = 8000
+
+
             display_path = full_path.copy()
             display_path = np.insert(display_path,0,current_position,axis=0)
             
             display_scale = 10
-            frame = np.ones((int(10560/display_scale),
-                int(10560/display_scale),3),dtype=np.uint8)*255
+            frame = np.ones((int(display_size/display_scale),
+                int(display_size/display_scale),3),dtype=np.uint8)
 
             if len(current_obstacles):
                 for i,o in enumerate(original_obstacles):
-                    center = (int((o[0]+5280)/display_scale),int((5280-o[1])/display_scale))
+                    center = (int((o[0]+(display_size/2))/display_scale),int(((display_size/2)-o[1])/display_scale))
                     r = int(o[2]/display_scale)
 
-                    dir_line = tuple(list(map(int,np.asarray(center)+10*(moving_obstacle_direction[i]))))
+                    #dir_line = tuple(list(map(int,np.add(np.asarray(center),10*(moving_obstacle_direction[i])))))
+                    dir_line = (center[0]+10*moving_obstacle_direction[i][0],center[1]-10*moving_obstacle_direction[i][1],)
+                    dir_line = tuple(map(int,dir_line))
 
-                    cv2.line(frame,center,dir_line,(255,0,0),1)
+                    cv2.line(frame,center,dir_line,(0,0,255),3)
 
                     cv2.circle(frame,center,r,(0,255,0),thickness=3,lineType=8,shift=0)
                 #--------------------------------------------------------------
 
                 for i,o in enumerate(current_obstacles):
-                    center = (int((o[0]+5280)/display_scale),int((5280-o[1])/display_scale))
+                    center = (int((o[0]+(display_size/2))/display_scale),int(((display_size/2)-o[1])/display_scale))
                     r = int(o[2]/display_scale)
 
                     cv2.circle(frame,center,r,(0,255,0),thickness=2,lineType=8,shift=0)
@@ -670,22 +773,22 @@ class StealthMode(object):
                 goal = boundary_points[(i+1)%n_boundary]
                 (x1,y1) = start
                 (x2,y2) = goal
-                (x1,y1) = (int((x1+5280)/display_scale),int((5280-y1)/display_scale))
-                (x2,y2) = (int((x2+5280)/display_scale),int((5280-y2)/display_scale))
-                cv2.line(frame,(int(x1),int(y1)),(int(x2),int(y2)),(0,0,0),1)
+                (x1,y1) = (int((x1+(display_size/2))/display_scale),int(((display_size/2)-y1)/display_scale))
+                (x2,y2) = (int((x2+(display_size/2))/display_scale),int(((display_size/2)-y2)/display_scale))
+                cv2.line(frame,(int(x1),int(y1)),(int(x2),int(y2)),(255,255,255),1)
 
             #'''
             #------------------------------------------------------------------
 
             for i,w in enumerate(current_waypoints):
-                center = (int((w[0]+5280)/display_scale),int((5280-w[1])/display_scale))
+                center = (int((w[0]+(display_size/2))/display_scale),int(((display_size/2)-w[1])/display_scale))
                 r = 3
                 cv2.circle(frame,center,r,(255,0,0),thickness=3,lineType=8,shift=0)
 
             #------------------------------------------------------------------
 
             for i,w in enumerate(primary_waypoints):
-                center = (int((w[0]+5280)/display_scale),int((5280-w[1])/display_scale))
+                center = (int((w[0]+(display_size/2))/display_scale),int(((display_size/2)-w[1])/display_scale))
                 r = 4
                 cv2.circle(frame,center,r,(255,255,0),thickness=3,lineType=8,shift=0)
 
@@ -695,15 +798,15 @@ class StealthMode(object):
                 (x1,y1) = display_path[i]
                 (x2,y2) = display_path[i+1]
                 
-                (x1,y1) = (int((x1+5280)/display_scale),int((5280-y1)/display_scale))
-                (x2,y2) = (int((x2+5280)/display_scale),int((5280-y2)/display_scale))
+                (x1,y1) = (int((x1+(display_size/2))/display_scale),int(((display_size/2)-y1)/display_scale))
+                (x2,y2) = (int((x2+(display_size/2))/display_scale),int(((display_size/2)-y2)/display_scale))
 
-                cv2.line(frame,(x1,y1),(x2,y2),(0,0,0),1)
+                cv2.line(frame,(x1,y1),(x2,y2),(255,255,255),1)
             
             cv2.imshow("frame",frame)
             cv2.waitKey(1)
 
-        return full_path
+        return [self.ft2latlng(x,y) for (x,y) in full_path]
 
         #sys.exit()
 

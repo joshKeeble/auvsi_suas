@@ -172,10 +172,12 @@ class Targeting(object):
                         (x+w)*config.FRAME_ROI_RESIZE,
                         (y+h)*config.FRAME_ROI_RESIZE),
                         [0,255,0])
+        r_candidates = np.multiply(r_candidates,config.FRAME_ROI_RESIZE)
+        s_candidates = np.multiply(s_candidates,config.FRAME_ROI_RESIZE)
         if config.DISPLAY_ROI:
-            return display_frame,candidates
+            return display_frame,r_candidates,s_candidates
         else:
-            return None,candidates
+            return None,r_candidates,s_candidates
 
     #--------------------------------------------------------------------------
 
@@ -222,10 +224,11 @@ class Targeting(object):
     #--------------------------------------------------------------------------
 
     def frame_test(self):
-        frame = cv2.imread("/Users/rosewang/Desktop/Programming/auvsi_suas/5.jpg")
+        frame = cv2.imread("/media/hal/7828-6360/Target-300ft.JPG")
         if config.DISPLAY_ROI:
             display_frame,candidates = self.roi_process(frame)
-            cv2.imshow("frame",display_frame)
+            h,w = display_frame.shape[:2]
+            cv2.imshow("frame",cv2.resize(display_frame,(int(w/1),int(h/1))))
             k = cv2.waitKey(0)
             if (k == ord('q')):
                 cv2.destroyAllWindows()
@@ -258,11 +261,11 @@ def video_test():
 
 def main():
     trgt = Targeting()
-    # trgt.frame_test()
-    trgt.video_save_test()
+    trgt.frame_test()
+    # trgt.video_save_test()
 
 #------------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    video_test()
-    #main()
+    #video_test()
+    main()

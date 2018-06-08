@@ -20,7 +20,18 @@ Image Preprocessing
 ===============================================================================
 """
 
-class ImageProcessing(object):
+class FrameProcessing(object):
+
+    def __init__(self):
+        pass
+
+"""
+===============================================================================
+Image Preprocessing
+===============================================================================
+"""
+
+class TargetProcessing(object):
 
     def __init__(self):
         self.criteria = (cv2.TERM_CRITERIA_EPS+cv2.TERM_CRITERIA_MAX_ITER,10,1.0)

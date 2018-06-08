@@ -126,10 +126,17 @@ class AUVSIUserInterface(ttk.Frame):
                     self.stealth_mode.mission_waypoints,
                     self.stealth_mode.current_position,
                     self.stealth_mode.boundaries)
-                #print("?"*80)
-                #compressed_data = zlib.compress(pickle.dumps(np.asarray(optimal_path)))
-                #gs2mp_client.send_data(compressed_data)
-                # print(current_position)
+                try:
+                    compressed_data = zlib.compress(pickle.dumps(np.asarray(optimal_path)))
+                    gs2mp_client.send_data(compressed_data)
+                    # print("Data sent:{}".format(compressed_data))
+
+                except Exception as e:
+                    exc_type,exc_obj,exc_tb = sys.exc_info()
+                    fname = os.path.split(
+                        exc_tb.tb_frame.f_code.co_filename)[1]
+                    print(exc_type,fname,exc_tb.tb_lineno,e,
+                        file=sys.stderr)
                 i += 1
             else:
                 time.sleep(1e-2)
