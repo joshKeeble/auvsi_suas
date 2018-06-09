@@ -17,10 +17,13 @@ import sys
 import os
 
 try:
-    import MissionPlanner
     import clr
+    clr.AddReference(“MissionPlanner”)
+    import MissionPlanner
+    clr.AddReference(“MAVLink”)
+    import MAVLink
 except:
-    pass
+    print("ERROR: Not run within Mission Planner",file=sys.stderr)
 
 
 import auvsi_suas.python.src.communications.osc_server as osc_server
@@ -30,13 +33,26 @@ import auvsi_suas.config as config
 #clr.AddReference("MissionPlanner.Utilities")
 #Script.ChangeMode("Guided")
 
+"""
+===============================================================================
+Mission Planner Handlers
+===============================================================================
+"""
+
 def gs2mp_server_handle(channel,data):
     """TCP server data packet handler"""
     data = zlib.decompress(data)
     data = pickle.loads(data)
     data = np.asarray(data)
     print("Incoming server data:{}".format(data))
-    
+  
+
+"""
+===============================================================================
+Mission Planner Interface Object
+===============================================================================
+"""
+
 
 class MPInterface(object):
 
@@ -52,7 +68,23 @@ class MPInterface(object):
 
     #--------------------------------------------------------------------------
 
+    def signal_servo(self,servo=None,pwm=None):
+        """
+        The servo is servo 9, pwm is 1200 for open/drop, pwm is 1500 for closed.
+        """
+        MAV.doCommand(MAVLink.MAV_CMD.DO_SET_SERVO,servo,pwm,0,0,0,0,0)
+
     #--------------------------------------------------------------------------
+
+    def open_payload(self):
+        """Open the payload claw"""
+        self.signal_servo(servo=9,pwm=1200)
+
+    #--------------------------------------------------------------------------
+
+    def close_payload(self):
+        """Close the payload claw"""
+        self.signal_servo(servo=9,pwm=1500)
 
     #--------------------------------------------------------------------------
 

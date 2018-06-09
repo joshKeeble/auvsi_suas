@@ -36,6 +36,8 @@ class CameraInterface(object):
 
 	def __init__(self):
 		self.use_picamera = False
+		self.frame = np.ones((config.CAMERA_HEIGHT,config.CAMERA_WIDTH,3),
+			dtype=np.uint8)
 		self.mode = ''
 
 	#--------------------------------------------------------------------------
@@ -51,10 +53,14 @@ class CameraInterface(object):
 		self.mode = 'picamera'
 		with picamera.PiCamera() as camera:
 		    camera.resolution = (config.CAMERA_WIDTH,config.CAMERA_HEIGHT)
+		    camera.framerate = 24
 		    time.sleep(2)
-		    image = np.empty((128, 112, 3), dtype=np.uint8)
-		    camera.capture(image, 'rgb')
-		    image = image[:config.CAMERA_WIDTH, :config.CAMERA_HEIGHT]
+		    while True:
+			    output = np.empty((config.CAMERA_HEIGHT,config.CAMERA_WIDTH,3),
+			    	dtype=np.uint8)
+			    camera.capture(output,'rgb')
+			    self.frame = output
+			    time.sleep(1e-3) # Adjust
 
 	#--------------------------------------------------------------------------
 
@@ -78,6 +84,9 @@ class CameraInterface(object):
 		if (self.mode == 'cv2'):
 			ret,frame = self.video_data.read()
 			cv2.waitKey(1)
+
+		elif (self.mode == 'picamera'):
+			frame = self.frame
 
 		return frame
 
