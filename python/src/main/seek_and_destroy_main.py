@@ -178,38 +178,78 @@ class SeekAndDestroyUAV(object):
             graph = mvnc.Graph('graph')
             fifoIn, fifoOut = graph.allocate_with_fifos(device, pretrained_graph)
 
-            img = cv2.imread(image_filename).astype(numpy.float32)
+            targeting_functions = targeting.Targeting()
+            target_preprocessing = preprocessing.TargetProcessing()
 
-            dx,dy,dz= img.shape
-            delta=float(abs(dy-dx))
-            if dx > dy: #crop the x dimension
-                img=img[int(0.5*delta):dx-int(0.5*delta),0:dy]
-            else:
-                img=img[0:dx,int(0.5*delta):dy-int(0.5*delta)]
+            video_data = camera.CameraInterface()
+            video_data.init_cv2()
+
+            while True:
+                frame = video_data.fetch_frame()
+                frame = cv2.imread()
+                height,width = frame.shape[:2]
+                #print(frame.shape)
+                #frame = cv2.resize(frame,(1080,952))
+                display_frame,r_candidates,s_candidates = targeting_functions.roi_process(frame)
+                cv2.imshow("frame",display_frame)
+                for roi in s_candidates:
+                    if isinstance(roi,(np.ndarray,list)):
+                        try:
+                            (x,y,w,h) = list(map(int,roi))
+                            print(x,y,w,h)
+                            print(y,min(y+h,height-1),x,min(x+w,width-1))
+                            frame = target_preprocessing.process_shape_frame(frame)
+                            region = frame[y:min(y+h,height-1),x:min(x+w,width-1)]
+                            
+                            region = region.astype(numpy.float32)
+
+                            dx,dy,dz= region.shape
+                            delta=float(abs(dy-dx))
+                            if dx > dy: #crop the x dimension
+                                region=region[int(0.5*delta):dx-int(0.5*delta),0:dy]
+                            else:
+                                region=region[0:dx,int(0.5*delta):dy-int(0.5*delta)]
+                                
+                            region = cv2.resize(region,(reqsize, reqsize))
+
+                            region = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+
+                            for i in range(3):
+                                region[:,:,i] = (region[:,:,i]-mean)*std
+
+                            print('Start download to NCS...')
+                            start_time = time.time()
+                            graph.queue_inference_with_fifo_elem(fifoIn, fifoOut,region,'user object')
+                            output, userobj = fifoOut.read_elem()
+
+                            top_inds = output.argsort()[::-1][:5]
+
+                            print(''.join(['*' for i in range(79)]))
+                            print('inception-v1 on NCS')
+                            print(''.join(['*' for i in range(79)]))
+                            for i in range(5):
+                                print(top_inds[i], categories[top_inds[i]], output[top_inds[i]])
+
+                            print(''.join(['*' for i in range(79)]))
+                            print("time elapsed:{}".format(time.time()-start_time))
+                            '''
+                            if (pred != 'Noise'):
+                                letter_pred = letterNet.evaluate_frame(sess,frane) ##### FIX WITH OCR
+                                if (letter_pred != 'Noise'):
+                                    gps = fetch_gps.estimate_gps(x+(w/2),y+(h/2))
+                                    colors = '''
+                            cv2.imshow('region',region)
+                            cv2.waitKey(1)
+                        except:
+                            pass
+                    else:
+                        pass
                 
-            img = cv2.resize(img, (reqsize, reqsize))
+                k = cv2.waitKey(1)
+                if (k == ord('q')):
+                    break
+            cv2.destroyAllWindows()
 
-            img=cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-
-            for i in range(3):
-                img[:,:,i] = (img[:,:,i] - mean) * std
-
-            print('Start download to NCS...')
-            for iteration in range(100000):
-                start_time = time.time()
-                graph.queue_inference_with_fifo_elem(fifoIn, fifoOut, img, 'user object')
-                output, userobj = fifoOut.read_elem()
-
-                top_inds = output.argsort()[::-1][:5]
-
-                print(''.join(['*' for i in range(79)]))
-                print('inception-v1 on NCS')
-                print(''.join(['*' for i in range(79)]))
-                for i in range(5):
-                    print(top_inds[i], categories[top_inds[i]], output[top_inds[i]])
-
-                print(''.join(['*' for i in range(79)]))
-                print("time elapsed:{}".format(time.time()-start_time))
             fifoIn.destroy()
             fifoOut.destroy()
             graph.destroy()

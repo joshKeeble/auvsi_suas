@@ -30,8 +30,6 @@ import auvsi_suas.python.src.stealth.stealth_mode as stealth
 import auvsi_suas.python.src.interop.client as client
 import auvsi_suas.config as config
 
-help(stealth)
-
 
  
 class AUVSIUserInterface(ttk.Frame):
@@ -40,7 +38,7 @@ class AUVSIUserInterface(ttk.Frame):
         ttk.Frame.__init__(self, parent, *args, **kwargs)
         global current_position
 
-        current_position    = (38.14792,-76.427995)
+        current_position    = (38.14792,-76.427995,0)
         self.root           = parent
         screen_width        = self.root.winfo_screenwidth()
         screen_height       = self.root.winfo_screenheight()
@@ -51,6 +49,8 @@ class AUVSIUserInterface(ttk.Frame):
         self.stealth_mode_activated = False
 
         self.stealth_mode = stealth.StealthMode()
+        self.stealth_mode.set_min_altitude(150)
+        self.stealth_mode.set_max_altitude(400)
 
         self.root.geometry("{}x{}".format(
             int(1090*self.width_ratio),int(460*self.height_ratio)))

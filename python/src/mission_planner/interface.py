@@ -41,38 +41,24 @@ def gs2mp_server_handle(channel,data):
 class MPInterface(object):
 
     def __init__(self):
-        self.vehicle_lat = 38.147404206618816
-        self.vehcile_lng =  -76.4277855321988
-        self.ground_station_host = config.GROUND_STATION_HOST
-        self.gs2mp_port = config.GROUND_STATION2MISSION_PLANNER_PORT
+        self.vehicle_lat          = 38.147404206618816
+        self.vehcile_lng          = -76.4277855321988
+        self.ground_station_host  = config.GROUND_STATION_HOST
+        self.gs2mp_port           = config.GROUND_STATION2MISSION_PLANNER_PORT
+
         self.mission_planner_host = config.MISSION_PLANNER_HOST 
-        self.mp2gs_port = config.MISSION_PLANNER2GROUND_STATION_PORT
+        self.mp2gs_port           = config.MISSION_PLANNER2GROUND_STATION_PORT
+        self.mp2gimbal_port       = config.MISSION_PLANNER2GIMBAL_PORT
 
     #--------------------------------------------------------------------------
 
     #--------------------------------------------------------------------------
-
-    def init_gs2mp_server(self):
-        self.gs2mp_server = osc_server.OSCServer(self.ground_station_host,
-            self.gs2mp_port)
-        print("Mission Planner server connected at {}:{}".format(
-            self.ground_station_host,self.gs2mp_port))
-        self.gs2mp_server.init_server(gs2mp_server_handle)
-        self.gs2mp_server.activate_listen_thread()
-        self.ms2gs_client = osc_client.OSCClient(
-            self.mission_planner_host,self.mp2gs_port)
-        self.ms2gs_client.init_client()
-        while True:
-            ################################################################### Create update function
-            telemetry = [self.vehicle_lat,self.vehcile_lng]
-            compressed_data = zlib.compress(pickle.dumps(
-                np.asarray(telemetry)))
-            self.ms2gs_client.send_data(compressed_data)
 
     #--------------------------------------------------------------------------
 
     def init_autonomous_mode(self):
-        Script.ChangeMode("Guided")
+        if not (self.fetch_mode() == "Guided"):
+            Script.ChangeMode("Guided")
 
     #--------------------------------------------------------------------------
 
@@ -241,36 +227,32 @@ class MPInterface(object):
         """Return the output channel 1"""
         return cs.chx2out
 
+    #--------------------------------------------------------------------------
 
+    def fetch_battery_voltage(self):
+        """Return the battery voltage"""
+        return cs.battery_voltage
 
+    #--------------------------------------------------------------------------
 
-rxrssi  float    
-chx1in, chx2in, .... chx8in     float   Input Channels from 1 to 8
-ch1out, chx2out, .... chx8out   float   Output Channel form 1 to 8
-nav_roll    float   Roll Target (deg)
-nav_pitch   float   Pitch Target (deg)
-nav_bearing     float   Bearing target (deg)
-target_bearing  float   Bearing Target (deg)
-wp_dist     float   Distance to Next Waypoint (dist)
-alt_error   float   Altitude Error (dist)
-ber_error   float   Bearing Error (dist)
-aspd_error  float   Airspeed Error (speed)
-wpno    float   Flying Mode
-mode    String  Flying Mode
-dimbrate    float   Climb Rate (speed)
-tot     int     Time over target (sec)
-distTraveled    float   Distance Traveled (dist)
-timeInAir   float   Time in Air (sec)
-turnrate    float   Turn Rate (speed)
-radius  float   Turn Radius (dist)
-battery_voltage     float   Battery Voltage (volt)
-battery_remaining   float   Battery Remaining (%)
-current     float   battery Current (Amps)
-HomeAlt     float    
-DistToHome  float   Absolute Pressure Value
-press_abs   float   Absolute Pressure Value
-sonarrange  float   Sonar Range (meters)
-sonarVoltage    float   Sonar Voltage (volt)
-armed
+    def fetch_battery_remaining(self):
+        """Return the remaining battery percentage"""
+        return cs.battery_remaining
 
-    
+    #--------------------------------------------------------------------------
+
+    def fetch_time_in_air(self):
+        """Return the time in air of the uav"""
+        return cs.timeInAir
+
+    #--------------------------------------------------------------------------
+
+    def fetch_mode(self):
+        """Return the flying mode as string"""
+        return cs.mode
+
+    #--------------------------------------------------------------------------
+
+    def is_armed(self):
+        """Return whether the uav is armed"""
+        return cs.armed

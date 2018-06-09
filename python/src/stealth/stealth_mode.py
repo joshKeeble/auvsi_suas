@@ -63,7 +63,7 @@ class StealthMode(object):
         self.obstacles          = []
 
         # Display obstacle avoidance
-        self.display            = False
+        self.display            = True
 
         # Previous obstacles
         self.prev_obstacles     = None
@@ -127,11 +127,18 @@ class StealthMode(object):
     #--------------------------------------------------------------------------
 
     def update_waypoints(self,waypoints):
-        
+        """Update the waypoints to be sent to path planning"""
         n_waypoints = len(waypoints)
-        processed_waypoints = np.zeros((n_waypoints,2))
+
+        temp_waypoints = [None for _ in waypoints]
         for n in waypoints:
-            processed_waypoints[n.order-1] = [n.latitude, n.longitude]
+            #print()
+            temp_waypoints[n.order-1] = n
+
+        processed_waypoints = np.zeros((n_waypoints,3))
+        for n in temp_waypoints:
+            processed_waypoints[n.order-1] = [n.latitude,n.longitude,
+            n.altitude_msl]
 
         self.mission_waypoints = processed_waypoints
 
@@ -141,6 +148,18 @@ class StealthMode(object):
         """Setup the location for ground station"""
         self.home_lat = home_waypoint.latitude
         self.home_lng = home_waypoint.longitude
+
+    #--------------------------------------------------------------------------
+
+    def set_max_altitude(self,max_altitude):
+        """Setup the maximum altitude from the mission"""
+        self.max_altitude = max_altitude
+
+    #--------------------------------------------------------------------------
+
+    def set_min_altitude(self,min_altitude):
+        """Setup the maximum altitude from the mission"""
+        self.min_altitude = min_altitude
 
     #--------------------------------------------------------------------------
 
@@ -457,6 +476,61 @@ class StealthMode(object):
 
     #--------------------------------------------------------------------------
 
+    def create_altitude_points(self,full_path,primary_waypoints,
+        waypoint_altitudes):
+        """Add the altitude waypoints to the full path"""
+        print(waypoint_altitudes)
+        print(primary_waypoints)
+        segments = self.segment_path(full_path,primary_waypoints)
+        path_placeholder = np.zeros((len(full_path),3))
+
+        for n in segments:
+            print('*'*80)
+            print(n)
+
+        counter = 0
+        for i,n in enumerate(segments): 
+            segment_range = np.linalg.norm(n[0]-n[-1])
+            for j in range(1,len(n)):
+                alt = min(self.max_altitude,max(self.min_altitude,
+                    (max((np.linalg.norm(n[0]-n[j])/segment_range),0.1)*(
+                    waypoint_altitudes[i+1]-(
+                    waypoint_altitudes[i])))+waypoint_altitudes[i]))
+
+                path_placeholder[counter][0] = n[j][0]
+                path_placeholder[counter][1] = n[j][1]
+                path_placeholder[counter][2] = alt
+                counter += 1
+
+        #path_placeholder = path_placeholder[:-1]
+        path_placeholder = np.asarray(path_placeholder)
+        """
+        unique_margin = 25
+
+        for i,n in enumerate(path_placeholder):
+            if (i>0) and (i+1<len(path_placeholder)):
+                if np.linalg.norm(n[:2]-path_placeholder[i-1][:2]) < unique_margin:
+                    path_placeholder = np.delete(path_placeholder,i,0)
+                elif np.linalg.norm(n[:2]-path_placeholder[i+1][:2]) < unique_margin:
+                    path_placeholder = np.delete(path_placeholder,i,0)
+
+
+
+        print('-'*80)
+        for n in path_placeholder:
+            print(n)
+        print('-'*80)
+        path_placeholder = path_placeholder[:-1]
+        print('-'*80)
+        for n in path_placeholder:
+            print(n)
+        print('-'*80)
+        sys.exit()
+        """
+        return path_placeholder
+
+    #--------------------------------------------------------------------------
+
     def partition_path(self,current_waypoints):
         """
         Split up a path into partitions
@@ -512,13 +586,17 @@ class StealthMode(object):
             output_path: list of gps coordinates of the waypoint path
 
         """
+    
+        #sys.exit()
+
         start_time = time.time()
 
         current_waypoints = []
 
         # Conver the waypoints from gps to feet
         for i,n in enumerate(mission_waypoints):
-            current_waypoints.append(self.latlng2ft(n[0],n[1]))
+            (x,y) = self.latlng2ft(n[0],n[1])
+            current_waypoints.append([x,y,n[2]])
 
         # Convert the obstacles from gps to feet
         for i,n in enumerate(obstacles):
@@ -532,20 +610,27 @@ class StealthMode(object):
         ####################################################################### TESTING
 
         # Add the current position to the beginning of the waypoints
-        current_p = np.asarray(self.latlng2ft(current_position[0],
-            current_position[1]))
+        (current_x,current_y) = self.latlng2ft(current_position[0],current_position[1])
+        current_p = np.asarray(current_x,current_y,current_position[2])
         current_waypoints = np.insert(current_waypoints,0,
             current_p,axis=0)
 
         current_waypoints = np.insert(current_waypoints,
             len(current_waypoints),
-            np.asarray((-1000,-2000)),
+            np.asarray((-1000,-2000,200)),
             axis=0)
 
         current_waypoints = np.insert(current_waypoints,
             len(current_waypoints),
-            np.asarray((-1000,2000)),
+            np.asarray((-1000,2000,400)),
             axis=0)
+
+        waypoint_altitudes = []
+        temp_waypoints = []
+        for n in current_waypoints:
+            waypoint_altitudes.append(n[2])
+            temp_waypoints.append(n[:2])
+        current_waypoints = temp_waypoints
 
         boundary_points = []
         #print(boundaries)
@@ -745,6 +830,8 @@ class StealthMode(object):
         primary_waypoints = list(map(rescale_up,primary_waypoints))
         boundary_points = list(map(rescale_up,boundary_points))
         full_path = list(map(rescale_up,full_path))
+
+        self.create_altitude_points(full_path,primary_waypoints,waypoint_altitudes)
 
         self.prev_obstacles = original_obstacles
 

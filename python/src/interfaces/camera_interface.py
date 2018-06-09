@@ -40,15 +40,21 @@ class CameraInterface(object):
 
 	#--------------------------------------------------------------------------
 
+	def init_picamera_thread(self):
+		self.picamera_thread = threading.Thread(target=self.init_picamera,
+			args=())
+
+	#--------------------------------------------------------------------------
+
 	def init_picamera(self):
 		"""Initialize picamera video capture"""
 		self.mode = 'picamera'
-		with picamera.PiCamera() as camera: ###### FIX
-			camera.resolution = (320,240)
-			camera.framerate = 24
-			time.sleep(2)
-			output = np.empty((240,320,3),dtype=np.uint8)
-			camera.capture(output,'rgb')
+		with picamera.PiCamera() as camera:
+		    camera.resolution = (config.CAMERA_WIDTH,config.CAMERA_HEIGHT)
+		    time.sleep(2)
+		    image = np.empty((128, 112, 3), dtype=np.uint8)
+		    camera.capture(image, 'rgb')
+		    image = image[:config.CAMERA_WIDTH, :config.CAMERA_HEIGHT]
 
 	#--------------------------------------------------------------------------
 
