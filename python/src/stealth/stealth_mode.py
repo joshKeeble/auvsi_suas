@@ -49,7 +49,7 @@ class StealthMode(object):
         self.waypoint_threshold = 10
 
         # Scale by which to reduce the map
-        self.path_scale         = 50
+        self.path_scale         = 30
 
         # Scale to increase obstacle radius to create buffer zone
         self.obstacle_scale     = 3
@@ -63,7 +63,7 @@ class StealthMode(object):
         self.obstacles          = []
 
         # Display obstacle avoidance
-        self.display            = True
+        self.display            = False
 
         # Previous obstacles
         self.prev_obstacles     = None
@@ -248,22 +248,30 @@ class StealthMode(object):
                             dy      = updated_mission_waypoints[i+1][1]-o[1]
                             alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
                         else:
-                            dx      = updated_mission_waypoints[i+1][0]-o[0]
-                            dy      = updated_mission_waypoints[i+1][1]-o[1]
-                            alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
+                            #dx      = updated_mission_waypoints[i+1][0]-o[0]
+                            #dy      = updated_mission_waypoints[i+1][1]-o[1]
+                            #alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
                             v_dx    = moving_obstacle_direction[j][0]
                             v_dy    = moving_obstacle_direction[j][1]
                             v_alpha = np.arctan(max(v_dy,1e-3)/max(v_dx,1e-3))
+                            #new_x   = dx-2*v_dx
+                            #new_y   = dy-2*v_dy
+                            #if ()
+                            #alpha   = np.arctan(max(new_y,1e-3)/max(new_x,1e-3))
+
+                            #'''
                             if (v_alpha >= 180):
-                                v_alpha_flip = v_alpha-180
+                                alpha = v_alpha-180
                             else:
-                                v_alpha_flip = v_alpha+180
-                            if not (abs(alpha-v_alpha_flip)<90):
-                                alpha = v_alpha_flip
+                                alpha = v_alpha+180
+                            #new_x   = dx-2*v_dx
+                            #new_y   = dy-2*v_dy
+                            #if ()
+                            #alpha   = np.arctan(max(new_y,1e-3)/max(new_x,1e-3))
                             #if not (abs(v_alpha-alpha)<=90):
                             #    if (alpha > v_alpha):
                             #        alpha =
-                        print(alpha)
+                        #print(alpha)
 
                         new_x   = o[0]+(o[2]+buffer_zone)*np.cos(alpha)
                         new_y   = o[1]+(o[2]+buffer_zone)*np.sin(alpha)
@@ -277,22 +285,28 @@ class StealthMode(object):
                             dy      = updated_mission_waypoints[i+1][1]-o[1]
                             alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
                         else:
-                            dx      = updated_mission_waypoints[i+1][0]-o[0]
-                            dy      = updated_mission_waypoints[i+1][1]-o[1]
-                            alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
+                            #dx      = updated_mission_waypoints[i+1][0]-o[0]
+                            #dy      = updated_mission_waypoints[i+1][1]-o[1]
+                            #alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
                             v_dx    = moving_obstacle_direction[j][0]
                             v_dy    = moving_obstacle_direction[j][1]
                             v_alpha = np.arctan(max(v_dy,1e-3)/max(v_dx,1e-3))
-                            
-                            if (v_alpha >= 180):
-                                v_alpha_flip = v_alpha-180
-                            else:
-                                v_alpha_flip = v_alpha+180
-                            
-                            if not (abs(alpha-v_alpha)<90):
-                                alpha = v_alpha_flip
+                            #new_x   = dx-2*v_dx
+                            #new_y   = dy-2*v_dy
+                            #if ()
+                            #alpha   = np.arctan(max(new_y,1e-3)/max(new_x,1e-3))
 
-                        print(alpha)
+                            #'''
+                            if (v_alpha >= 180):
+                                alpha = v_alpha-180
+                            else:
+                                alpha = v_alpha+180
+                            #new_x   = dx-2*v_dx
+                            #new_y   = dy-2*v_dy
+                            #if ()
+                            #alpha   = np.arctan(max(new_y,1e-3)/max(new_x,1e-3))
+
+                        #print(alpha)
                             
                         new_x   = o[0]+(o[2]+buffer_zone)*np.cos(alpha)
                         new_y   = o[1]+(o[2]+buffer_zone)*np.sin(alpha)
@@ -301,25 +315,42 @@ class StealthMode(object):
                 # If not in center, move to closest point to waypoint
                 elif (np.linalg.norm((n[1]-o[1],n[0]-o[0]))<=o[2]):
                     if np.equal(moving_obstacle_direction[j],[0.0]).all():
-                    #if True:
+                    # if True:
                         dx      = updated_mission_waypoints[i+1][0]-o[0]
                         dy      = updated_mission_waypoints[i+1][1]-o[1]
                         alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
                     else:
                         dx      = updated_mission_waypoints[i+1][0]-o[0]
                         dy      = updated_mission_waypoints[i+1][1]-o[1]
-                        alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
+                        #alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
                         v_dx    = moving_obstacle_direction[j][0]
                         v_dy    = moving_obstacle_direction[j][1]
                         v_alpha = np.arctan(max(v_dy,1e-3)/max(v_dx,1e-3))
-                        if (v_alpha >= 180):
-                            v_alpha_flip = v_alpha-180
-                        else:
-                            v_alpha_flip = v_alpha+180
-                        if not (abs(alpha-v_alpha_flip)<90):
-                            alpha = v_alpha_flip
+                        #new_x   = dx-2*v_dx
+                        #new_y   = dy-2*v_dy
+                        #if ()
+                        #alpha   = np.arctan(max(new_y,1e-3)/max(new_x,1e-3))
 
-                    print(alpha)
+                        #'''
+                        if (v_alpha >= 180):
+                            alpha = v_alpha-180
+                        else:
+                            alpha = v_alpha+180
+                        '''
+                        if (alpha < 0):
+                            alpha += 360
+                        if (v_alpha < 0):
+                            v_alpha += 360
+
+                        if (max(alpha-v_alpha,0)<90):
+                            if (alpha > v_alpha):
+                                alpha = 2*(90-alpha+v_alpha)+alpha
+                            else:
+                                alpha = 2*(90-v_alpha+alpha)+alpha
+                        '''
+
+
+                    #print(alpha)
                             
                     new_x   = o[0]+(o[2]+buffer_zone)*np.cos(alpha)
                     new_y   = o[1]+(o[2]+buffer_zone)*np.sin(alpha)
@@ -725,9 +756,9 @@ class StealthMode(object):
         print("full_path",full_path)
         print('-'*80)
         '''
-        print('='*80)
+        #print('='*80)
         print(time.time()-start_time)
-        print('='*80)
+        #print('='*80)
 
         if self.display:
 

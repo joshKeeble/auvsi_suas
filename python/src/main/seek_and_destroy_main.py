@@ -15,6 +15,11 @@ import cv2
 import sys
 import os
 
+try:
+    from mvnc import mvncapi as mvnc
+except:
+    print("Running without Movidius NCS",file=sys.stderr)
+
 #try:
 import auvsi_suas.python.src.seek_and_destroy.neural_processing as classifier
 import auvsi_suas.python.src.seek_and_destroy.fetch_color as fetch_color
@@ -23,7 +28,6 @@ import auvsi_suas.python.src.seek_and_destroy.targeting as targeting
 import auvsi_suas.python.src.communications.osc_client as osc_client
 import auvsi_suas.python.src.communications.osc_server as osc_server
 import auvsi_suas.python.src.interfaces.camera_interface as camera
-
 import auvsi_suas.config as config
 '''  
 except ModuleNotFoundError as e:
@@ -69,7 +73,7 @@ class SeekAndDestroyUAV(object):
 
     #--------------------------------------------------------------------------
 
-    def main(self):
+    def tf_main(self):
         #self.init_osc_server()
         #self.init_osc_client()
 
@@ -126,6 +130,92 @@ class SeekAndDestroyUAV(object):
                 if (k == ord('q')):
                     break
             cv2.destroyAllWindows()
+
+    #--------------------------------------------------------------------------
+
+    def can_connect_ncs(self):
+        """Boolean function for if there is a ncs connected"""
+        return 1 if len(mvnc.enumerate_devices()) else 0
+
+    #--------------------------------------------------------------------------
+
+    def movidius_main(self):
+        """Run Seek and Destroy with Intel Movidius NCS"""
+        graph_filename = './shapeNet_graph'
+
+        devices = mvnc.enumerate_devices()
+        
+        if not self.can_connect_ncs():
+            print("Warning, NCS not connected, runnning on Tensorflow instead",
+                file=sys.stderr)
+            self.tf_main()
+        else:
+            device = mvnc.Device(devices[0])
+            device.open()
+
+            #Load graph
+            with open(graph_filename,mode='rb') as graph_file:
+                pretrained_graph = graph_file.read()
+
+            #Load preprocessing data
+            mean = 128 
+            std = 1/128 
+
+            #Load categories
+            categories = []
+            with open('../seek_and_destroy/shapes.txt','r') as f:
+                for line in f:
+                    cat = line.split('\n')[0]
+                    if cat != 'classes':
+                        categories.append(cat)
+                f.close()
+                print('Number of categories:', len(categories))
+
+            #Load image size
+            with open(path_to_networks + 'inputsize.txt', 'r') as f:
+                reqsize = int(f.readline().split('\n')[0])
+
+            graph = mvnc.Graph('graph')
+            fifoIn, fifoOut = graph.allocate_with_fifos(device, pretrained_graph)
+
+            img = cv2.imread(image_filename).astype(numpy.float32)
+
+            dx,dy,dz= img.shape
+            delta=float(abs(dy-dx))
+            if dx > dy: #crop the x dimension
+                img=img[int(0.5*delta):dx-int(0.5*delta),0:dy]
+            else:
+                img=img[0:dx,int(0.5*delta):dy-int(0.5*delta)]
+                
+            img = cv2.resize(img, (reqsize, reqsize))
+
+            img=cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+
+            for i in range(3):
+                img[:,:,i] = (img[:,:,i] - mean) * std
+
+            print('Start download to NCS...')
+            for iteration in range(100000):
+                start_time = time.time()
+                graph.queue_inference_with_fifo_elem(fifoIn, fifoOut, img, 'user object')
+                output, userobj = fifoOut.read_elem()
+
+                top_inds = output.argsort()[::-1][:5]
+
+                print(''.join(['*' for i in range(79)]))
+                print('inception-v1 on NCS')
+                print(''.join(['*' for i in range(79)]))
+                for i in range(5):
+                    print(top_inds[i], categories[top_inds[i]], output[top_inds[i]])
+
+                print(''.join(['*' for i in range(79)]))
+                print("time elapsed:{}".format(time.time()-start_time))
+            fifoIn.destroy()
+            fifoOut.destroy()
+            graph.destroy()
+            device.close()
+            print('Finished')
+
 
 """
 def main():
