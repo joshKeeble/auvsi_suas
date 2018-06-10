@@ -13,10 +13,12 @@ import matplotlib.pyplot as plt
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
 import numpy as np
+import pickle
 import random
 import copy
 import math
 import time
+import zlib
 import cv2
 import sys
 import os
@@ -479,14 +481,9 @@ class StealthMode(object):
     def create_altitude_points(self,full_path,primary_waypoints,
         waypoint_altitudes):
         """Add the altitude waypoints to the full path"""
-        print(waypoint_altitudes)
-        print(primary_waypoints)
         segments = self.segment_path(full_path,primary_waypoints)
         path_placeholder = np.zeros((len(full_path),3))
 
-        for n in segments:
-            print('*'*80)
-            print(n)
 
         counter = 0
         for i,n in enumerate(segments): 
@@ -614,7 +611,7 @@ class StealthMode(object):
         current_p = np.asarray(current_x,current_y,current_position[2])
         current_waypoints = np.insert(current_waypoints,0,
             current_p,axis=0)
-
+        '''
         current_waypoints = np.insert(current_waypoints,
             len(current_waypoints),
             np.asarray((-1000,-2000,200)),
@@ -624,24 +621,26 @@ class StealthMode(object):
             len(current_waypoints),
             np.asarray((-1000,2000,400)),
             axis=0)
-
+        '''
         waypoint_altitudes = []
         temp_waypoints = []
         for n in current_waypoints:
             waypoint_altitudes.append(n[2])
             temp_waypoints.append(n[:2])
         current_waypoints = temp_waypoints
-
+        
         boundary_points = []
         #print(boundaries)
         fly_zone = boundaries[0].boundary_pts
         for i,n in enumerate(fly_zone):
             (x,y) = self.latlng2ft(n.latitude,n.longitude)
             boundary_points.append((x,y))
-
+        '''
         boundary_points = [[-2000,-2000],[3000,-3000], ####### FIX!
             [3000,4000],[-2000,1700]]
         # print(boundary_points)
+        '''
+        print(current_waypoints)
 
         #######################################################################
         
@@ -654,7 +653,7 @@ class StealthMode(object):
         primary_waypoints   = current_waypoints.copy()
 
         # Create polygon of boundary
-        geofence = Polygon(boundary_points)
+        #geofence = Polygon(boundary_points)
 
         full_path = []
 
@@ -671,7 +670,7 @@ class StealthMode(object):
 
         current_waypoints = self.partition_path(current_waypoints)
 
-        current_waypoints = self.apply_geofence(current_waypoints,geofence)
+        #current_waypoints = self.apply_geofence(current_waypoints,geofence)
 
         
         steps = len(current_waypoints)-1
@@ -831,7 +830,7 @@ class StealthMode(object):
         boundary_points = list(map(rescale_up,boundary_points))
         full_path = list(map(rescale_up,full_path))
 
-        self.create_altitude_points(full_path,primary_waypoints,waypoint_altitudes)
+        #self.create_altitude_points(full_path,primary_waypoints,waypoint_altitudes)
 
         self.prev_obstacles = original_obstacles
 
@@ -851,9 +850,8 @@ class StealthMode(object):
 
             display_size = 8000
 
-
             display_path = full_path.copy()
-            display_path = np.insert(display_path,0,current_position,axis=0)
+            display_path = np.insert(display_path,0,current_position[:2],axis=0)
             
             display_scale = 10
             frame = np.ones((int(display_size/display_scale),
@@ -922,7 +920,7 @@ class StealthMode(object):
                 cv2.line(frame,(x1,y1),(x2,y2),(255,255,255),1)
             
             cv2.imshow("frame",frame)
-            cv2.waitKey(1)
+            cv2.waitKey(0)
 
         return [self.ft2latlng(x,y) for (x,y) in full_path]
 
@@ -1093,3 +1091,133 @@ class StealthMode(object):
 
         return [self.ft2latlng(lat,lng) for (lat,lng) in output_path]
         '''
+
+import re
+import sys
+
+
+class ClientBaseType(object):
+    """ ClientBaseType is a simple base class which provides basic functions.
+
+    The attributes are obtained from the 'attrs' property, which should be
+    defined by subclasses.
+    """
+
+    # Subclasses should override.
+    attrs = []
+
+    def __eq__(self, other):
+        """Compares two objects."""
+        for attr in self.attrs:
+            if self.__dict__[attr] != other.__dict__[attr]:
+                return False
+        return True
+
+    def __repr__(self):
+        """Gets string encoding of object."""
+        return "%s(%s)" % (self.__class__.__name__,
+                           ', '.join('%s=%s' % (attr, self.__dict__[attr])
+                                     for attr in self.attrs))
+
+    def __unicode__(self):
+        """Gets unicode encoding of object."""
+        return unicode(self.__str__())
+
+    def serialize(self):
+        """Serialize the current state of the object."""
+        serial = {}
+        for attr in self.attrs:
+            data = self.__dict__[attr]
+            if isinstance(data, ClientBaseType):
+                serial[attr] = data.serialize()
+            elif isinstance(data, list):
+                serial[attr] = [d.serialize() for d in data]
+            elif data is not None:
+                serial[attr] = data
+        return serial
+
+    @classmethod
+    def deserialize(cls, d):
+        """Deserialize the state of the object."""
+        if isinstance(d, cls):
+            return d
+        else:
+            return cls(**d)
+
+class Waypoint(ClientBaseType):
+    """Waypoint consisting of an order, GPS position, and optional altitude.
+
+    Attributes:
+        order: An ID giving relative order in a set of waypoints.
+        latitude: Latitude in decimal degrees.
+        longitude: Longitude in decimal degrees.
+        altitude: Optional. Altitude in feet MSL.
+
+    Raises:
+        ValueError: Argument not convertable to int or float.
+    """
+
+    attrs = ['order', 'latitude', 'longitude', 'altitude_msl']
+
+    def __init__(self, order, latitude, longitude, altitude_msl=None):
+        self.order = int(order)
+        self.latitude = float(latitude)
+        self.longitude = float(longitude)
+        self.altitude_msl = None
+        if altitude_msl is not None:
+            self.altitude_msl = float(altitude_msl)
+
+
+class FlyZone(ClientBaseType):
+    """Flight boundary consisting of GPS polygon and altitude range.
+
+    Attributes:
+        boundary_pts: List of Waypoint defining a polygon.
+        altitude_msl_min: Minimum altitude in feet MSL.
+        altitude_msl_max: Maximum altitude in feet MSL.
+
+    Raises:
+        ValueError: Argument not convertable to float.
+    """
+
+    attrs = ['boundary_pts', 'altitude_msl_min', 'altitude_msl_max']
+
+    def __init__(self, boundary_pts, altitude_msl_min, altitude_msl_max):
+        self.boundary_pts = [Waypoint(0,bp[0],bp[1]) for bp in boundary_pts]
+        self.altitude_msl_min = float(altitude_msl_min)
+        self.altitude_msl_max = float(altitude_msl_max)
+
+
+
+def main():
+    gs2mp_client = osc_client.OSCClient('192.168.1.42',5005)
+    gs2mp_client.init_client()
+
+    stealth = StealthMode()
+    obstacles = [(45.9616069,-121.2746859,50)]
+    mission_waypoints = [(45.9626361,-121.2751794,200)]
+
+    current_position = (45.960615,-121.274267,0)
+    home_waypoint = Waypoint(1,current_position[0],current_position[1])
+
+    stealth.set_home_location(home_waypoint)
+    stealth.set_max_altitude(400)
+    stealth.set_min_altitude(100)
+
+    print(stealth.latlng2ft(mission_waypoints[0][0],mission_waypoints[0][1]))
+
+    boundary_points = [(45.9601301,-121.2709951),(45.9598616,-121.2774324),(45.9643066,-121.2795138),(45.9647988,-121.2711239)]
+    boundary = FlyZone(boundary_points,100,400)
+    path = stealth.find_path(obstacles,mission_waypoints,current_position,[boundary])
+    print(path)
+
+    while True:
+        print("sending:{}\n{}".format(path,'-'*80))
+        path = np.asarray(path)
+        path = pickle.dumps(path)
+        path = zlib.compress(path)
+        gs2mp_client.send_data(path,channel='path')
+        time.sleep(1)
+
+if __name__ == "__main__":
+    main()

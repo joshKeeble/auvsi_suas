@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="e6212590-70f2-48bf-94b1-4de9d97b615f" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/python/src/communications/osc_client.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/communications/osc_client.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/interfaces/music.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/interfaces/music.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/main/mission_planner_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/main/mission_planner_main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/mission_planner/interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/mission_planner/interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/stealth/stealth_mode.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/stealth/stealth_mode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/css/animate.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/css/animate.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/css/docs.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/css/docs.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/css/shCoreDefault.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/css/shCoreDefault.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/css/font-awesome.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/css/font-awesome.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/css/font-awesome.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/css/font-awesome.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/fonts/FontAwesome.otf" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/fonts/FontAwesome.otf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/fonts/fontawesome-webfont.eot" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/fonts/fontawesome-webfont.eot" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/fonts/fontawesome-webfont.svg" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/fonts/fontawesome-webfont.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/fonts/fontawesome-webfont.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/fonts/fontawesome-webfont.ttf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/fonts/fontawesome-webfont.woff" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/fonts/fontawesome-webfont.woff" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/glyphicons-halflings-regular.eot" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/glyphicons-halflings-regular.eot" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/glyphicons-halflings-regular.svg" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/glyphicons-halflings-regular.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/glyphicons-halflings-regular.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/glyphicons-halflings-regular.ttf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/glyphicons-halflings-regular.woff" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/glyphicons-halflings-regular.woff" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/glyphicons-halflings-regular.woff2" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/glyphicons-halflings-regular.woff2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/bordered-pulled.less" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/bordered-pulled.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/core.less" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/core.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/fixed-width.less" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/fixed-width.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/font-awesome.less" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/font-awesome.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/icons.less" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/icons.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/larger.less" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/larger.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/list.less" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/list.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/mixins.less" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/mixins.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/path.less" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/path.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/rotated-flipped.less" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/rotated-flipped.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/spinning.less" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/spinning.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/stacked.less" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/stacked.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/variables.less" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/less/variables.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_bordered-pulled.scss" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_bordered-pulled.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_core.scss" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_core.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_fixed-width.scss" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_fixed-width.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_icons.scss" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_icons.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_larger.scss" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_larger.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_list.scss" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_list.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_mixins.scss" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_mixins.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_path.scss" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_path.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_rotated-flipped.scss" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_rotated-flipped.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_spinning.scss" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_spinning.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_stacked.scss" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_stacked.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/_variables.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/font-awesome.scss" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/fonts/scss/font-awesome.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/images/layout.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/images/layout.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/images/min_menu.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/images/min_menu.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/images/min_menu.tiff" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/images/min_menu.tiff" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/images/welcome.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/images/welcome.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/images/welcome.tiff" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/images/welcome.tiff" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/js/jquery.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/js/jquery.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/js/shBrushXml.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/js/shBrushXml.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/js/shCore.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/documentation/js/shCore.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/calender.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/calender.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/chartjs.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/chartjs.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/chartjs2.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/chartjs2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/contacts.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/contacts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/animate.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/animate.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/calendar/fullcalendar.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/calendar/fullcalendar.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/calendar/fullcalendar.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/calendar/fullcalendar.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/calendar/fullcalendar.print.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/calendar/fullcalendar.print.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/colorpicker/bootstrap-colorpicker.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/colorpicker/bootstrap-colorpicker.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/colorpicker/img/bootstrap-colorpicker/alpha-horizontal.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/colorpicker/img/bootstrap-colorpicker/alpha-horizontal.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/colorpicker/img/bootstrap-colorpicker/alpha.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/colorpicker/img/bootstrap-colorpicker/alpha.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/colorpicker/img/bootstrap-colorpicker/hue-horizontal.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/colorpicker/img/bootstrap-colorpicker/hue-horizontal.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/colorpicker/img/bootstrap-colorpicker/hue.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/colorpicker/img/bootstrap-colorpicker/hue.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/colorpicker/img/bootstrap-colorpicker/saturation.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/colorpicker/img/bootstrap-colorpicker/saturation.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/custom.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/custom.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/css/demo_page.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/css/demo_page.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/css/demo_table.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/css/demo_table.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/css/demo_table_jui.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/css/demo_table_jui.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/css/jquery.dataTables.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/css/jquery.dataTables.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/css/jquery.dataTables_themeroller.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/css/jquery.dataTables_themeroller.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/Sorting icons.psd" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/Sorting icons.psd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/back_disabled.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/back_disabled.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/back_enabled.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/back_enabled.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/back_enabled_hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/back_enabled_hover.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/forward_disabled.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/forward_disabled.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/forward_enabled.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/forward_enabled.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/forward_enabled_hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/forward_enabled_hover.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/sort_asc.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/sort_asc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/sort_asc_disabled.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/sort_asc_disabled.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/sort_both.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/sort_both.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/sort_desc.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/sort_desc.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/sort_desc_disabled.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/images/sort_desc_disabled.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/tools/css/dataTables.tableTools.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/datatables/tools/css/dataTables.tableTools.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/editor/external/google-code-prettify/prettify.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/editor/external/google-code-prettify/prettify.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/editor/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/editor/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/floatexamples.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/floatexamples.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/_all.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/_all.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/aero.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/aero.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/aero.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/aero.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/aero@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/aero@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/blue.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/blue.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/blue.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/blue.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/blue@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/blue@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/flat.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/flat.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/flat.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/flat.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/flat@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/flat@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/green.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/green.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/green.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/green.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/green@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/green@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/grey.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/grey.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/grey.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/grey.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/grey@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/grey@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/orange.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/orange.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/orange.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/orange.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/orange@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/orange@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/pink.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/pink.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/pink.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/pink.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/pink@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/pink@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/purple.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/purple.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/purple.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/purple.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/purple@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/purple@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/red.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/red.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/red.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/red.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/red@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/red@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/yellow.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/yellow.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/yellow.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/yellow.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/yellow@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/icheck/flat/yellow@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/ion.rangeSlider.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/ion.rangeSlider.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/ion.rangeSlider.skinFlat.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/ion.rangeSlider.skinFlat.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/maps/jquery-jvectormap-2.0.3.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/maps/jquery-jvectormap-2.0.3.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/normalize.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/normalize.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/nprogress.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/nprogress.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/progressbar/bootstrap-progressbar-3.3.0.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/progressbar/bootstrap-progressbar-3.3.0.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/select/select2.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/select/select2.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/switchery/switchery.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/css/switchery/switchery.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/e_commerce.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/e_commerce.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/echarts.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/echarts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/fonts/less/spinning.less" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/fonts/less/spinning.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/fonts/scss/_spinning.scss" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/fonts/scss/_spinning.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/form_advanced.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/form_advanced.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/form_buttons.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/form_buttons.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/form_upload.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/form_upload.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/form_validation.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/form_validation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/form_wizards.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/form_wizards.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/general_elements.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/general_elements.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/glyphicons.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/glyphicons.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/icons.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/icons.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/1.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/4.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/4.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/american-express.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/american-express.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/back_disabled.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/back_disabled.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/back_enabled.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/back_enabled.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/back_enabled_hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/back_enabled_hover.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/bootstrap-colorpicker/alpha-horizontal.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/bootstrap-colorpicker/alpha-horizontal.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/bootstrap-colorpicker/alpha.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/bootstrap-colorpicker/alpha.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/bootstrap-colorpicker/hue-horizontal.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/bootstrap-colorpicker/hue-horizontal.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/bootstrap-colorpicker/hue.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/bootstrap-colorpicker/hue.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/bootstrap-colorpicker/saturation.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/bootstrap-colorpicker/saturation.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/data.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/data.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/forward_disabled.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/forward_disabled.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/forward_enabled.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/forward_enabled.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/forward_enabled_hover.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/forward_enabled_hover.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/icons.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/icons.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/img.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/img.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/mastercard.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/mastercard.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/paypal2.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/paypal2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/picture-2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/picture-2.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/picture.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/picture.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/picture2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/picture2.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/prod1.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/prod1.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/prod2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/prod2.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/prod3.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/prod3.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/prod4.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/prod4.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/prod5.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/prod5.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/sprite-skin-flat.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/sprite-skin-flat.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/sprite-skin-modern.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/sprite-skin-modern.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/sprite-skin-nice.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/sprite-skin-nice.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/sprite-skin-simple.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/sprite-skin-simple.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/visa.png" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/images/visa.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/inbox.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/inbox.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/index2.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/index2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/index3.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/index3.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/invoice.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/invoice.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/autocomplete/countries.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/autocomplete/countries.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/autocomplete/jquery.autocomplete.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/autocomplete/jquery.autocomplete.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/calendar/fullcalendar.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/calendar/fullcalendar.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/chartjs/chart.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/chartjs/chart.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/colorpicker/bootstrap-colorpicker.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/colorpicker/bootstrap-colorpicker.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/colorpicker/docs.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/colorpicker/docs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/cropping/cropper.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/cropping/cropper.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/cropping/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/cropping/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/cropping/main2.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/cropping/main2.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/custom.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/custom.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/buttons.bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/buttons.bootstrap.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/buttons.bootstrap.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/buttons.bootstrap.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/buttons.html5.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/buttons.html5.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/buttons.print.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/buttons.print.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/dataTables.bootstrap.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/dataTables.bootstrap.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/dataTables.buttons.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/dataTables.buttons.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/dataTables.fixedHeader.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/dataTables.fixedHeader.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/dataTables.keyTable.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/dataTables.keyTable.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/dataTables.responsive.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/dataTables.responsive.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/dataTables.scroller.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/dataTables.scroller.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/fixedHeader.bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/fixedHeader.bootstrap.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/jquery.dataTables.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/jquery.dataTables.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/jquery.dataTables.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/jquery.dataTables.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/json/scroller-demo.json" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/json/scroller-demo.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/jszip.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/jszip.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/pdfmake.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/pdfmake.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/responsive.bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/responsive.bootstrap.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/responsive.bootstrap.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/responsive.bootstrap.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/scroller.bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/scroller.bootstrap.min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/vfs_fonts.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datatables/vfs_fonts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datepicker/daterangepicker.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/datepicker/daterangepicker.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/dropzone/dropzone.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/dropzone/dropzone.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/easypie/jquery.easypiechart.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/easypie/jquery.easypiechart.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/echart/echarts-all.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/echart/echarts-all.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/echart/green.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/echart/green.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/bootstrap-wysiwyg.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/bootstrap-wysiwyg.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-apollo.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-apollo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-basic.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-basic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-clj.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-clj.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-css.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-css.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-dart.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-dart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-erlang.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-erlang.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-go.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-go.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-hs.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-hs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-lisp.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-lisp.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-llvm.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-llvm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-lua.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-lua.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-matlab.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-matlab.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-ml.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-ml.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-mumps.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-mumps.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-n.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-n.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-pascal.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-pascal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-proto.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-proto.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-r.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-r.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-rd.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-rd.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-scala.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-scala.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-sql.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-sql.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-tcl.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-tcl.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-tex.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-tex.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-vb.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-vb.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-vhdl.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-vhdl.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-wiki.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-wiki.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-xq.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-xq.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-yaml.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/lang-yaml.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/prettify.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/prettify.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/run_prettify.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/google-code-prettify/run_prettify.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/jquery.hotkeys.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/editor/external/jquery.hotkeys.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/curvedLines.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/curvedLines.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/date.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/date.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/jquery.flot.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/jquery.flot.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/jquery.flot.orderBars.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/jquery.flot.orderBars.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/jquery.flot.pie.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/jquery.flot.pie.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/jquery.flot.resize.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/jquery.flot.resize.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/jquery.flot.spline.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/jquery.flot.spline.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/jquery.flot.stack.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/jquery.flot.stack.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/jquery.flot.time.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/jquery.flot.time.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/jquery.flot.tooltip.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/flot/jquery.flot.tooltip.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/gauge/gauge.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/gauge/gauge.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/gauge/gauge_demo.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/gauge/gauge_demo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/icheck/icheck.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/icheck/icheck.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/input_mask/jquery.inputmask.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/input_mask/jquery.inputmask.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/ion_range/ion.rangeSlider.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/ion_range/ion.rangeSlider.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/jquery.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/jquery.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/knob/jquery.knob.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/knob/jquery.knob.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/maps/gdp-data.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/maps/gdp-data.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/maps/jquery-jvectormap-2.0.3.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/maps/jquery-jvectormap-2.0.3.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/maps/jquery-jvectormap-us-aea-en.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/maps/jquery-jvectormap-us-aea-en.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/maps/jquery-jvectormap-world-mill-en.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/maps/jquery-jvectormap-world-mill-en.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/maps/us-unemployment.json" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/maps/us-unemployment.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/moment/moment.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/moment/moment.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/moris/example.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/moris/example.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/moris/morris.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/moris/morris.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/moris/raphael-min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/moris/raphael-min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/nicescroll/jquery.nicescroll.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/nicescroll/jquery.nicescroll.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/notify/pnotify.buttons.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/notify/pnotify.buttons.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/notify/pnotify.core.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/notify/pnotify.core.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/notify/pnotify.nonblock.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/notify/pnotify.nonblock.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/nprogress.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/nprogress.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/parsley/parsley.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/parsley/parsley.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/progressbar/bootstrap-progressbar.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/progressbar/bootstrap-progressbar.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/select/select2.full.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/select/select2.full.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/sidebar/classie.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/sidebar/classie.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/sidebar/component.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/sidebar/component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/sidebar/modernizr.custom.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/sidebar/modernizr.custom.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/sidebar/sidebarEffects.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/sidebar/sidebarEffects.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/skycons/skycons.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/skycons/skycons.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/sparkline/jquery.sparkline.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/sparkline/jquery.sparkline.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/switchery/switchery.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/switchery/switchery.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/tags/jquery.tagsinput.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/tags/jquery.tagsinput.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/textarea/autosize.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/textarea/autosize.min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/validator/validator.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/validator/validator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/wizard/jquery.smartWizard.js" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/js/wizard/jquery.smartWizard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/less/custom.css" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/less/custom.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/map.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/map.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/media_gallery.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/media_gallery.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/morisjs.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/morisjs.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/other_charts.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/other_charts.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/page_404.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/page_404.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/page_500.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/page_500.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/plain_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/plain_page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/pricing_tables.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/pricing_tables.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/project_detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/project_detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/projects.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/projects.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/sign_up.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/sign_up.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/tables.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/tables.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/tables_dynamic.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/tables_dynamic.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/typography.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/typography.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/widgets.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/widgets.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/xx.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/static/xx.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/auvsi_ui/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/auvsi_ui/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python/src/ui/menu/tk_menu.py" beforeDir="false" afterPath="$PROJECT_DIR$/python/src/ui/menu/tk_menu.py" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="interface.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/python/src/mission_planner/interface.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="22" column="31" lean-forward="true" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="291" />
+    <option name="y" value="97" />
+    <option name="width" value="1215" />
+    <option name="height" value="970" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="auvsi_suas" type="b2602c69:ProjectViewProjectNode" />
+              <item name="auvsi_suas" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="auvsi_suas" type="b2602c69:ProjectViewProjectNode" />
+              <item name="auvsi_suas" type="462c0819:PsiDirectoryNode" />
+              <item name="python" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="auvsi_suas" type="b2602c69:ProjectViewProjectNode" />
+              <item name="auvsi_suas" type="462c0819:PsiDirectoryNode" />
+              <item name="python" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="auvsi_suas" type="b2602c69:ProjectViewProjectNode" />
+              <item name="auvsi_suas" type="462c0819:PsiDirectoryNode" />
+              <item name="python" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="mission_planner" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e6212590-70f2-48bf-94b1-4de9d97b615f" name="Default" comment="" />
+      <created>1528580341349</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1528580341349</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="291" y="97" width="1215" height="970" extended-state="0" />
+    <editor active="true" />
+    <layout>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Version Control" />
+      <window_info anchor="bottom" id="Python Console" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info id="Favorites" side_tool="true" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/python/src/mission_planner/interface.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="22" column="31" lean-forward="true" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

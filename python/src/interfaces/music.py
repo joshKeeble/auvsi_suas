@@ -10,6 +10,7 @@ Play music because why not?
 from __future__ import print_function
 from __future__ import division
 from pygame import mixer 
+import time
 import sys
 import os
 
@@ -26,7 +27,7 @@ def play_mp3(mp3_file):
 				mixer.music.load(mp3_file)
 				mixer.music.play()
 				while True:
-					if (time.time()-start_time > )
+					pass
 
 def main():
 	test_file_path = "/home/hal/Desktop/Ride of the Valkyries by Wagner (Royalty-Free Music).mp3"

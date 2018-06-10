@@ -48,8 +48,8 @@ class OSCClient(object):
 
     #--------------------------------------------------------------------------
 
-    def send_data(self,data):
-        self.client.send_message("/filter",data)
+    def send_data(self,data,channel="/filter"):
+        self.client.send_message(channel,data)
 
 #------------------------------------------------------------------------------
 

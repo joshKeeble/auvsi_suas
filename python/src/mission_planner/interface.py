@@ -18,9 +18,9 @@ import os
 
 try:
     import clr
-    clr.AddReference(“MissionPlanner”)
+    #clr.AddReference(“MissionPlanner”)
     import MissionPlanner
-    clr.AddReference(“MAVLink”)
+    #clr.AddReference(“MAVLink”)
     import MAVLink
 except:
     print("ERROR: Not run within Mission Planner",file=sys.stderr)
@@ -38,14 +38,6 @@ import auvsi_suas.config as config
 Mission Planner Handlers
 ===============================================================================
 """
-
-def gs2mp_server_handle(channel,data):
-    """TCP server data packet handler"""
-    data = zlib.decompress(data)
-    data = pickle.loads(data)
-    data = np.asarray(data)
-    print("Incoming server data:{}".format(data))
-  
 
 """
 ===============================================================================
@@ -94,7 +86,17 @@ class MPInterface(object):
 
     #--------------------------------------------------------------------------
 
+    def init_gs2mp_server(self):
+        """Initialize ground station to mission planner server"""
+        self.gs2mp_server = osc_server.OSCServer(config.GROUND_STATION_HOST,
+            config.GROUND_STATION2MISSION_PLANNER_PORT)
+        self.gs2mp_server.init_server(gs2mp_server_handle)
+        self.gs2mp_server.activate_listen_thread()
+
+    #--------------------------------------------------------------------------
+
     def add_waypoint(self,lat,lng,alt):
+        """Add a waypoint"""
         wp = MissionPlanner.Utilities.Locationwp()
         MissionPlanner.Utilities.Locationwp.lat.SetValue(wp,lat)
         MissionPlanner.Utilities.Locationwp.lat.SetValue(wp,lng)
@@ -288,3 +290,17 @@ class MPInterface(object):
     def is_armed(self):
         """Return whether the uav is armed"""
         return cs.armed
+
+
+mp_interface = MPInterface()
+mp_interface.init_autonomous_mode()
+
+def gs2mp_server_handle(channel,data):
+    """TCP server data packet handler"""
+    data = zlib.decompress(data)
+    data = pickle.loads(data)
+    data = np.asarray(data)
+    print("Incoming server data:{}".format(data))
+    if (channel == 'path'):
+        for n in data:
+            mp_interface.add_waypoint(n[0],n[1],n[2])

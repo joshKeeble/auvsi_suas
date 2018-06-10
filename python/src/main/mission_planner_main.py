@@ -39,6 +39,8 @@ class MissionPlannerMain(object):
 
     def main(self):
         self.interface.init_gs2mp_server()
+        while True:
+            pass
 
 """
 ===============================================================================

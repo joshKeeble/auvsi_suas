@@ -128,7 +128,7 @@ class AUVSIUserInterface(ttk.Frame):
                     self.stealth_mode.boundaries)
                 try:
                     compressed_data = zlib.compress(pickle.dumps(np.asarray(optimal_path)))
-                    gs2mp_client.send_data(compressed_data)
+                    gs2mp_client.send_data(compressed_data,channel='path')
                     # print("Data sent:{}".format(compressed_data))
 
                 except Exception as e:
