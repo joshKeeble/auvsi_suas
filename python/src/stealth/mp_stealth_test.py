@@ -1,24 +1,10 @@
 #!/bin/env/python3
 #-*- encoding: utf-8 -*-
-"""
-===============================================================================
-Simulation for UAV Mapping Mission Planner Test
-===============================================================================
-
--------------------------------------------------------------------------------
-"""
-#!/bin/env/python3
-#-*- encoding: utf-8 -*-
-"""
-===============================================================================
-AUVSI SUAS Mission Planner Interface
-===============================================================================
-
--------------------------------------------------------------------------------
-"""
 import sys
 
-paths = []
+paths = ['C:\Users\Rocket\Desktop\\','','C:\\Users\\Rocket\\Anaconda\\envs\\auvsi\\python36.zip',
+'C:\\Users\\Rocket\\Anaconda\\envs\\auvsi\\DLLs', 'C:\\Users\\Rocket\\Anaconda\\envs\\auvsi\\lib',
+'C:\\Users\\Rocket\\Anaconda\\envs\\auvsi', 'C:\\Users\\Rocket\\Anaconda\\envs\\auvsi\\lib\\site-packages']
 
 for n in paths:
 	sys.path.append(path)
@@ -27,17 +13,18 @@ import numpy as np
 import pickle
 import zlib
 
-from auvsi_suas.python.src.communications.osc_server import osc_server
+#from auvsi_suas.python.src.communications.osc_server import osc_server
 
 try:
     import clr
-    clr.AddReference(“MissionPlanner”)
+    clr.AddReference("MissionPlanner")
     import MissionPlanner
-    clr.AddReference(“MAVLink”)
+    clr.AddReference("MAVLink")
     import MAVLink
 except:
     print("ERROR: Not run within Mission Planner",file=sys.stderr)
 
+print(1)
 
 #import auvsi_suas.python.src.communications.osc_server as osc_server
 #import auvsi_suas.python.src.communications.osc_client as osc_client
@@ -46,32 +33,11 @@ except:
 clr.AddReference("MissionPlanner.Utilities")
 #Script.ChangeMode("Guided")
 
-"""
-===============================================================================
-Mission Planner Handlers
-===============================================================================
-"""
-
-"""
-===============================================================================
-Mission Planner Interface Object
-===============================================================================
-"""
 
 
 class MPInterface(object):
 
     def __init__(self):
-        '''
-        self.vehicle_lat          = 38.147404206618816
-        self.vehcile_lng          = -76.4277855321988
-        self.ground_station_host  = config.GROUND_STATION_HOST
-        self.gs2mp_port           = config.GROUND_STATION2MISSION_PLANNER_PORT
-
-        self.mission_planner_host = config.MISSION_PLANNER_HOST 
-        self.mp2gs_port           = config.MISSION_PLANNER2GROUND_STATION_PORT
-        self.mp2gimbal_port       = config.MISSION_PLANNER2GIMBAL_PORT
-        '''
         pass
 
     #--------------------------------------------------------------------------
@@ -118,6 +84,7 @@ class MPInterface(object):
         MissionPlanner.Utilities.Locationwp.lng.SetValue(wp,lng)
         MissionPlanner.Utilities.Locationwp.alt.SetValue(wp,alt)
         MAV.setGuidedModeWP(wp)
+    '''
 
     #--------------------------------------------------------------------------
 
@@ -307,10 +274,10 @@ class MPInterface(object):
         """Return whether the uav is armed"""
         return cs.armed
 
+    '''
 
 
-
-
+print(2)
 
 
 def gs2mp_server_handle(channel,data):
@@ -322,6 +289,8 @@ def gs2mp_server_handle(channel,data):
     if (channel == 'path'):
         for n in data:
             mp_interface.add_waypoint(n[0],n[1],n[2])
+
+print(3)
 
 def main():
 	mp_interface = MPInterface()

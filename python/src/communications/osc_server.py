@@ -11,12 +11,9 @@ from __future__ import print_function
 from __future__ import division
 from pythonosc import dispatcher
 from pythonosc import osc_server
-import numpy as np
 import threading
 import pickle
-import math
 import zlib
-import cv2
 import sys
 import os
 import re
@@ -28,9 +25,7 @@ def handle(channel,data):
     data = zlib.decompress(data)
     data = pickle.loads(data)
     data = np.asarray(data,dtype=np.uint8)
-    # print(data)
-    cv2.imshow("data",data)
-    cv2.waitKey(20)
+    print(data)
 
 """
 ===============================================================================
@@ -54,7 +49,7 @@ class OSCServer(object):
     #--------------------------------------------------------------------------
 
     def init_server(self,handle):
-        self.handler = dispatcher.Dispatcher()
+        self.handler = dispatcher.dispatcher()
         self.handler.map("/filter", handle)
         self.server = osc_server.ThreadingOSCUDPServer(
             (self.host,self.port),self.handler)
