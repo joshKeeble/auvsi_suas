@@ -4,13 +4,13 @@
 import sys
 print(sys.version)
 
-paths =  ['C:\Users\Rocket\Desktop\\','', 'C:\\Users\\Rocket\\Anaconda\\envs\\mission_planner\\python27.zip', 
-'C:\\Users\\Rocket\\Anaconda\\envs\\mission_planner\\DLLs', 
-'C:\\Users\\Rocket\\Anaconda\\envs\\mission_planner\\lib', 
-'C:\\Users\\Rocket\\Anaconda\\envs\\mission_planner\\lib\\plat-win', 
-'C:\\Users\\Rocket\\Anaconda\\envs\\mission_planner\\lib\\lib-tk', 
-'C:\\Users\\Rocket\\Anaconda\\envs\\mission_planner', 
-'C:\\Users\\Rocket\\Anaconda\\envs\\mission_planner\\lib\\site-packages']
+paths =  ['C:\\Users\\soffer\\Desktop','C:\\Users\\soffer\\AppData\\Local\\Continuum\\anaconda3\\envs\\mission_planner\\python27.zip', 
+'C:\\Users\\soffer\\AppData\\Local\\Continuum\\anaconda3\\envs\\mission_planner\\DLLs', 
+'C:\\Users\\soffer\\AppData\\Local\\Continuum\\anaconda3\\envs\\mission_planner\\lib', 
+'C:\\Users\\soffer\\AppData\\Local\\Continuum\\anaconda3\\envs\\mission_planner\\lib\\plat-win', 
+'C:\\Users\\soffer\\AppData\\Local\\Continuum\\anaconda3\\envs\\mission_planner\\lib\\lib-tk', 
+'C:\\Users\\soffer\\AppData\\Local\\Continuum\\anaconda3\\envs\\mission_planner', 
+'C:\\Users\\soffer\\AppData\\Local\\Continuum\\anaconda3\\envs\\mission_planner\\lib\\site-packages']
 
 print(sys.path)
 
@@ -27,98 +27,7 @@ import time
 import os
 
 
-"""
-===============================================================================
-Client Object
-===============================================================================
-"""
-
-class VideoStreamClient(object):
-
-    def __init__(self,host,port):
-        self.host = host
-        self.port = port
-        self.setup_client()
-
-    #--------------------------------------------------------------------------
-
-    def setup_client(self):
-        self.client_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        self.client_socket.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-        self.client_socket.connect((self.host,self.port))
-
-    #--------------------------------------------------------------------------
-
-    def send_frame(self,frame):
-        frame_data = pickle.dumps(frame)
-        frame_data = struct.pack("L",len(frame_data))+frame_data
-
-        self.client_socket.sendall(frame_data)
-
-        self.client_socket.recv(10)
-
-"""
-===============================================================================
-Server Object
-===============================================================================
-"""
-
-class VideoStreamServer(object):
-
-    def __init__(self,host,port):
-        self.host = host
-        self.port = port
-        self.setup_server()
-
-    #--------------------------------------------------------------------------
-
-    def setup_server(self):
-        self.server_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-        self.server_socket.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-        self.server_socket.bind((self.host,self.port))
-        print("Server activated")
-
-    #--------------------------------------------------------------------------
-
-    def listen(self,handle,handle_args):
-        self.server_socket.listen(10)
-        conn,addr = self.server_socket.accept()
-        
-        package_size = struct.calcsize("L")
-
-        n_packets = 0
-
-        while True:
-
-            start_time = time.time()
-            data = bytearray(b'')
-
-            while (len(data)<package_size):
-                data.extend(conn.recv(config.VIDEO_STREAM_RECV_SIZE))
-
-            print(data)
-
-            packed_msg_size = data[:package_size]
-
-            data = data[package_size:]
-
-            msg_size = struct.unpack("L",packed_msg_size)[0]
-
-            while (len(data) < msg_size):
-                data.extend(conn.recv(config.VIDEO_STREAM_RECV_SIZE))
-
-
-            if len(data):
-
-                packet = pickle.loads(data)
-
-                client_message = handle(packet,handle_args)
-                
-                n_packets += 1
-                print("Recieved packets: {}".format(n_packets))
-
-                conn.send(client_message)
-
+import auvsi_suas.python.src.communications.mp_communications as mp_coms
 try:
     import clr
     clr.AddReference("MissionPlanner")
@@ -185,7 +94,7 @@ class MPInterface(object):
         MissionPlanner.Utilities.Locationwp.lat.SetValue(wp,lat)
         MissionPlanner.Utilities.Locationwp.lng.SetValue(wp,lng)
         MissionPlanner.Utilities.Locationwp.alt.SetValue(wp,alt)
-        MAV.setGuidedModeWP(wp)
+        MAV.setAutoModeWP(wp)
 
     #--------------------------------------------------------------------------
 
@@ -194,7 +103,6 @@ class MPInterface(object):
         return cs.mode
 
 
-print(2)
 
 
 def gs2mp_server_handle(data,handle_args):
@@ -203,16 +111,20 @@ def gs2mp_server_handle(data,handle_args):
     print("Incoming server data:{}".format(data))
     #for n in data:
     #    mp_interface.add_waypoint(n[0],n[1],n[2])
+    return b'1'
 
-print(3)
+host = 'localhost'
+port = 4012
+
 
 def main():
     mp_interface = MPInterface()
     mp_interface.init_autonomous_mode()
     if not cs.mode == "Guided":
-        Script.ChangeMode("Guided")
-    gs2mp_server = VideoStreamServer('192.168.1.69',5005)
-    gs2mp_server.listen(gs2mp_server_handle,None)
+        Script.ChangeMode("Auto")
+    print("Ready to recieve gps coordinates")
+    gs2mp_server = mp_coms.MissionPlannerServer(host,port)
+    gs2mp_server.listen(gs2mp_server_handle,0x00)
     #gs2mp_server = osc_server.OSCServer('192.168.1.42',5005)
     #gs2mp_server.init_server(gs2mp_server_handle)
     #gs2mp_server.listen()

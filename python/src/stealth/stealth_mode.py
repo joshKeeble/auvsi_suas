@@ -9,7 +9,6 @@ Simulation for UAV Mapping
 """
 from __future__ import print_function
 from __future__ import division
-import matplotlib.pyplot as plt
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
 import numpy as np
@@ -23,6 +22,10 @@ import cv2
 import sys
 import os
 
+if (sys.platform == 'win32'):
+    sys.path.append('C:\\Users\\soffer\\Desktop')
+
+import auvsi_suas.python.src.communications.mp_communications as mp_coms
 import auvsi_suas.python.src.communications.osc_server as osc_server
 import auvsi_suas.python.src.communications.osc_client as osc_client
 import auvsi_suas.python.src.stealth.smoothed_RRT as smoothed_RRT
@@ -416,7 +419,7 @@ class StealthMode(object):
         temp_waypoints = current_waypoints.copy()
         temp_primary = primary_waypoints.copy()
 
-        primary_indexes = [0]
+        primary_indexes = []
 
         for p in temp_primary:
             for i,n in enumerate(temp_waypoints):
@@ -483,7 +486,12 @@ class StealthMode(object):
         """Add the altitude waypoints to the full path"""
         segments = self.segment_path(full_path,primary_waypoints)
         path_placeholder = np.zeros((len(full_path),3))
-
+        print('-'*80)
+        print("segments:{}".format(segments))
+        for n in segments:
+            print(n)
+        print(len(segments))
+        print('-'*80)
 
         counter = 0
         for i,n in enumerate(segments): 
@@ -830,7 +838,8 @@ class StealthMode(object):
         boundary_points = list(map(rescale_up,boundary_points))
         full_path = list(map(rescale_up,full_path))
 
-        #self.create_altitude_points(full_path,primary_waypoints,waypoint_altitudes)
+        print(full_path,primary_waypoints,waypoint_altitudes)
+        full_path = self.create_altitude_points(full_path,primary_waypoints,waypoint_altitudes)
 
         self.prev_obstacles = original_obstacles
 
@@ -851,7 +860,7 @@ class StealthMode(object):
             display_size = 8000
 
             display_path = full_path.copy()
-            display_path = np.insert(display_path,0,current_position[:2],axis=0)
+            display_path = np.insert(display_path,0,current_position[:3],axis=0)
             
             display_scale = 10
             frame = np.ones((int(display_size/display_scale),
@@ -911,8 +920,8 @@ class StealthMode(object):
             #------------------------------------------------------------------
         
             for i in range(len(display_path)-1):
-                (x1,y1) = display_path[i]
-                (x2,y2) = display_path[i+1]
+                (x1,y1,_) = display_path[i]
+                (x2,y2,_) = display_path[i+1]
                 
                 (x1,y1) = (int((x1+(display_size/2))/display_scale),int(((display_size/2)-y1)/display_scale))
                 (x2,y2) = (int((x2+(display_size/2))/display_scale),int(((display_size/2)-y2)/display_scale))
@@ -922,7 +931,12 @@ class StealthMode(object):
             cv2.imshow("frame",frame)
             cv2.waitKey(0)
 
-        return [self.ft2latlng(x,y) for (x,y) in full_path]
+        output_path = []
+        for (x,y,h) in full_path:
+            (lat,lng) = self.ft2latlng(x,y)
+            output_path.append([lat,lng,h])
+
+        return output_path
 
         #sys.exit()
 
@@ -1187,11 +1201,13 @@ class FlyZone(ClientBaseType):
         self.altitude_msl_min = float(altitude_msl_min)
         self.altitude_msl_max = float(altitude_msl_max)
 
+host = 'localhost'
+port = 4023
 
 
 def main():
-    gs2mp_client = osc_client.OSCClient('192.168.1.42',5005)
-    gs2mp_client.init_client()
+    #gs2mp_client = osc_client.OSCClient('192.168.1.42',5005)
+    #gs2mp_client.init_client()
 
     stealth = StealthMode()
     obstacles = [(45.9616069,-121.2746859,50)]
@@ -1209,15 +1225,30 @@ def main():
     boundary_points = [(45.9601301,-121.2709951),(45.9598616,-121.2774324),(45.9643066,-121.2795138),(45.9647988,-121.2711239)]
     boundary = FlyZone(boundary_points,100,400)
     path = stealth.find_path(obstacles,mission_waypoints,current_position,[boundary])
-    print(path)
+    print('Path:',path)
+
+    
+
 
     while True:
-        print("sending:{}\n{}".format(path,'-'*80))
-        path = np.asarray(path)
-        path = pickle.dumps(path)
-        path = zlib.compress(path)
-        gs2mp_client.send_data(path,channel='path')
+        mp_client = mp_coms.MissionPlannerClient(host,port)
+        #print("sending:{}\n{}".format(path,'-'*80))
+        #path = np.asarray(path)
+        #path = pickle.dumps(path)
+        #path = zlib.compress(path)
+        #path = [1,2,3,4,5]
+        path = np.asarray(np.reshape(path,(1,-1))[0],dtype=np.float32).tolist()
+
+        #path = [1,2,3,4,5]
+        print(path)
+
+        mp_client.send_data(path)
+       # mp_client.client_socket.close()
+        #gs2mp_client.send_data(path,channel='path')
         time.sleep(1)
+        mp_client.client_socket.close()
+        break
+
 
 if __name__ == "__main__":
     main()
