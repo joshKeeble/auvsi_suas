@@ -1227,8 +1227,6 @@ def main():
     path = stealth.find_path(obstacles,mission_waypoints,current_position,[boundary])
     print('Path:',path)
 
-    
-
 
     while True:
         mp_client = mp_coms.MissionPlannerClient(host,port)

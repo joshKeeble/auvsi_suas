@@ -12,12 +12,8 @@ paths =  ['C:\\Users\\soffer\\Desktop','C:\\Users\\soffer\\AppData\\Local\\Conti
 'C:\\Users\\soffer\\AppData\\Local\\Continuum\\anaconda3\\envs\\mission_planner', 
 'C:\\Users\\soffer\\AppData\\Local\\Continuum\\anaconda3\\envs\\mission_planner\\lib\\site-packages']
 
-print(sys.path)
-
 for n in paths:
 	sys.path.append(n)
-
-print(sys.path)
 
 import threading
 import pickle
@@ -106,11 +102,8 @@ class MPInterface(object):
 
 
 def gs2mp_server_handle(data,handle_args):
-    """TCP server data packet handler"""
 
     print("Incoming server data:{}".format(data))
-    #for n in data:
-    #    mp_interface.add_waypoint(n[0],n[1],n[2])
     return b'1'
 
 host = 'localhost'

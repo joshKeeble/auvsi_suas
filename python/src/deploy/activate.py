@@ -13,19 +13,25 @@ import sys
 import os
 
 
-class RPiGPIO(object):
+class PayloadDeployment(object):
 
-	def __init__(self,GPIO_ID):
-		self.GPIO_ID = GPIO_ID
-
-	#--------------------------------------------------------------------------
-
-
-	def init_gpio(self):
-		"""Initialize GPIO configuration"""
-		pass
+	def __init__(self):
+		self.drop_zone_lat = 0
+		self.drop_zone_lng = 0
+		self.drop_height = 400
 
 	#--------------------------------------------------------------------------
 
-	def activate(self):
-		pass
+	def update_drop_zone(self,lat,lng):
+		"""Update the drop zone location"""
+		print("Drop zone",lat,lng)
+		self.drop_zone_lat = lat
+		self.drop_zone_lng = lng
+
+	#--------------------------------------------------------------------------
+
+	def send_data(self,client):
+		"""Send the information to mission planner"""
+		client.send_data(("drop",(self.drop_zone_lat,
+			self.drop_zone_lng,self.drop_height)))
+
