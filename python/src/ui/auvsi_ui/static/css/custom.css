@@ -234,31 +234,31 @@ body.nav-md .container.body .right_col {
   color: #34495E;
 }
 .border-blue {
-  border-color: #3498DB !important;
+  border-color: #dbdfe1 !important;
 }
 .border-purple {
-  border-color: #9B59B6 !important;
+  border-color: #c1c1c1 !important;
 }
 .border-green {
-  border-color: #1ABB9C !important;
+  border-color: #d21e1e !important;
 }
 .border-aero {
-  border-color: #9CC2CB !important;
+  border-color: #c0c4c5 !important;
 }
 .border-red {
   border-color: #E74C3C !important;
 }
 .border-dark {
-  border-color: #34495E !important;
+  border-color: #454749 !important;
 }
 .bg-white {
   background: #fff !important;
   border: 1px solid #fff !important;
-  color: #73879C;
+  color: #7e8892;
 }
 .bg-green {
-  background: #1ABB9C !important;
-  border: 1px solid #1ABB9C !important;
+  background: #bb1a1a !important;
+  border: 1px solid #bb1a1a !important;
   color: #fff;
 }
 .bg-red {
@@ -267,8 +267,8 @@ body.nav-md .container.body .right_col {
   color: #fff;
 }
 .bg-blue {
-  background: #3498DB !important;
-  border: 1px solid #3498DB !important;
+  background: #b40e0e !important;
+  border: 1px solid #db3434 !important;
   color: #fff;
 }
 .bg-orange {
@@ -282,8 +282,8 @@ body.nav-md .container.body .right_col {
   color: #fff;
 }
 .bg-blue-sky {
-  background: #50C1CF !important;
-  border: 1px solid #50C1CF !important;
+  background: #b40000 !important;
+  border: 1px solid #a31919 !important;
   color: #fff;
 }
 .container {
@@ -297,8 +297,8 @@ body.nav-md .container.body .right_col {
   margin-bottom: 5px
 }
 body {
-  color: #73879C;
-  background: #2A3F54;
+  color: #899096;
+  background: #800000;
   /*#ECF0F1; #FCFCFC*/
   font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
   font-size: 13px;
@@ -349,7 +349,7 @@ body {
   overflow: hidden
 }
 .progress-bar-dark {
-  background-color: #34495E !important;
+  background-color: #48494b !important;
 }
 .progress-bar-gray {
   background-color: #BDC3C7 !important;
@@ -554,7 +554,7 @@ li.current-page {
   box-shadow: rgba(0, 0, 0, 0.25) 0 1px 0, inset rgba(255, 255, 255, 0.16) 0 1px 0;
 }
 li.current-page a {
-  color: #1ABB9C !important
+  color: #ffffff !important
 }
 .navbar-brand, .navbar-nav>li>a {
   font-weight: 500;

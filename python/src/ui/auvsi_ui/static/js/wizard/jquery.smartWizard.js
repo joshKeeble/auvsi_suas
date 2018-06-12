@@ -17,13 +17,13 @@ function SmartWizard(target, options) {
     this.curStepIdx   = options.selected;
     this.steps        = $(target).children("ul").children("li").children("a"); // Get all anchors
     this.contentWidth = 0;
-    this.msgBox = $('<div class="msgBox"><div class="content"></div><a href="#" class="close">X</a></div>');
+    this.msgBox = $('<div class="msgBox"><div class="content"></div><a href="/" class="close">X</a></div>');
     this.elmStepContainer = $('<div></div>').addClass("stepContainer");
     this.loader = $('<div>Loading</div>').addClass("loader");
     this.buttons = {
         next : $('<a>'+options.labelNext+'</a>').attr("href","#").addClass("btn btn-success"),
         previous : $('<a>'+options.labelPrevious+'</a>').attr("href","#").addClass("btn btn-primary"),
-        finish  : $('<a>'+options.labelFinish+'</a>').attr("href","#").addClass("btn btn-default")
+        finish  : $('<a>'+options.labelFinish+'</a>').attr("href","/")
     };
 
     /*
@@ -54,7 +54,7 @@ function SmartWizard(target, options) {
                     $(e).attr("id",s);
                 }
                 var span = $("<span/>").addClass("stepDesc").text(title);
-                var li = $("<li></li>").append($("<a></a>").attr("href", "#" + s).append($("<label></label>").addClass("stepNumber").text(i + 1)).append(span));
+                //var li = $("<li></li>").append($("<a></a>").attr("href", "#" + s).append($("<label></label>").addClass("stepNumber").text(i + 1)).append(span));
                 ul.append(li);
             });
             // (re)initialise the steps property
@@ -146,14 +146,14 @@ function SmartWizard(target, options) {
         }
 
         $($this.steps, $this.target).each(function(i){
-            $($(this).attr("href").replace(/^.+#/, '#'), $this.target).hide();
+            //$($(this).attr("href").replace(/^.+#/, '#'), $this.target).hide();
             $(this).attr("rel",i+1);
         });
     };
 
     var _step = function ($this, selStep) {
         return $(
-            $(selStep, $this.target).attr("href").replace(/^.+#/, '#'),
+            //$(selStep, $this.target).attr("href").replace(/^.+#/, '#'),
             $this.target
         );
     };
@@ -237,13 +237,13 @@ function SmartWizard(target, options) {
                 curElementLeft = 10 + _step($this, curStep).outerWidth();
             }
             if (stepIdx == prevCurStepIdx) {
-                nextElmLeft1 = $($(selStep, $this.target).attr("href"), $this.target).outerWidth() + 20;
+                //nextElmLeft1 = $($(selStep, $this.target).attr("href"), $this.target).outerWidth() + 20;
                 nextElmLeft2 = 0;
-                curElementLeft = 0 - $($(curStep, $this.target).attr("href"), $this.target).outerWidth();
+               // curElementLeft = 0 - $($(curStep, $this.target).attr("href"), $this.target).outerWidth();
             } else {
-                $($(curStep, $this.target).attr("href"), $this.target).animate({left:curElementLeft},"fast",function(e){
-                    $($(curStep, $this.target).attr("href"), $this.target).hide();
-                });
+                //$($(curStep, $this.target).attr("href"), $this.target).animate({left:curElementLeft},"fast",function(e){
+                    //$($(curStep, $this.target).attr("href"), $this.target).hide();
+                //});
             }
 
             _step($this, selStep).css("left",nextElmLeft1).show().animate({left:nextElmLeft2},"fast",function(e){
