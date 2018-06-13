@@ -18,7 +18,7 @@ import os
 
 try:
     import auvsi_suas.config as config
-    import auvsi_suas.python.src.ui.menu.tk_menu as ui
+    import auvsi_suas.python.src.ui.auvsi_ui.app as app
     
 except ModuleNotFoundError as e:
     cwd = os.getcwd().split(os.path.sep)
@@ -42,9 +42,7 @@ class AUVSIMain(object):
 
     def init_ui(self):
         """Initialize User Interface"""
-        root = tk.Tk()
-        ui.AUVSIUserInterface(root)
-        root.mainloop()
+        app.app.run(debug=True)
 
     #--------------------------------------------------------------------------
 

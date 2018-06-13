@@ -10,78 +10,35 @@ AUVSI SUAS User Interface
 from __future__ import print_function
 from __future__ import division
 import numpy as np 
+import threading
+import random
+import json
 import sys
 import os
 import re
 
-
+import auvsi_suas.python.src.communications.mp_communications as mp_coms
 import auvsi_suas.python.src.communications.osc_client as osc_client
 import auvsi_suas.python.src.communications.osc_server as osc_server
 import auvsi_suas.python.src.communications.test_link as tcp_test
-import auvsi_suas.python.src.deploy.activate as deployment
 import auvsi_suas.python.src.stealth.stealth_mode as stealth
 import auvsi_suas.python.src.interop.types as interop_types
+import auvsi_suas.python.src.deploy.activate as deployment
 import auvsi_suas.python.src.interop.client as client
 import auvsi_suas.config as config
 
 
-
-
 from flask import Flask, render_template, request, url_for, redirect
+
 app = Flask(__name__,static_url_path='/static')
 
-#@app.route('/')
-
-#def login():
-#   return render_template('login.html')
-'''
-@app.route('/')
-@app.route('/login',methods=['POST'])
-def login():
-    #error = None
-    print("Does this print?")
-    if request.method == 'POST':
-        print(request.form['username'])
-        #if valid_login(request.form['username'],
-        #              request.form['password']):
-        #   return log_the_user_in(request.form['username'])
-        #else:
-        #    error = 'Invalid username/password'
-    else:
-        print("hmmm...")
-        print(request.method)
-        print(request.form)
-        print(request.data)
-        print(request.args)
-        print(request)
-        #print(request.form['username'])
-    # the code below is executed if the request method
-    # was GET or the credentials were invalid
-    return render_template('login.html', error='error')
-'''
-#Make an app.route() decorator here
-"""
-@app.route('/', methods=['GET', 'POST']) #allow both GET and POST requests
-def form_example():
-    if request.method == 'POST':  #this block is only entered when the form is submitted
-        language = request.form.get('language')
-        framework = request.form['framework']
-
-        return '''<h1>The language value is: {}</h1>
-                  <h1>The framework value is: {}</h1>'''.format(language, framework)
-
-    return '''<form method="POST">
-                  Language: <input type="text" name="language"><br>
-                  Framework: <input type="text" name="framework"><br>
-                  <input type="submit" value="Submit"><br>
-              </form>'''
-
-#"""
 """
 ===============================================================================
 
 ===============================================================================
 """
+
+v_alt = 0
 
 class InteropParser(object):
 
@@ -96,52 +53,38 @@ class InteropParser(object):
 
     #--------------------------------------------------------------------------
 
-    def payload_drop(self):
-        self.drop_deploy.send_data()
-
-
-
-    #--------------------------------------------------------------------------
-
     def run_stealth_mode(self):
-        #global current_position ############################################## FIX
-        i = 0
-        while True:
-            if self.stealth_mode_activated:
-                obstacles = []
-                for n in self.stealth_mode.obstacles:
-                    try:
-                        obstacles.append((n[0],n[1],n[2]))
-                    except:
-                        obstacles.append((n[0],n[1],n[2]))
-                # print(obstacles)
-                optimal_path = self.stealth_mode.find_path(obstacles,
-                    self.stealth_mode.mission_waypoints,
-                    self.stealth_mode.mission_waypoints[0],
-                    self.stealth_mode.boundaries)
-                try:
+        obstacles = []
+        for n in self.stealth_mode.obstacles:
+            try:
+                obstacles.append((n[0],n[1],n[2]))
+            except:
+                obstacles.append((n[0],n[1],n[2]))
+        # print(obstacles)
+        optimal_path = self.stealth_mode.find_path(obstacles,
+            self.stealth_mode.mission_waypoints,
+            self.stealth_mode.mission_waypoints[0],
+            self.stealth_mode.boundaries)
+        try:
+            mp_client = mp_coms.MissionPlannerClient(
+                config.MISSION_PLANNER_HOST,
+                config.GROUND_STATION2MISSION_PLANNER_PORT)
 
+            path = np.asarray(np.reshape(optimal_path,(1,-1))[0],dtype=np.float32).tolist()
 
-                    mp_client = mp_coms.MissionPlannerClient(host,port)
+            print(path)
 
-                    path = np.asarray(np.reshape(optimal_path,(1,-1))[0],dtype=np.float32).tolist()
+            mp_client.send_data(path)
 
-                    print(path)
+            time.sleep(1)
+            mp_client.client_socket.close()
 
-                    mp_client.send_data(path)
-
-                    time.sleep(1)
-                    mp_client.client_socket.close()
-
-                except Exception as e:
-                    exc_type,exc_obj,exc_tb = sys.exc_info()
-                    fname = os.path.split(
-                        exc_tb.tb_frame.f_code.co_filename)[1]
-                    print(exc_type,fname,exc_tb.tb_lineno,e,
-                        file=sys.stderr)
-                i += 1
-            else:
-                time.sleep(1e-2)
+        except Exception as e:
+            exc_type,exc_obj,exc_tb = sys.exc_info()
+            fname = os.path.split(
+                exc_tb.tb_frame.f_code.co_filename)[1]
+            print(exc_type,fname,exc_tb.tb_lineno,e,
+                file=sys.stderr)
 
     #--------------------------------------------------------------------------
 
@@ -180,15 +123,14 @@ class InteropParser(object):
     def post_telemtry(self,lat,lng,alt,heading):
         t = interop_types.Telemetry(
             latitude=lat,
-            longitude=lng, 
+            longitude=lng,
             altitude_msl=alt, 
             uas_heading=heading)
 
         if config.INTEROP_USE_ASYNC:
-            mission = self.interop_client.post_telemetry(t).result()
+            self.interop_client.post_telemetry(t).result()
         else:
-            mission = self.interop_client.post_telemetry(t)
-
+            self.interop_client.post_telemetry(t)
 
 """
 ===============================================================================
@@ -199,16 +141,18 @@ class InteropParser(object):
 
 def server_handle(data,data_args):
     print(data)
-    [lat,lng,alt,heading] = data
-    interop_parser.post_telemetry(lat,lng,alt,heading)
+    global v_lat,v_lng,v_alt,v_heading
+    [v_lat,v_lng,v_alt,v_heading] = data
+    interop_parser.post_telemetry(v_lat,v_lng,v_alt,v_heading)
     return b'1'
 
 #------------------------------------------------------------------------------
 
 def server_test():
-    interface.init_autonomous_mode()
-    mp_server = mp_coms.MissionPlannerServer(host,port)
-    mp_server.listen(server_handle,0x00)
+    # interface.init_autonomous_mode()
+    mp2gs_server = mp_coms.MissionPlannerServer(config.GROUND_STATION_HOST,
+        config.MISSION_PLANNER2GROUND_STATION_PORT)
+    mp2gs_server.listen(server_handle,0x00)
 
 #------------------------------------------------------------------------------
 
@@ -228,11 +172,6 @@ def login_post_function():
     global interop_client
     global interop_parser
 
-    print(request.form)
-    print(request.method)
-    print(request.form['username'])
-    print(request.data)
-    print(request.args)
     interop_url = request.form['http_addr']
     username = request.form['username']
     password = request.form['password']
@@ -352,28 +291,21 @@ def network_configuration_post_function():
         valid = False
 
     if valid:
-        print(ground_station_addr)
         if verify_ip(ground_station_addr):
-            print("changed")
             config.GROUND_STATION_HOST = ground_station_addr
+
         if verify_ip(mission_planner_addr):
-            print("changed")
             config.MISSION_PLANNER_HOST = mission_planner_addr
+
         if verify_ip(payload_addr):
-            print("changed")
             config.PAYLOAD_HOST = payload_addr
 
         if verify_port(gs2mp_port):
-            print("changed")
             config.GROUND_STATION2MISSION_PLANNER_PORT = gs2mp_port
+
         if verify_port(gs2pd_port):
-            print("changed")
             config.GROUND_STATION2PAYLOAD_PORT = gs2pd_port
-        print(config.GROUND_STATION_HOST)
-        print(config.MISSION_PLANNER_HOST)
-        print(config.PAYLOAD_HOST)
-        print(config.GROUND_STATION2MISSION_PLANNER_PORT)
-        print(config.GROUND_STATION2PAYLOAD_PORT)
+
     return redirect(url_for('index'))
 
 #------------------------------------------------------------------------------
@@ -429,7 +361,48 @@ def payload_deployment_get_function():
     return render_template('payload_deployment.html',error='error')
 
 def payload_deployment_post_function():
-    print("DEPLOYED!!!!")
+    global v_alt
+    try:
+        drop_lat = interop_parser.drop_deploy.drop_zone_lat
+        drop_lng = interop_parser.drop_deploy.drop_zone_lng
+    except:
+        drop_lat = 45.632676
+        drop_lng = -122.651599
+    if not v_alt:
+        drop_height = 400
+    else:
+        drop_height = v_alt
+    if (request.form['latitude'] != '' and request.form['longitude'] != ''):
+        try:
+            temp_drop_lat = float(request.form['latitude'])
+            temp_drop_lng = float(request.form['longitude'])
+            drop_lat,drop_lng = temp_drop_lat,temp_drop_lng
+        except Exception as e:
+            print("Error processing new drop lat/lng args:{}".format(e),
+                file=sys.stderr)
+    try:
+
+        mp_client = mp_coms.MissionPlannerClient(
+            config.MISSION_PLANNER_HOST,
+            config.GROUND_STATION2MISSION_PLANNER_PORT)
+
+        path = [(0,0,0),(drop_lat,drop_lng,drop_height)]
+
+        path = np.asarray(np.reshape(path,(1,-1))[0],dtype=np.float32).tolist()
+
+        mp_client.send_data(path)
+
+        mp_client.client_socket.close()
+
+    except Exception as e:
+        exc_type,exc_obj,exc_tb = sys.exc_info()
+        fname = os.path.split(
+            exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type,fname,exc_tb.tb_lineno,e,
+            file=sys.stderr)
+
+
+
     return redirect(url_for('index'))
 
 
@@ -446,14 +419,125 @@ def payload_deployment():
 ===============================================================================
 """
 
+def return_home_get_function():
+    return render_template('return_home.html',error='error')
+
+#------------------------------------------------------------------------------
+
+def return_home_post_function():
+    global v_alt
+    try:
+        home_lat = interop_parser.drop_deploy.drop_zone_lat
+        home_lng = interop_parser.drop_deploy.drop_zone_lng
+    except:
+        home_lat = 45.632676
+        home_lng = -122.651599
+    home_height = 0
+    if (request.form['latitude'] != '' and request.form['longitude'] != ''):
+        try:
+            temp_home_lat = float(request.form['latitude'])
+            temp_home_lng = float(request.form['longitude'])
+            home_lat,drop_lng = temp_home_lat,temp_home_lng
+        except Exception as e:
+            print("Error processing new drop lat/lng args:{}".format(e),
+                file=sys.stderr)
+    try:
+
+        mp_client = mp_coms.MissionPlannerClient(
+            config.MISSION_PLANNER_HOST,
+            config.GROUND_STATION2MISSION_PLANNER_PORT)
+
+        path = [(-1,-1,-1),(drop_lat,drop_lng,0)]
+
+        path = np.asarray(np.reshape(path,(1,-1))[0],dtype=np.float32).tolist()
+
+        mp_client.send_data(path)
+
+        mp_client.client_socket.close()
+
+    except Exception as e:
+        exc_type,exc_obj,exc_tb = sys.exc_info()
+        fname = os.path.split(
+            exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type,fname,exc_tb.tb_lineno,e,
+            file=sys.stderr)
+
+    return redirect(url_for('index'))
+
+#------------------------------------------------------------------------------
+
+@app.route("/return_home",methods=['GET','POST'])
+def return_home():
+    if request.method == 'GET':
+        return return_home_get_function()
+    elif request.method == 'POST':
+        return return_home_post_function()
+
+"""
+===============================================================================
+
+===============================================================================
+"""
+
+def new_waypoint_get_function():
+    return render_template('new_waypoint.html',error='error')
+
+#------------------------------------------------------------------------------
+
+def new_waypoint_post_function():
+    if (request.form['latitude'] != '' 
+        and request.form['longitude'] != '' 
+        and request.form['altitude'] != ''):
+        try:
+            temp_new_lat = float(request.form['latitude'])
+            temp_new_lng = float(request.form['longitude'])
+            temp_new_alt = float(request.form['altitude'])
+            new_lat,new_lng,new_alt = temp_home_lat,temp_home_lng,temp_new_alt
+            try:
+                mp_client = mp_coms.MissionPlannerClient(
+                    config.MISSION_PLANNER_HOST,
+                    config.GROUND_STATION2MISSION_PLANNER_PORT)
+
+                path = [(-1,-1,-1),(new_lat,new_lng,new_alt)]
+
+                path = np.asarray(np.reshape(path,(1,-1))[0],dtype=np.float32).tolist()
+
+                mp_client.send_data(path)
+
+                mp_client.client_socket.close()
+
+            except Exception as e:
+                exc_type,exc_obj,exc_tb = sys.exc_info()
+                fname = os.path.split(
+                    exc_tb.tb_frame.f_code.co_filename)[1]
+                print(exc_type,fname,exc_tb.tb_lineno,e,
+                    file=sys.stderr)
+        except Exception as e:
+            print("Error processing new drop lat/lng args:{}".format(e),
+                file=sys.stderr)
+
+    return redirect(url_for('index'))
+
+#------------------------------------------------------------------------------
+
+@app.route("/new_waypoint",methods=['GET','POST'])
+def new_waypoint():
+    if request.method == 'GET':
+        return new_waypoint_get_function()
+    elif request.method == 'POST':
+        return new_waypoint_post_function()
+
+"""
+===============================================================================
+
+===============================================================================
+"""
+
 def stationary_obstacle_avoidance_get_function():
     return render_template('obstacle_avoidance_stationary.html',error='error')
 
 def stationary_obstacle_avoidance_post_function():
-    print(request.form)
-    print(request.method)
-    print(request.data)
-    print(request.args)
+    print("OBSTACLES!!!")
     return redirect(url_for('index'))
 
 
@@ -495,17 +579,51 @@ def load_manual_missions():
 ===============================================================================
 """
 
+def save_object(target_type,shape,shape_color,letter,letter_color):
+    cwd = os.getcwd().split(os.path.sep)
+    project_dir = os.path.sep.join(cwd[:cwd.index("auvsi_suas")+1])
+    object_dir = os.path.join(project_dir,'objects')
+
+    n_objects = 0
+    for n in os.listdir(object_dir):
+        if n.endswith('.json'):
+            n_objects += 1
+
+    file_name = os.path.join(object_dir,'{}.json'.format(n_objects+1))
+
+    target_type = target_type.lower()
+
+    if (target_type in ['standard','emergent']):
+        object_data = {
+        "type": "{}".format(target_type),
+        "latitude": 38.1478+np.random.uniform(-0.001,0.001),
+        "longitude": -76.4275+np.random.uniform(-0.001,0.001),
+        "orientation": ["n","w","e","s"][random.randrange(0,3)],
+        "shape":"{}".format(shape),
+        "background_color":"{}".format(shape_color),
+        "alphanumeric":"{}".format(letter),
+        "alphanumeric_color":"{}".format(letter_color)
+        }
+        print(file_name)
+        with open(file_name,'w') as outfile:
+            json.dump(object_data,outfile)
+
 def manual_targeting_missions_get_function():
     return render_template('manual_targeting.html',error='error')
 
+#------------------------------------------------------------------------------
+
+
 def manual_targeting_missions_post_function():
-    print("manual_targeting")
-    print(request.form)
-    print(request.method)
-    print(request.data)
-    print(request.args)
+    target_type = request.form['target_type']
+    shape = request.form['shape_type']
+    shape_color = request.form['shape_color']
+    letter = request.form['alphanumeric']
+    letter_color = request.form['alpha_color']
+    save_object(target_type,shape,shape_color,letter,letter_color)
     return redirect(url_for('index'))
 
+#------------------------------------------------------------------------------
 
 @app.route("/manual_targeting",methods=['GET','POST'])
 def manual_targeting():
@@ -520,14 +638,43 @@ def manual_targeting():
 ===============================================================================
 """
 
-def submit_objects_get_function():
-    return render_template('submit_objects.html',error='error')
 
-def submit_objects_post_function():
+
+def autonomous_targeting_missions_get_function():
+    return render_template('autonomous_targeting.html',error='error')
+
+def autonomous_targeting_missions_post_function():
+    print("autonomous_targeting")
     print(request.form)
     print(request.method)
     print(request.data)
     print(request.args)
+    return redirect(url_for('index'))
+
+
+@app.route("/autonomous_targeting",methods=['GET','POST'])
+def autonomous_targeting():
+    if request.method == 'GET':
+        return autonomous_targeting_missions_get_function()
+    elif request.method == 'POST':
+        return autonomous_targeting_missions_post_function()
+
+"""
+===============================================================================
+
+===============================================================================
+"""
+
+def interop_submit_objects():
+    dir_path = os.getcwd().split(os.sep)
+    dir_path = os.sep.join(dir_path[dir_path.index('auvsi_suas')])
+
+
+def submit_objects_get_function():
+    return render_template('submit_objects.html',error='error')
+
+def submit_objects_post_function():
+    interop_submit_objects()
     return redirect(url_for('index'))
 
 

@@ -78,17 +78,19 @@
                   <ul class="nav child_menu" style="display: none">
                     <li><a href="/index">Dashboard</a>
                     </li>
-                    <li><a href="/load_manual_missions">Load Manual Mission</a>
-                    </li>
-                    <li><a href="/under_construction">Documentation</a>
+                    <!--li><a href="/load_manual_missions">Load Manual Mission</a>
+                    </li-->
+                    <li><a href="/documentation">Documentation</a>
                     </li>
                   </ul>
                 </li>
                 <li><a><i class="fa fa-random"></i> Interop <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">
-                    <li><a href="/under_construction">View Mission</a>
+                    <!--li><a href="/under_construction">View Mission</a>
+                    </li-->
+                    <!--li><a href="/object_review">Review Objects</a-->
                     </li>
-                    <li><a href="/object_review">Review Objects</a>
+                    <li><a href="/submit_objects">Submit Objects</a>
                     </li>
                   </ul>
                 </li>
@@ -96,22 +98,22 @@
                   <ul class="nav child_menu" style="display: none">
                     <li><a href="/network_configuration">Configurations</a>
                     </li>
-                    <li><a href="/under_construction">Testing</a>
-                    </li>
+                    <!--li><a href="/under_construction">Testing</a>
+                    </li-->
 
                   </ul>
                 </li>
                 <li><a><i class="fa fa-camera"></i> Targeting <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">
-                    <li><a href="/under_construction">Autonomous Mode</a>
+                    <li><a href="/autonomous_targeting">Autonomous Mode</a>
                     </li>
-                    <li><a href="/under_construction">Manual Mode</a>
+                    <li><a href="/manual_targeting">Manual Mode</a>
                     </li>
                   </ul>
                 </li>
                 <li><a><i class="fa fa-arrows"></i> Obstacle Avoidance <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">
-                    <li><a href="/under_construction">Stationary</a>
+                    <li><a href="/stationary_obstacle_avoidance">Stationary</a>
                     </li>
                     <li><a href="/under_construction">Moving</a>
                     </li>
@@ -119,9 +121,17 @@
                 </li>
                 <li><a><i class="fa fa-bomb"></i> Payload Deployment <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">
-                    <li><a href="/under_construction">Automatic Mode</a>
+                    <li><a href="/payload_deployment">Automatic Mode</a>
                     </li>
-                    <li><a href="/under_construction">Manual Mode</a>
+                    </li>
+                  </ul>
+                </li>
+                <li><a><i class="fa fa-compass"></i> Navigation <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu" style="display: none">
+                    <li><a href="/return_home">Land</a>
+                    </li>
+                    <li><a href="/new_waypoint">Redirect</a>
+                    </li>
                     </li>
                   </ul>
                 </li>
@@ -180,70 +190,23 @@
     <div class="col-md-24 col-sm-24 col-xs-24">
         <div class="x_panel">
             <div class="x_title">
-              <h3>Usage</h3>
-              <p class="font-gray-dark">
-              The following values are the default values for the communication network.
-              </p>
 
-              <p>The current version of the UI does not support after configuration file changes, so check the file afterwards if validation is required.
-              </p>
-
-              <h2>Default Network Configurations<small>/auvsi_suas/network_configurations.txt</small></h2>
-
-                  <table class="table table-striped">
-                    <thead>
-                      <tr>
-                        <th>Type</th>
-                        <th>Latitude</th>
-                        <th>Longitude</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">Drop Zone</th>
-                        <td>47.18291</td>
-                        <td>-193.48315</td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-
-           <h3>Network Configurations</h3>
+           <h3>Stationary Obstacle Avoidance</h3>
             <p class="font-gray-dark">
-              Enter forms for all updates to the network settings. Alternatively, you can directly edit /auvsi_suas/network_configuration.txt. Note that all addresses must be correctly formatted and all entry forms entered before being successfully submitted.
+              Activate stationary obstacle avoidance which will take in obstacles from interop and create a path around them to the mission waypoints. This will then send those revised waypoints over to Mission Plannner to be sent to the UAV. 
+            </p>
+            <p class="font-gray-dark">
+              Make sure that the Mission Planner server is activated or else it will not recieve the new waypoints. But since it is stationary and not moving obstacle avoidance, you can retry with the server connected and it will output the same path.
             </p>
 
             <div class="clearfix"></div>
-            <form class="form-horizontal form-label-left">
+            <form class="form-horizontal form-label-left" method="post">
 
-              <div class="clearfix"></div>
-              <p class="font-gray-dark">
-                Port number for sending waypoints to Mission Planner over the UDP socket client that is recieved by the python script loaded in Mission Planner. The port range is 4000-5000.
-              </p>
-              <div class="form-group">
-                <label class="control-label col-md-3" for="last-name">Ground Station to MP Port <span class="required">*</span>
-                </label>
-                <div class="col-md-7">
-                  <input type="text" id="last-name2" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
-                </div>
-              </div>
-
-
-              <div class="form-group">
-                <p class="font-gray-dark">
-                Port number for sending waypoints to thhe Payload Raspberry Pi over the OSC client. The port range is 4000-5000.
-                </p>
-                <label class="control-label col-md-3" for="last-name">Ground Station to Payload Port <span class="required">*</span>
-                </label>
-                <div class="col-md-7">
-                  <input type="text" id="last-name2" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
-                </div>
-              </div>
               <a href="/"><button class="btn btn-primary pull-right" onclick="new PNotify({
                                 title: 'Submit Changes',
                                 text: 'Changes to Network Configuration saved',
                                 type: 'success'
-                            });">Submit Changes</button>
+                            });">Activate</button>
 
             </form>
           </div>

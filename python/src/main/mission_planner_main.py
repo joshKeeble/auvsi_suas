@@ -114,6 +114,22 @@ def traverse_path(path):
 
 ###############################################################################
 
+def deploy_payload(drop_zone):
+    interface.add_waypoint(drop_zone[0],drop_zone[1],drop_zone[2])
+    while (abs(cs.lat-drop_zone[0])>0.00005) and (abs(cs.lng-drop_zone[1])>0.00005) and (abs(cs.alt-drop_zone[2])>30):
+        time.sleep(1e-1)
+    interface.open_payload()
+    time.sleep(1)
+    interface.close_payload()
+
+#------------------------------------------------------------------------------
+
+def return_home(home_gps):
+    interface.add_waypoint(home_gps[0],home_gps[1],home_gps[2])
+    while (abs(cs.lat-home_gps[0])>0.00005) and (abs(cs.lng-home_gps[1])>0.00005) and (abs(cs.alt-home_gps[2])>30):
+        time.sleep(1e-1)
+
+#------------------------------------------------------------------------------
 
 def server_handle(data,data_args):
     print(data)
@@ -125,9 +141,16 @@ def server_handle(data,data_args):
         alt = data[3*i+2]
         path.append((lat,lng,alt))
 
-    traverse_thread = threading.Thread(target=traverse_path,args=(path))
-    traverse_thread.daemon = True
-    traverse_thread.start()
+    if (path[0][0]==0) and (path[0][1]==0) and (path[0][2]==0):
+        deploy_payload(path[1])
+
+    elif (path[0][0]==-1) and (path[0][1]==-1) and (path[0][2]==-1):
+        deploy_payload(path[1])
+
+    else:
+        traverse_thread = threading.Thread(target=traverse_path,args=(path))
+        traverse_thread.daemon = True
+        traverse_thread.start()
 
     return b'1'
 
