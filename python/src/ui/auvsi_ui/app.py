@@ -25,6 +25,7 @@ import auvsi_suas.python.src.stealth.stealth_mode as stealth
 import auvsi_suas.python.src.interop.types as interop_types
 import auvsi_suas.python.src.deploy.activate as deployment
 import auvsi_suas.python.src.interop.client as client
+import auvsi_suas.python.src.interop as interop
 import auvsi_suas.config as config
 
 
@@ -90,13 +91,16 @@ class InteropParser(object):
 
     def fetch_mission(self):
         """Main function for processing interop data"""
-        #self.init_telemetry_server()
+        global mission
         if config.INTEROP_USE_ASYNC:
             mission = self.interop_client.get_missions().result()[0]
         else:
             mission = self.interop_client.get_missions()[0]
 
-        print(mission)
+        print('='*int(os.popen('stty size','r').read().split()[1]))
+        print("INTEROP MISSION:{}".format(mission))
+        print('='*int(os.popen('stty size','r').read().split()[1]))
+
         self.drop_deploy.update_drop_zone(mission.air_drop_pos.latitude,
             mission.air_drop_pos.longitude)
         self.stealth_mode.set_home_location(mission.home_pos)
@@ -357,10 +361,23 @@ def under_construction():
 ===============================================================================
 """
 
+@app.route("/interop_error",methods=['GET','POST'])
+def interop_error():
+    return render_template('interop_error.html',error='error')
+
+"""
+===============================================================================
+
+===============================================================================
+"""
+
 def payload_deployment_get_function():
     return render_template('payload_deployment.html',error='error')
 
 def payload_deployment_post_function():
+    print('='*int(os.popen('stty size','r').read().split()[1]))
+    print("Payload Deployment Activated")
+    print('-'*int(os.popen('stty size','r').read().split()[1]))
     global v_alt
     try:
         drop_lat = interop_parser.drop_deploy.drop_zone_lat
@@ -372,6 +389,7 @@ def payload_deployment_post_function():
         drop_height = 400
     else:
         drop_height = v_alt
+
     if (request.form['latitude'] != '' and request.form['longitude'] != ''):
         try:
             temp_drop_lat = float(request.form['latitude'])
@@ -380,6 +398,8 @@ def payload_deployment_post_function():
         except Exception as e:
             print("Error processing new drop lat/lng args:{}".format(e),
                 file=sys.stderr)
+    print("Deployment Zone: {}:{}:{}".format(drop_lat,drop_lng,drop_height))
+    print('-'*int(os.popen('stty size','r').read().split()[1]))
     try:
 
         mp_client = mp_coms.MissionPlannerClient(
@@ -391,6 +411,8 @@ def payload_deployment_post_function():
         path = np.asarray(np.reshape(path,(1,-1))[0],dtype=np.float32).tolist()
 
         mp_client.send_data(path)
+        print("Path sent to Mission Planner: {}".format(path))
+        print('='*int(os.popen('stty size','r').read().split()[1]))
 
         mp_client.client_socket.close()
 
@@ -427,12 +449,13 @@ def return_home_get_function():
 def return_home_post_function():
     global v_alt
     try:
-        home_lat = interop_parser.drop_deploy.drop_zone_lat
-        home_lng = interop_parser.drop_deploy.drop_zone_lng
+        home_lat = mission.home_pos.latitude
+        home_lng = mission.home_pos.longitude
     except:
         home_lat = 45.632676
         home_lng = -122.651599
     home_height = 0
+
     if (request.form['latitude'] != '' and request.form['longitude'] != ''):
         try:
             temp_home_lat = float(request.form['latitude'])
@@ -538,6 +561,10 @@ def stationary_obstacle_avoidance_get_function():
 
 def stationary_obstacle_avoidance_post_function():
     print("OBSTACLES!!!")
+    try:
+        interop_parser.run_stealth_mode()
+    except:
+        return redirect(url_for('interop_error'))
     return redirect(url_for('index'))
 
 
@@ -579,6 +606,54 @@ def load_manual_missions():
 ===============================================================================
 """
 
+def upload_all_objects():
+    cwd = os.getcwd().split(os.path.sep)
+    project_dir = os.path.sep.join(cwd[:cwd.index("auvsi_suas")+1])
+    object_dir = os.path.join(project_dir,'objects')
+
+    dir_list = os.listdir(object_dir)
+
+    if len(dir_list):
+        for i in range(int(len(dir_list)/2)):
+            valid = False
+            json_file = os.path.join(object_dir,"{}.json".format(i+1))
+
+            if os.path.exists(os.path.join(object_dir,"{}.json".format(i+1))):
+                if os.path.exists(os.path.join(object_dir,"{}.jpg".format(i+1))):
+                    image_file = os.path.join(object_dir,"{}.jpg".format(i+1))
+                    valid = True
+                elif os.path.exists(os.path.join(object_dir,"{}.png".format(i+1))):
+                    image_file = os.path.join(object_dir,"{}.png".format(i+1))
+                    valid = True
+            if valid:
+                with open(json_file) as f:
+                    data = json.load(f)
+                    print("Object data")
+                    print(data)
+
+
+
+#------------------------------------------------------------------------------
+
+def upload_object(target_type,shape,shape_color,letter,letter_color,image_path):
+    odlc = interop.Odlc(type='standard',
+            latitude=target_latitude,
+            longitude=target_longitude,
+            orientation=target_orientation,
+            shape=target_shape,
+            background_color=target_shape_color,
+            alphanumeric=target_char,
+            alphanumeric_color=target_char_color)
+
+    odlc = interop_client.post_odlc(odlc)
+    if os.path.exists(image_path):
+        if image_path.endswith('.jpg') or image_path.endswith('.png'):
+            with open(image_path, 'rb') as f:
+                image_data = f.read()
+                client.put_odlc_image(odlc.id, image_data)
+
+#------------------------------------------------------------------------------
+
 def save_object(target_type,shape,shape_color,letter,letter_color):
     cwd = os.getcwd().split(os.path.sep)
     project_dir = os.path.sep.join(cwd[:cwd.index("auvsi_suas")+1])
@@ -594,11 +669,18 @@ def save_object(target_type,shape,shape_color,letter,letter_color):
     target_type = target_type.lower()
 
     if (target_type in ['standard','emergent']):
+        target_latitude     = 38.1478+np.random.uniform(-0.001,0.001)
+        target_longitude    = -76.4275+np.random.uniform(-0.001,0.001)
+        target_orientation  = ["n","w","e","s"][random.randrange(0,3)]
+        target_shape        = shape
+        target_shape_color  = shape_color
+        target_char         = letter
+        target_char_color   = letter_color
         object_data = {
         "type": "{}".format(target_type),
-        "latitude": 38.1478+np.random.uniform(-0.001,0.001),
-        "longitude": -76.4275+np.random.uniform(-0.001,0.001),
-        "orientation": ["n","w","e","s"][random.randrange(0,3)],
+        "latitude": target_latitude,
+        "longitude": target_longitude,
+        "orientation": target_orientation,
         "shape":"{}".format(shape),
         "background_color":"{}".format(shape_color),
         "alphanumeric":"{}".format(letter),
@@ -607,6 +689,8 @@ def save_object(target_type,shape,shape_color,letter,letter_color):
         print(file_name)
         with open(file_name,'w') as outfile:
             json.dump(object_data,outfile)
+
+
 
 def manual_targeting_missions_get_function():
     return render_template('manual_targeting.html',error='error')
@@ -666,8 +750,10 @@ def autonomous_targeting():
 """
 
 def interop_submit_objects():
-    dir_path = os.getcwd().split(os.sep)
-    dir_path = os.sep.join(dir_path[dir_path.index('auvsi_suas')])
+    cwd = os.getcwd().split(os.path.sep)
+    project_dir = os.path.sep.join(cwd[:cwd.index("auvsi_suas")+1])
+    object_dir = os.path.join(project_dir,'objects')
+
 
 
 def submit_objects_get_function():

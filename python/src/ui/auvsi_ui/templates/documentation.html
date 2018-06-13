@@ -191,17 +191,71 @@
         <div class="x_panel">
             <div class="x_title">
               <h3>Documentation</h3>
+               <div class="x_title"></div>
               <div class="clearfix"></div>
               <h4>Installation</h4>
+              <h5>Mission Planner Laptop</h5>
               <p class="font-gray-dark">
-              
+              Other than Mission Planner on the Windows Laptop, there shouldn't have to be any additional packages that are required by that device. It only runs one script, /main/mission_planner_main.py which is loaded into IronPython Mission Planner scripts. This is set to Python 2.7.7, so be aware of any syntax differences when editing.</p> 
+              <p>However, there are additional steps for setting the Python Path in that script due to how this is not run on the native Python, but through Mission Planner instead. It doesn't come with the normal included paths and has to added manually. Therefore we install conda to create an environment that we can easily control and import its system paths into IronPython. 
               </p>
+              <h5>Ground Station Laptop</h5>
+              <p class="font-gray-dark">
+              This has all of the requireemnts except for any computer vision functions which are all onboard the UAV.</p>
+              <p>- Python 3.5+</p>
+              <p>- pythonosc (pip install python-osc)</p>
+              <p>- numpy</p>
+              <p>- opencv (for system imports, conda install -c menpo opencv, pip install python-opencv)
+              <p>- flask</p>
+              <p>- shapely</p>
+              <p>- matplotlib</p>
+              <p>- json</p>
+              <p>- pickle</p>
+              </p>
+              <h5>Payload Raspberry Pi</h5>
+              <p class="font-gray-dark">
+                This requires all of the computer vision libraries as well as communication libraries.
+              </p>
+              <p>- Python 3.5+</p>
+              <p>- opencv (install from source on Raspberry Pi)</p>
+              <p>- tensorflow or Movidius NCS SDK</p>
+              <p>- pytesseract</p>
+              <p>- numpy</p>
+              <p>- pythonosc (pip install python-osc)</p>
+              <p>- skimage</p>
+              <p>- datetime</p>
+              <p>- picamera</p>
+
+              <h5>Payload Raspberry Pi</h5>
+              <p class="font-gray-dark">
+                Requires the liibraries for serial control of a stepper motor and servo as well as sensor data acquisition.
+              </p>
+              <p>- Python 3.5+</p>
+              <p>- pythonosc (pip install python-osc)</p>
+              <p>- BNO055</p>
               <div class="clearfix"></div>
+              <div class="x_title"></div>
               <h4>Usage</h4>
               <p class="font-gray-dark">
-              
+                Before being able to interface with Mission Planner, open conda on the Windows laptop.
+              </p>
+              <p>conda create -n mission_planner python=2.7.7</p>
+              <p>activate mission_planner</p>
+              <p>conda install matplotlib</p>
+              <p>pip install shapely</p>
+              <p>python</p>
+              <p>Once in python, we can find the full list of system paths to manually enter into Mission Planner:</p>
+              <p>>>import sys</p>
+              <p>>>sys.path</p>
+              <p>You should a list of full directory paths.</p>
+              <p>Copy this path.</p>
+              <p>Replace the list of paths in /auvsi_suas/python/src/main/mission_planner_main.py with this list.</p>
+              <p>Add the root directory of wherever you cloned /auvsi_suas into into the list so Mission Planner can find auvsi_suas modules.</p>
+              <p>
+              Follow the checklist on the Dashboard for a brief rundown of how to operate a mission.
               </p>
               <div class="clearfix"></div>
+              <div class="x_title"></div>
               <h4>Troubleshooting</h4>
               <p class="font-gray-dark">
               
