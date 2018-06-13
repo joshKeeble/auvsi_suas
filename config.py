@@ -146,7 +146,7 @@ COMMUNICATION
 # Mission Planner Host
 MISSION_PLANNER_HOST 				= '127.0.0.1'
 # Mission Planner Port
-MISSION_PLANNER2GROUND_STATION_PORT = 5005
+MISSION_PLANNER2GROUND_STATION_PORT = 4006
 
 MISSION_PLANNER2GIMBAL_PORT 		= 5006
 #------------------------------------------------------------------------------

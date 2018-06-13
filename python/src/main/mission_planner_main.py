@@ -11,10 +11,13 @@ paths = ['', 'C:\\Users\\soffer\\Desktop',
 
 for path in paths:
     sys.path.append(path)
+print("Imported system paths")
 
 import auvsi_suas.python.src.communications.mp_communications as mp_coms
+import auvsi_suas.config as config
+import threading
 import time
-
+print("Imported libraries")
 try:
     import clr
     clr.AddReference("MissionPlanner")
@@ -24,6 +27,12 @@ try:
     clr.AddReference("MissionPlanner.Utilities")
 except:
     print("ERROR: Not run within Mission Planner")
+print("Imported Mission Planner libraries")
+
+
+# 45.632788, -122.651605
+#
+
 
 """
 ===============================================================================
@@ -89,18 +98,41 @@ port = config.GROUND_STATION2MISSION_PLANNER_PORT
 
 interface = MPInterface()
 
+
+###############################################################################
+
+# VERIFY THAT THIS METHOD WORKS CORRECTLY!!
+
+def traverse_path(path):
+    while len(path):
+        goal = path[0]
+        interface.add_waypoint(goal[0],goal[1],goal[2])
+        while (abs(cs.lat-goal[0])>0.00005) and (abs(cs.lng-goal[1])>0.00005) and (abs(cs.alt-goal[2])>30):
+            time.sleep(1e-1)
+        path = path[1:]
+
+
+###############################################################################
+
+
 def server_handle(data,data_args):
     print(data)
     print(type(data))
+    path = []
     for i in range(len(data)/3):
         lat = data[3*i]
         lng = data[3*i+1]
         alt = data[3*i+2]
-        interface.add_waypoint(lat,lng,alt)
+        path.append((lat,lng,alt))
+
+    traverse_thread = threading.Thread(target=traverse_path,args=(path))
+    traverse_thread.daemon = True
+    traverse_thread.start()
+
     return b'1'
 
 
-def server_test():
+def server_main():
     interface.init_autonomous_mode()
     mp_server = mp_coms.MissionPlannerServer(host,port)
     mp_server.listen(server_handle,0x00)
@@ -120,12 +152,17 @@ def client_test():
     while True:
 
         try:
+            #start_time = time.time()
             mp_client = mp_coms.MissionPlannerClient(host,port)
             data = [cs.lat,cs.lng,cs.alt,cs.groundcourse]
+            data = list(map(float,data))
 
             mp_client.send_data(data)
             print('Data sent:{}'.format(data))
+            #time.sleep(1e-1)
             mp_client.client_socket.close()
+            #print("Time elapsed:",start_time-time.time())
+            
         except Exception as e:
             print(e)
             print("Are you sure that the Ground Station server is turned on?")
@@ -142,4 +179,4 @@ Mission Planner Interface Class
 """
 
 activate_client()
-server_test()
+server_main()

@@ -9,26 +9,33 @@ sys.path.append(os.sep.join(cwd_split[:cwd_split.index('auvsi_suas')]))
 #sys.path.append()
 
 import auvsi_suas.python.src.communications.mp_communications as mp_coms
+import auvsi_suas.config as config
+import time
 
 def server_handle(data,data_args):
 	print(data)
 	print(type(data))
 	return b'1'
 
-host = 'localhost'
-port = 4011
+host = config.GROUND_STATION_HOST
+port = config.MISSION_PLANNER2GROUND_STATION_PORT
 
 def server_test():
 	try:
 		mp_server = mp_coms.MissionPlannerServer(host,port)
+		print("Server here?")
 		mp_server.listen(server_handle,0x00)
+
 	except Exception as e:
-		print(e)
+		exc_type,exc_obj,exc_tb = sys.exc_info()
+		fname = os.path.split(exc_tb.tb_frame.t_code.co_filename)[1]
+		print(exc_type,fname,exc_tb.tb_lineno)
 
 def client_test():
 
 	mp_client = mp_coms.MissionPlannerClient(host,port)
 	while True:
+
 		try:
 			data = [1,2,3,4,5]
 

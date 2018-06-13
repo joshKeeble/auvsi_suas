@@ -33,21 +33,21 @@ class MissionPlannerClient(object):
 
     def send_data(self,data):
 
-        print(data)
-        print('-'*80)
+        #sprint(data)
+        #print('-'*80)
         data = pickle.dumps(data,protocol=2)
 
-        print(data)
-        print('-'*80)
+        #print(data)
+        #print('-'*80)
 
         #data = struct.pack("L",len(data))+data
 
-        print(data)
-        print('-'*80)
+        #print(data)
+        #print('-'*80)
 
         self.client_socket.sendall(data)
 
-        print("Data sent, waiting for response")
+        #print("Data sent")
 
         #server_response = self.client_socket.recv(10)
 
@@ -88,14 +88,16 @@ class MissionPlannerServer(object):
             #start_time = time.time()
             #data = bytearray(b'')
             try:
-                print("waiting...")
+                #print("waiting...")
                 data = self.server_socket.recv(1024)
                 print(list(data))
                 print(type(data))
+                print(data)
                 n_packets += 1
-                print("N PACKETS:{}".format(n_packets))
+                #print("N PACKETS:{}".format(n_packets))
                 packet = pickle.loads(data)
-                handle(packet,handle_args)
+                print(packet)
+                #handle(packet,handle_args)
 
             except Exception as e:
                 print(e)
