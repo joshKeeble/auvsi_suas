@@ -180,39 +180,70 @@
     <div class="col-md-24 col-sm-24 col-xs-24">
         <div class="x_panel">
             <div class="x_title">
-              <h3>Payload Deployment</h3>
+              <h3>Usage</h3>
+              <p class="font-gray-dark">
+              The following values are the default values for the communication network.
+              </p>
+
+              <p>The current version of the UI does not support after configuration file changes, so check the file afterwards if validation is required.
+              </p>
+
+              <h2>Default Network Configurations<small>/auvsi_suas/network_configurations.txt</small></h2>
+
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Type</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Drop Zone</th>
+                        <td>47.18291</td>
+                        <td>-193.48315</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+
+           <h3>Network Configurations</h3>
             <p class="font-gray-dark">
-              Activate command to send the UAV to the GPS coordinate sent by the Interoperability System to autonomously release the payload on the target location. 
-            </p>
-            <p class="font-gray-dark">
-              If you want to send the payload to a different location, enter the new latitude and longitude and press activate.
+              Enter forms for all updates to the network settings. Alternatively, you can directly edit /auvsi_suas/network_configuration.txt. Note that all addresses must be correctly formatted and all entry forms entered before being successfully submitted.
             </p>
 
             <div class="clearfix"></div>
-            <form class="form-horizontal form-label-left" method='post'>
+            <form class="form-horizontal form-label-left">
 
               <div class="clearfix"></div>
+              <p class="font-gray-dark">
+                Port number for sending waypoints to Mission Planner over the UDP socket client that is recieved by the python script loaded in Mission Planner. The port range is 4000-5000.
+              </p>
               <div class="form-group">
-                <label class="control-label col-md-3" for="last-name">New Latitude of Drop Zone <span class="required">*</span>
+                <label class="control-label col-md-3" for="last-name">Ground Station to MP Port <span class="required">*</span>
                 </label>
                 <div class="col-md-7">
-                  <input type="text" id="latitude" name="latitude"  class="form-control col-md-7 col-xs-12">
+                  <input type="text" id="last-name2" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
                 </div>
               </div>
 
 
               <div class="form-group">
-                <label class="control-label col-md-3" for="last-name">New Longitude of Drop Zone<span class="required">*</span>
+                <p class="font-gray-dark">
+                Port number for sending waypoints to thhe Payload Raspberry Pi over the OSC client. The port range is 4000-5000.
+                </p>
+                <label class="control-label col-md-3" for="last-name">Ground Station to Payload Port <span class="required">*</span>
                 </label>
                 <div class="col-md-7">
-                  <input type="text" id="longitude" name="longitude"  class="form-control col-md-7 col-xs-12">
+                  <input type="text" id="last-name2" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
                 </div>
               </div>
               <a href="/"><button class="btn btn-primary pull-right" onclick="new PNotify({
                                 title: 'Submit Changes',
                                 text: 'Changes to Network Configuration saved',
                                 type: 'success'
-                            });">Activate</button>
+                            });">Submit Changes</button>
 
             </form>
           </div>

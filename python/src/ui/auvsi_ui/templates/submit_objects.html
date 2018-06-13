@@ -19,12 +19,10 @@
 
   <!-- Custom styling plus plugins -->
   <link href="/static/css/custom.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="/static/css/maps/jquery-jvectormap-2.0.3.css" />
   <link href="/static/css/icheck/flat/green.css" rel="stylesheet" />
-  <link href="/static/css/floatexamples.css" rel="stylesheet" type="text/css" />
 
   <script src="/static/js/jquery.min.js"></script>
-  <script src="/static/js/nprogress.js"></script>
+
 
   <!--[if lt IE 9]>
         <script src="../assets/js/ie8-responsive-file-warning.js"></script>
@@ -80,7 +78,7 @@
                     </li>
                     <li><a href="/load_manual_missions">Load Manual Mission</a>
                     </li>
-                    <li><a href="/under_construction">Documentation</a>
+                    <li><a href="/documentation">Documentation</a>
                     </li>
                   </ul>
                 </li>
@@ -111,7 +109,7 @@
                 </li>
                 <li><a><i class="fa fa-arrows"></i> Obstacle Avoidance <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">
-                    <li><a href="/under_construction">Stationary</a>
+                    <li><a href="/stationary_obstacle_avoidance">Stationary</a>
                     </li>
                     <li><a href="/under_construction">Moving</a>
                     </li>
@@ -119,9 +117,8 @@
                 </li>
                 <li><a><i class="fa fa-bomb"></i> Payload Deployment <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">
-                    <li><a href="/under_construction">Automatic Mode</a>
+                    <li><a href="/payload_deployment">Automatic Mode</a>
                     </li>
-                    <li><a href="/under_construction">Manual Mode</a>
                     </li>
                   </ul>
                 </li>
@@ -173,46 +170,79 @@
             </ul>
           </nav>
         </div>
-
       </div>
 
-  <div class="right_col" role="main">
+
+
+<div class="right_col" role="main">
     <div class="col-md-24 col-sm-24 col-xs-24">
         <div class="x_panel">
             <div class="x_title">
-              <h3>Payload Deployment</h3>
+              <h3>Usage</h3>
+              <p class="font-gray-dark">
+              The following values are the default values for the communication network.
+              </p>
+              <form action="choices/form_upload.html" class="dropzone" style="border: 1px solid #e5e5e5; height: 300px; "></form>
+
+              <p>The current version of the UI does not support after configuration file changes, so check the file afterwards if validation is required.
+              </p>
+
+              <h2>Default Network Configurations<small>/auvsi_suas/network_configurations.txt</small></h2>
+
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Type</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Drop Zone</th>
+                        <td>47.18291</td>
+                        <td>-193.48315</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+
+           <h3>Network Configurations</h3>
             <p class="font-gray-dark">
-              Activate command to send the UAV to the GPS coordinate sent by the Interoperability System to autonomously release the payload on the target location. 
-            </p>
-            <p class="font-gray-dark">
-              If you want to send the payload to a different location, enter the new latitude and longitude and press activate.
+              Enter forms for all updates to the network settings. Alternatively, you can directly edit /auvsi_suas/network_configuration.txt. Note that all addresses must be correctly formatted and all entry forms entered before being successfully submitted.
             </p>
 
             <div class="clearfix"></div>
-            <form class="form-horizontal form-label-left" method='post'>
+            <form class="form-horizontal form-label-left">
 
               <div class="clearfix"></div>
+              <p class="font-gray-dark">
+                Port number for sending waypoints to Mission Planner over the UDP socket client that is recieved by the python script loaded in Mission Planner. The port range is 4000-5000.
+              </p>
               <div class="form-group">
-                <label class="control-label col-md-3" for="last-name">New Latitude of Drop Zone <span class="required">*</span>
+                <label class="control-label col-md-3" for="last-name">Ground Station to MP Port <span class="required">*</span>
                 </label>
                 <div class="col-md-7">
-                  <input type="text" id="latitude" name="latitude"  class="form-control col-md-7 col-xs-12">
+                  <input type="text" id="last-name2" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
                 </div>
               </div>
 
 
               <div class="form-group">
-                <label class="control-label col-md-3" for="last-name">New Longitude of Drop Zone<span class="required">*</span>
+                <p class="font-gray-dark">
+                Port number for sending waypoints to thhe Payload Raspberry Pi over the OSC client. The port range is 4000-5000.
+                </p>
+                <label class="control-label col-md-3" for="last-name">Ground Station to Payload Port <span class="required">*</span>
                 </label>
                 <div class="col-md-7">
-                  <input type="text" id="longitude" name="longitude"  class="form-control col-md-7 col-xs-12">
+                  <input type="text" id="last-name2" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
                 </div>
               </div>
               <a href="/"><button class="btn btn-primary pull-right" onclick="new PNotify({
                                 title: 'Submit Changes',
                                 text: 'Changes to Network Configuration saved',
                                 type: 'success'
-                            });">Activate</button>
+                            });">Submit Changes</button>
 
             </form>
           </div>
@@ -220,207 +250,33 @@
       </div>
     </div>
 
+
+
+
+
+
+
+
   <div id="custom_notifications" class="custom-notifications dsp_none">
     <ul class="list-unstyled notifications clearfix" data-tabbed_notifications="notif-group">
     </ul>
     <div class="clearfix"></div>
     <div id="notif-group" class="tabbed_notifications"></div>
   </div>
+
   <script src="/static/js/bootstrap.min.js"></script>
 
-  <!-- gauge js -->
-  <script type="text/javascript" src="/static/js/gauge/gauge.min.js"></script>
-  <script type="text/javascript" src="/static/js/gauge/gauge_demo.js"></script>
   <!-- bootstrap progress js -->
   <script src="/static/js/progressbar/bootstrap-progressbar.min.js"></script>
   <script src="/static/js/nicescroll/jquery.nicescroll.min.js"></script>
   <!-- icheck -->
   <script src="/static/js/icheck/icheck.min.js"></script>
-  <!-- daterangepicker -->
-  <script type="text/javascript" src="/static/js/moment/moment.min.js"></script>
-  <script type="text/javascript" src="/static/js/datepicker/daterangepicker.js"></script>
-  <!-- chart js -->
-  <script src="/static/js/chartjs/chart.min.js"></script>
 
   <script src="/static/js/custom.js"></script>
-
-  <!-- flot js -->
-  <!--[if lte IE 8]><script type="text/javascript" src="/static/js/excanvas.min.js"></script><![endif]-->
-  <script type="text/javascript" src="/static/js/flot/jquery.flot.js"></script>
-  <script type="text/javascript" src="/static/js/flot/jquery.flot.pie.js"></script>
-  <script type="text/javascript" src="/static/js/flot/jquery.flot.orderBars.js"></script>
-  <script type="text/javascript" src="/static/js/flot/jquery.flot.time.min.js"></script>
-  <script type="text/javascript" src="/static/js/flot/date.js"></script>
-  <script type="text/javascript" src="/static/js/flot/jquery.flot.spline.js"></script>
-  <script type="text/javascript" src="/static/js/flot/jquery.flot.stack.js"></script>
-  <script type="text/javascript" src="/static/js/flot/curvedLines.js"></script>
-  <script type="text/javascript" src="/static/js/flot/jquery.flot.resize.js"></script>
-  <script>
-    $(document).ready(function() {
-      // [17, 74, 6, 39, 20, 85, 7]
-      //[82, 23, 66, 9, 99, 6, 2]
-      var data1 = [
-        [gd(2012, 1, 1), 17],
-        [gd(2012, 1, 2), 74],
-        [gd(2012, 1, 3), 6],
-        [gd(2012, 1, 4), 39],
-        [gd(2012, 1, 5), 20],
-        [gd(2012, 1, 6), 85],
-        [gd(2012, 1, 7), 7]
-      ];
-
-      var data2 = [
-        [gd(2012, 1, 1), 82],
-        [gd(2012, 1, 2), 23],
-        [gd(2012, 1, 3), 66],
-        [gd(2012, 1, 4), 9],
-        [gd(2012, 1, 5), 119],
-        [gd(2012, 1, 6), 6],
-        [gd(2012, 1, 7), 9]
-      ];
-      $("#canvas_dahs").length && $.plot($("#canvas_dahs"), [
-        data1, data2
-      ], {
-        series: {
-          lines: {
-            show: false,
-            fill: true
-          },
-          splines: {
-            show: true,
-            tension: 0.4,
-            lineWidth: 1,
-            fill: 0.4
-          },
-          points: {
-            radius: 0,
-            show: true
-          },
-          shadowSize: 2
-        },
-        grid: {
-          verticalLines: true,
-          hoverable: true,
-          clickable: true,
-          tickColor: "#d5d5d5",
-          borderWidth: 1,
-          color: '#fff'
-        },
-        colors: ["rgba(38, 185, 154, 0.38)", "rgba(3, 88, 106, 0.38)"],
-        xaxis: {
-          tickColor: "rgba(51, 51, 51, 0.06)",
-          mode: "time",
-          tickSize: [1, "day"],
-          //tickLength: 10,
-          axisLabel: "Date",
-          axisLabelUseCanvas: true,
-          axisLabelFontSizePixels: 12,
-          axisLabelFontFamily: 'Verdana, Arial',
-          axisLabelPadding: 10
-            //mode: "time", timeformat: "%m/%d/%y", minTickSize: [1, "day"]
-        },
-        yaxis: {
-          ticks: 8,
-          tickColor: "rgba(51, 51, 51, 0.06)",
-        },
-        tooltip: false
-      });
-
-      function gd(year, month, day) {
-        return new Date(year, month - 1, day).getTime();
-      }
-    });
-  </script>
-
-  <!-- worldmap -->
-  <script type="text/javascript" src="/static/js/maps/jquery-jvectormap-2.0.3.min.js"></script>
-  <script type="text/javascript" src="/static/js/maps/gdp-data.js"></script>
-  <script type="text/javascript" src="/static/js/maps/jquery-jvectormap-world-mill-en.js"></script>
-  <script type="text/javascript" src="/static/js/maps/jquery-jvectormap-us-aea-en.js"></script>
+  <!-- form wizard -->
   <!-- pace -->
-  <script src="/static/js/pace/pace.min.js"></script>
-  <script>
-    $(function() {
-      $('#world-map-gdp').vectorMap({
-        map: 'world_mill_en',
-        backgroundColor: 'transparent',
-        zoomOnScroll: false,
-        series: {
-          regions: [{
-            values: gdpData,
-            scale: ['#E6F2F0', '#149B7E'],
-            normalizeFunction: 'polynomial'
-          }]
-        },
-        onRegionTipShow: function(e, el, code) {
-          el.html(el.html() + ' (GDP - ' + gdpData[code] + ')');
-        }
-      });
-    });
-  </script>
-  <!-- skycons -->
-  <script src="/static/js/skycons/skycons.min.js"></script>
-  <script>
-    var icons = new Skycons({
-        "color": "#73879C"
-      }),
-      list = [
-        "clear-day", "clear-night", "partly-cloudy-day",
-        "partly-cloudy-night", "cloudy", "rain", "sleet", "snow", "wind",
-        "fog"
-      ],
-      i;
 
-    for (i = list.length; i--;)
-      icons.set(list[i], list[i]);
 
-    icons.play();
-  </script>
-
-  <!-- dashbord linegraph -->
-  <script>
-    Chart.defaults.global.legend = {
-      enabled: false
-    };
-
-    var data = {
-      labels: [
-        "Symbian",
-        "Blackberry",
-        "Other",
-        "Android",
-        "IOS"
-      ],
-      datasets: [{
-        data: [15, 20, 30, 10, 30],
-        backgroundColor: [
-          "#BDC3C7",
-          "#9B59B6",
-          "#455C73",
-          "#26B99A",
-          "#3498DB"
-        ],
-        hoverBackgroundColor: [
-          "#CFD4D8",
-          "#B370CF",
-          "#34495E",
-          "#36CAAB",
-          "#49A9EA"
-        ]
-
-      }]
-    };
-
-    var canvasDoughnut = new Chart(document.getElementById("canvas1"), {
-      type: 'doughnut',
-      tooltipFillColor: "rgba(51, 51, 51, 0.55)",
-      data: data
-    });
-  </script>
-  <!-- /dashbord linegraph -->
-
-  <!-- /datepicker -->
-  <!-- /footer content -->
 </body>
 
 </html>

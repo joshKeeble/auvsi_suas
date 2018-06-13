@@ -295,7 +295,7 @@
             </p>
 
             <div class="clearfix"></div>
-            <form class="form-horizontal form-label-left">
+            <form class="form-horizontal form-label-left" method="post">
               <p class="font-gray-dark">
                 Address of the Ground Station Laptop, must be 192.168.1.x, default is address: 192.168.1.42, netmask: 255.255.255.0, broadcast: 192.168.1.255.
               </p>
@@ -305,7 +305,7 @@
                 <label class="control-label col-md-3" for="first-name">Ground Station Address <span class="required">*</span>
                 </label>
                 <div class="col-md-7">
-                  <input type="text" id="first-name2" required="required" class="form-control col-md-7 col-xs-12">
+                  <input type="text" id="ground_station_addr" name="ground_station_addr" required="required" class="form-control col-md-7 col-xs-12">
                 </div>
               </div>
 
@@ -317,7 +317,7 @@
                 <label class="control-label col-md-3" for="last-name">Mission Planner Address <span class="required">*</span>
                 </label>
                 <div class="col-md-7">
-                  <input type="text" id="last-name2" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
+                  <input type="text" id=" mission_planner_addr" name="mission_planner_addr" required="required" class="form-control col-md-7 col-xs-12">
                 </div>
               </div>
 
@@ -329,7 +329,7 @@
                 <label class="control-label col-md-3" for="first-name">Payload Address <span class="required">*</span>
                 </label>
                 <div class="col-md-7">
-                  <input type="text" id="first-name2" required="required" class="form-control col-md-7 col-xs-12">
+                  <input type="text" id="payload_addr" name="payload_addr" required="required" class="form-control col-md-7 col-xs-12">
                 </div>
               </div>
 
@@ -341,7 +341,7 @@
                 <label class="control-label col-md-3" for="last-name">Ground Station to MP Port <span class="required">*</span>
                 </label>
                 <div class="col-md-7">
-                  <input type="text" id="last-name2" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
+                  <input type="text" id="gs2mp_port" name="gs2mp_port" required="required" class="form-control col-md-7 col-xs-12">
                 </div>
               </div>
 
@@ -353,7 +353,7 @@
                 <label class="control-label col-md-3" for="last-name">Ground Station to Payload Port <span class="required">*</span>
                 </label>
                 <div class="col-md-7">
-                  <input type="text" id="last-name2" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
+                  <input type="text" id="gs2pd_port" name="gs2pd_port" required="required" class="form-control col-md-7 col-xs-12">
                 </div>
               </div>
               <a href="/"><button class="btn btn-primary pull-right" onclick="new PNotify({

@@ -78,6 +78,11 @@ class MPInterface(object):
         """Return the flying mode as string"""
         return cs.mode
 
+"""
+===============================================================================
+Mission Planner Interface Class
+===============================================================================
+"""
 
 host = config.MISSION_PLANNER_HOST
 port = config.GROUND_STATION2MISSION_PLANNER_PORT
@@ -100,19 +105,41 @@ def server_test():
     mp_server = mp_coms.MissionPlannerServer(host,port)
     mp_server.listen(server_handle,0x00)
 
+"""
+===============================================================================
+Mission Planner Interface Class
+===============================================================================
+"""
+
 
 def client_test():
 
-    mp_client = mp_coms.MissionPlannerClient(host,port)
+    host = config.GROUND_STATION_HOST
+    port = config.MISSION_PLANNER2GROUND_STATION_PORT
 
     while True:
+
         try:
-            data = [1,2,3,4,5]
+            mp_client = mp_coms.MissionPlannerClient(host,port)
+            data = [cs.lat,cs.lng,cs.alt,cs.groundcourse]
 
             mp_client.send_data(data)
             print('Data sent:{}'.format(data))
+            mp_client.client_socket.close()
         except Exception as e:
             print(e)
-            print("Are you sure that the server is turned on?")
+            print("Are you sure that the Ground Station server is turned on?")
 
+def activate_client():
+    client_thread = threading.Thread(target=client_test,args=())
+    client_thread.daemon = True
+    client_thread.start()
+
+"""
+===============================================================================
+Mission Planner Interface Class
+===============================================================================
+"""
+
+activate_client()
 server_test()
