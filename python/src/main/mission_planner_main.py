@@ -182,7 +182,7 @@ def client_test():
         try:
             #start_time = time.time()
             mp_client = mp_coms.MissionPlannerClient(host,port)
-            data = [cs.lat,cs.lng,cs.alt,cs.groundcourse]
+            data = [cs.lat,cs.lng,cs.alt,cs.groundcourse,cs.airspeed]
             data = list(map(float,data))
 
             mp_client.send_data(data)
