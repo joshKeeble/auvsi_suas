@@ -68,11 +68,11 @@ class TargetProcessing(object):
         #    frame = cv2.resize(frame,(100,100))
         #frame = self.k_cluster(frame,k=2)
         #frame = np.reshape(frame,(100,100,3))
-        #frame = cv2.resize(frame,(50,50))
-        cv2.imshow('original',frame)
+        frame = cv2.resize(frame,(50,50))
+        #cv2.imshow('original',frame)
         frame = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
         frame = self.k_cluster(frame,k=2)
-        cv2.imshow("k-frame",frame)
+        #cv2.imshow("k-frame",frame)
         h,s,v = cv2.split(frame)
 
         shape_color = np.reshape(v,(-1,1))[-1]
@@ -96,8 +96,8 @@ class TargetProcessing(object):
         #    cv2.THRESH_BINARY,115,1)
         v = cv2.Canny(frame,min(background,shape_color)-1,max(background,shape_color))
         v = 255-v
-        cv2.imshow('v',v)
-        return frame
+        #cv2.imshow('v',v)
+        return v
 
     #--------------------------------------------------------------------------
 

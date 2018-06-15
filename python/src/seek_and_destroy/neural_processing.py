@@ -166,9 +166,9 @@ class Dataset():
             #frame_shape = n.shape
             data = image_processing.process_shape_frame(n)
 
-            letter_data = image_processing.process_letter_frame(n)
-            cv2.imshow("frame",data)
-            cv2.waitKey(0)
+            #letter_data = image_processing.process_letter_frame(n)
+            #cv2.imshow("frame",data)
+            #cv2.waitKey(0)
 
             self.data[i] = data
             
@@ -788,7 +788,7 @@ def main():
     letter_data = Dataset(data_root)
 
     letter_data.load_data()
-    sys.exit()
+    # sys.exit()
 
     training_data   = letter_data.training_data()
 

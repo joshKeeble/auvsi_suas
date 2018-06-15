@@ -1,6 +1,9 @@
 import sys
 
-paths = ['', 'C:\\Users\\soffer\\Desktop',
+paths = ['', 
+
+'C:\\Users\\soffer\\Desktop', # Directory that contains /auvsi_suas
+
 'C:\\Users\\soffer\\AppData\\Local\\Continuum\\anaconda3\\envs\\mission_planner\\python27.zip', 
 'C:\\Users\\soffer\\AppData\\Local\\Continuum\\anaconda3\\envs\\mission_planner\\DLLs', 
 'C:\\Users\\soffer\\AppData\\Local\\Continuum\\anaconda3\\envs\\mission_planner\\lib', 
@@ -8,6 +11,7 @@ paths = ['', 'C:\\Users\\soffer\\Desktop',
 'C:\\Users\\soffer\\AppData\\Local\\Continuum\\anaconda3\\envs\\mission_planner\\lib\\lib-tk', 
 'C:\\Users\\soffer\\AppData\\Local\\Continuum\\anaconda3\\envs\\mission_planner', 
 'C:\\Users\\soffer\\AppData\\Local\\Continuum\\anaconda3\\envs\\mission_planner\\lib\\site-packages']
+
 
 for path in paths:
     sys.path.append(path)
