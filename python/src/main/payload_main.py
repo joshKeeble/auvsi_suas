@@ -76,36 +76,70 @@ class PayloadMain(object):
                 display_frame,r_candidates,s_candidates = targeting_functions.roi_process(frame)
                 cv2.imshow("frame",display_frame)
 
-                for roi in s_candidates:
-                    if isinstance(roi,(np.ndarray,list)):
-                        try:
-                            #(x,y,w,h) = list(map(int,roi))
-                            #print(x,y,w,h)
-                            #print(y,min(y+h,height-1),x,min(x+w,width-1))
-                            #region = frame[y:min(y+h,height-1),x:min(x+w,width-1)]
+                if isinstance(r_candidates,np.ndarray):
+                    for roi in r_candidates:
+                        if isinstance(roi,(np.ndarray,list)):
+                            try:
+                                #(x,y,w,h) = list(map(int,roi))
+                                #print(x,y,w,h)
+                                #print(y,min(y+h,height-1),x,min(x+w,width-1))
+                                #region = frame[y:min(y+h,height-1),x:min(x+w,width-1)]
 
 
-                            region = cv2.imread('/home/hal/Desktop/Programming/generated_data/letters/B/circle_B_193.jpg')
-                            #cv2.imshow('region',region)
-                            region = target_preprocessing.process_shape_frame(region)
-                            #shape_pred = shapeNet.evaluate_frame(sess,frame)
-                            #if (pred != 'Noise'):
-                                #letter_pred = letterNet.evaluate_frame(
-                                #    sess,frane) ##### FIX WITH OCR
-                                #if (letter_pred != 'Noise'):
-                                #    gps = fetch_gps.estimate_gps(x+(w/2),y+(h/2))
-                                #    colors = 
-                            cv2.imshow('region',region)
-                            cv2.waitKey(1)
-                        except Exception as e:
-                            exc_type,exc_obj,exc_tb = sys.exc_info()
-                            fname = os.path.split(
-                                exc_tb.tb_frame.f_code.co_filename)[1]
-                            print("Classification Error:",exc_type,fname,
-                                exc_tb.tb_lineno,e,
-                                file=sys.stderr)
-                    else:
-                        pass
+                                region = cv2.imread('/home/hal/Desktop/Programming/generated_data/letters/B/circle_B_193.jpg')
+                                #cv2.imshow('region',region)
+                                region = target_preprocessing.process_shape_frame(region)
+                                #shape_pred = shapeNet.evaluate_frame(sess,frame)
+                                #if (pred != 'Noise'):
+                                    #letter_pred = letterNet.evaluate_frame(
+                                    #    sess,frane) ##### FIX WITH OCR
+                                    #if (letter_pred != 'Noise'):
+                                    #    gps = fetch_gps.estimate_gps(x+(w/2),y+(h/2))
+                                    #    colors = 
+                                cv2.imshow('region',region)
+                                cv2.waitKey(1)
+                            except Exception as e:
+                                exc_type,exc_obj,exc_tb = sys.exc_info()
+                                fname = os.path.split(
+                                    exc_tb.tb_frame.f_code.co_filename)[1]
+                                print("Classification Error:",exc_type,fname,
+                                    exc_tb.tb_lineno,e,
+                                    file=sys.stderr)
+                        else:
+                            pass
+
+                if isinstance(s_candidates,np.ndarray):
+                    for roi in s_candidates:
+                        if isinstance(roi,(np.ndarray,list)):
+                            try:
+                                #(x,y,w,h) = list(map(int,roi))
+                                #print(x,y,w,h)
+                                #print(y,min(y+h,height-1),x,min(x+w,width-1))
+                                #region = frame[y:min(y+h,height-1),x:min(x+w,width-1)]
+
+
+                                region = cv2.imread('/home/hal/Desktop/Programming/generated_data/letters/B/circle_B_193.jpg')
+                                #cv2.imshow('region',region)
+                                region = target_preprocessing.process_shape_frame(region)
+                                #shape_pred = shapeNet.evaluate_frame(sess,frame)
+                                #if (pred != 'Noise'):
+                                    #letter_pred = letterNet.evaluate_frame(
+                                    #    sess,frane) ##### FIX WITH OCR
+                                    #if (letter_pred != 'Noise'):
+                                    #    gps = fetch_gps.estimate_gps(x+(w/2),y+(h/2))
+                                    #    colors = 
+                                cv2.imshow('region',region)
+                                cv2.waitKey(1)
+                            except Exception as e:
+                                exc_type,exc_obj,exc_tb = sys.exc_info()
+                                fname = os.path.split(
+                                    exc_tb.tb_frame.f_code.co_filename)[1]
+                                print("Classification Error:",exc_type,fname,
+                                    exc_tb.tb_lineno,e,
+                                    file=sys.stderr)
+                        else:
+                            pass
+
                 
                 k = cv2.waitKey(1)
                 if (k == ord('q')):

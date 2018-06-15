@@ -140,8 +140,11 @@ class Targeting(object):
             if not (len(frame.shape)==3):
                 raise Exception("Frame arg is not 3D: n dim: {}".format(
                     len(frame.shape)))
-        h,w = frame.shape[:2]
 
+        if not config.USE_BLOB_DETECTION and config.USE_SELECTIVE_SEARCH:
+            raise Exception("No ROI method selected")
+        h,w = frame.shape[:2]
+        r_candidates,s_candidates = None,None
         candidates = []
         if config.DISPLAY_ROI:
             display_frame = frame.copy()
@@ -172,8 +175,11 @@ class Targeting(object):
                         (x+w)*config.FRAME_ROI_RESIZE,
                         (y+h)*config.FRAME_ROI_RESIZE),
                         [0,255,0])
-        r_candidates = np.multiply(r_candidates,config.FRAME_ROI_RESIZE)
-        s_candidates = np.multiply(s_candidates,config.FRAME_ROI_RESIZE)
+        
+        if config.USE_BLOB_DETECTION:
+            r_candidates = np.multiply(r_candidates,config.FRAME_ROI_RESIZE)
+        if config.USE_SELECTIVE_SEARCH:
+            s_candidates = np.multiply(s_candidates,config.FRAME_ROI_RESIZE)
         if config.DISPLAY_ROI:
             return display_frame,r_candidates,s_candidates
         else:

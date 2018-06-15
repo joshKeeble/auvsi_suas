@@ -66,7 +66,7 @@ HESSIAN_MAX_SIGMA           = 10
 HESSIAN_MIN_SIGMA           = 1
 HESSIAN_THRESHOLD           = 0.01
 
-USE_SELECTIVE_SEARCH        = True
+USE_SELECTIVE_SEARCH        = False
 
 # Resize scale for how much to shrink the frame before selective search
 # Larger scale will increase speed but decrease accuracy
