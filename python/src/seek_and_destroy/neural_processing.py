@@ -160,24 +160,16 @@ class Dataset():
         current_marker = 0
         progress = 0
 
-        image_processing = preprocessing.ImageProcessing()
+        image_processing = preprocessing.TargetProcessing()
 
         for i,n in enumerate(self.data):
             #frame_shape = n.shape
             data = image_processing.process_shape_frame(n)
-            #n = np.resize(self.k_cluster(n),frame_shape)
 
-            #canny = np.absolute((cv2.Canny(n,100,200))-255.)
+            letter_data = image_processing.process_letter_frame(n)
+            cv2.imshow("frame",data)
+            cv2.waitKey(0)
 
-            #resized = cv2.resize(n,(50,50))
-
-            #gray = cv2.cvtColor(canny,cv2.COLOR_BGR2GRAY)
-            #gray = cv2.cvtColor(resized,cv2.COLOR_BGR2GRAY)
-            #cv2.imshow("data",data)
-            #print(self.labels[i])
-            #print(self.label_names)
-            #print(self.label_names[self.labels[i].index(1.)])
-            #cv2.waitKey(0)
             self.data[i] = data
             
             #print(self.labels[i])

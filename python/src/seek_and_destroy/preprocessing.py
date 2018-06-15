@@ -52,17 +52,51 @@ class TargetProcessing(object):
 
     #--------------------------------------------------------------------------
 
+    def process_letter_frame(self,frame):
+        frame = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
+        frame = self.k_cluster(frame,k=5)
+
+        cv2.imshow("letter_frame",frame)
+
+
+
+    #--------------------------------------------------------------------------
+
     def process_shape_frame(self,frame):
         """Preprocess the frame for shapes"""
-        if not (np.equal(frame.shape,np.asarray([100,100,3])).all()):
-            frame = cv2.resize(frame,(100,100))
+        #if not (np.equal(frame.shape,np.asarray([100,100,3])).all()):
+        #    frame = cv2.resize(frame,(100,100))
+        #frame = self.k_cluster(frame,k=2)
+        #frame = np.reshape(frame,(100,100,3))
+        #frame = cv2.resize(frame,(50,50))
+        cv2.imshow('original',frame)
+        frame = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
         frame = self.k_cluster(frame,k=2)
-        frame = np.reshape(frame,(100,100,3))
-        frame = cv2.resize(frame,(50,50))
-        frame = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
-        frame = cv2.adaptiveThreshold(frame,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-            cv2.THRESH_BINARY,115,1)
-        frame = cv2.Canny(frame,50,150)
+        cv2.imshow("k-frame",frame)
+        h,s,v = cv2.split(frame)
+
+        shape_color = np.reshape(v,(-1,1))[-1]
+        background = np.reshape(v,(-1,1))[0]
+        for n in np.reshape(v,(-1,1)):
+            if n != background:
+                shape_color = n
+                break
+
+        #print(shape_color)
+        #print(background)
+        #ret,v = cv2.threshold(v,background,shape_color,cv2.THRESH_BINARY)
+        #v = cv2.inRange(frame,background,shape_color)
+
+        #for n in v:
+        #    print(n)
+
+        #frame = cv2.cvtColor(frame,cv2.COLOR_HSV2BGR)
+        #frame = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
+        #v = cv2.adaptiveThreshold(v,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+        #    cv2.THRESH_BINARY,115,1)
+        v = cv2.Canny(frame,min(background,shape_color)-1,max(background,shape_color))
+        v = 255-v
+        cv2.imshow('v',v)
         return frame
 
     #--------------------------------------------------------------------------

@@ -64,6 +64,15 @@ class CameraInterface(object):
 
 	#--------------------------------------------------------------------------
 
+	def init_camera(self):
+		""""Initialize the camera"""
+		if self.use_picamera:
+			self.init_picamera_thread()
+		else:
+			self.init_cv2()
+
+	#--------------------------------------------------------------------------
+
 	def init_cv2(self,usb_id=0):
 		"""Initialize opencv video capture"""
 		self.video_data = cv2.VideoCapture(0)
@@ -80,6 +89,7 @@ class CameraInterface(object):
 			print("No method specified, automatically using cv2",
 				file=sys.stderr)
 			self.init_cv2()
+			ret,frame = self.video_data.read()
 
 		if (self.mode == 'cv2'):
 			ret,frame = self.video_data.read()

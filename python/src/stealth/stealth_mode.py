@@ -9,8 +9,8 @@ Simulation for UAV Mapping
 """
 from __future__ import print_function
 from __future__ import division
-from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon
+from shapely.geometry import Point
 import numpy as np
 import pickle
 import random
@@ -21,6 +21,7 @@ import zlib
 import cv2
 import sys
 import os
+import re
 
 if (sys.platform == 'win32'):
     sys.path.append('C:\\Users\\soffer\\Desktop')
@@ -272,30 +273,15 @@ class StealthMode(object):
                             dy      = updated_mission_waypoints[i+1][1]-o[1]
                             alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
                         else:
-                            #dx      = updated_mission_waypoints[i+1][0]-o[0]
-                            #dy      = updated_mission_waypoints[i+1][1]-o[1]
-                            #alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
+
                             v_dx    = moving_obstacle_direction[j][0]
                             v_dy    = moving_obstacle_direction[j][1]
                             v_alpha = np.arctan(max(v_dy,1e-3)/max(v_dx,1e-3))
-                            #new_x   = dx-2*v_dx
-                            #new_y   = dy-2*v_dy
-                            #if ()
-                            #alpha   = np.arctan(max(new_y,1e-3)/max(new_x,1e-3))
 
-                            #'''
                             if (v_alpha >= 180):
                                 alpha = v_alpha-180
                             else:
                                 alpha = v_alpha+180
-                            #new_x   = dx-2*v_dx
-                            #new_y   = dy-2*v_dy
-                            #if ()
-                            #alpha   = np.arctan(max(new_y,1e-3)/max(new_x,1e-3))
-                            #if not (abs(v_alpha-alpha)<=90):
-                            #    if (alpha > v_alpha):
-                            #        alpha =
-                        #print(alpha)
 
                         new_x   = o[0]+(o[2]+buffer_zone)*np.cos(alpha)
                         new_y   = o[1]+(o[2]+buffer_zone)*np.sin(alpha)
@@ -309,28 +295,16 @@ class StealthMode(object):
                             dy      = updated_mission_waypoints[i+1][1]-o[1]
                             alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
                         else:
-                            #dx      = updated_mission_waypoints[i+1][0]-o[0]
-                            #dy      = updated_mission_waypoints[i+1][1]-o[1]
-                            #alpha   = np.arctan(max(dy,1e-3)/max(dx,1e-3))
+
                             v_dx    = moving_obstacle_direction[j][0]
                             v_dy    = moving_obstacle_direction[j][1]
                             v_alpha = np.arctan(max(v_dy,1e-3)/max(v_dx,1e-3))
-                            #new_x   = dx-2*v_dx
-                            #new_y   = dy-2*v_dy
-                            #if ()
-                            #alpha   = np.arctan(max(new_y,1e-3)/max(new_x,1e-3))
 
-                            #'''
                             if (v_alpha >= 180):
                                 alpha = v_alpha-180
                             else:
                                 alpha = v_alpha+180
-                            #new_x   = dx-2*v_dx
-                            #new_y   = dy-2*v_dy
-                            #if ()
-                            #alpha   = np.arctan(max(new_y,1e-3)/max(new_x,1e-3))
 
-                        #print(alpha)
                             
                         new_x   = o[0]+(o[2]+buffer_zone)*np.cos(alpha)
                         new_y   = o[1]+(o[2]+buffer_zone)*np.sin(alpha)
@@ -350,31 +324,11 @@ class StealthMode(object):
                         v_dx    = moving_obstacle_direction[j][0]
                         v_dy    = moving_obstacle_direction[j][1]
                         v_alpha = np.arctan(max(v_dy,1e-3)/max(v_dx,1e-3))
-                        #new_x   = dx-2*v_dx
-                        #new_y   = dy-2*v_dy
-                        #if ()
-                        #alpha   = np.arctan(max(new_y,1e-3)/max(new_x,1e-3))
 
-                        #'''
                         if (v_alpha >= 180):
                             alpha = v_alpha-180
                         else:
                             alpha = v_alpha+180
-                        '''
-                        if (alpha < 0):
-                            alpha += 360
-                        if (v_alpha < 0):
-                            v_alpha += 360
-
-                        if (max(alpha-v_alpha,0)<90):
-                            if (alpha > v_alpha):
-                                alpha = 2*(90-alpha+v_alpha)+alpha
-                            else:
-                                alpha = 2*(90-v_alpha+alpha)+alpha
-                        '''
-
-
-                    #print(alpha)
                             
                     new_x   = o[0]+(o[2]+buffer_zone)*np.cos(alpha)
                     new_y   = o[1]+(o[2]+buffer_zone)*np.sin(alpha)
@@ -392,6 +346,16 @@ class StealthMode(object):
             Waypoints list in x,y
             Geofence list of polygon points in shapely.Polygon
         """
+        for i,n in enumerate(current_waypoints):
+            current_waypoints[i] = list(n)
+        geo_line_points = []
+        geo_x,geo_y = geofence.exterior.coords.xy
+
+        geo_points = list(zip(geo_x.tolist(),geo_y.tolist()))
+        for i in range(len(geo_points)-1):
+            line = self.fetch_line(geo_points[i],geo_points[i+1])
+            geo_line_points.extend(list(line))
+
         # Temporary copy of waypoints in case an attribute is inputed
         temp_waypoints = current_waypoints.copy()
         for i,p in enumerate(current_waypoints):
@@ -399,17 +363,28 @@ class StealthMode(object):
             # Convert to shapely.Point
             point = Point(p[0],p[1])
 
+
             # If the point is outside, remove point
             if not geofence.contains(point):
 
+                lowest = 1e3
+                best = -1
+                for k,line_point in enumerate(geo_line_points):
+                    dist = np.linalg.norm(np.asarray(p[:2])-np.asarray(line_point))
+                    if dist < lowest:
+                        lowest = dist
+                        best = k
+                temp_waypoints[i][0] = geo_line_points[best][0]
+                temp_waypoints[i][1] = geo_line_points[best][1]
+                
                 # Find index
-                for j,s in enumerate(temp_waypoints):
-                    if np.equal(s,p).all():
-                        p_index = j
-                        break
+                #for j,s in enumerate(temp_waypoints):
+                #    if np.equal(s,p).all():
+                #        p_index = j
+                #        break
 
                 # Remove outside points
-                temp_waypoints = np.delete(temp_waypoints,p_index,0)
+                #temp_waypoints = np.delete(temp_waypoints,p_index,0)
 
         return temp_waypoints
 
@@ -486,12 +461,12 @@ class StealthMode(object):
         """Add the altitude waypoints to the full path"""
         segments = self.segment_path(full_path,primary_waypoints)
         path_placeholder = np.zeros((len(full_path),3))
-        print('-'*80)
-        print("segments:{}".format(segments))
-        for n in segments:
-            print(n)
-        print(len(segments))
-        print('-'*80)
+        #print('-'*80)
+        #print("segments:{}".format(segments))
+        #for n in segments:
+        #    print(n)
+        #print(len(segments))
+        #print('-'*80)
 
         counter = 0
         for i,n in enumerate(segments): 
@@ -509,29 +484,7 @@ class StealthMode(object):
 
         #path_placeholder = path_placeholder[:-1]
         path_placeholder = np.asarray(path_placeholder)
-        """
-        unique_margin = 25
 
-        for i,n in enumerate(path_placeholder):
-            if (i>0) and (i+1<len(path_placeholder)):
-                if np.linalg.norm(n[:2]-path_placeholder[i-1][:2]) < unique_margin:
-                    path_placeholder = np.delete(path_placeholder,i,0)
-                elif np.linalg.norm(n[:2]-path_placeholder[i+1][:2]) < unique_margin:
-                    path_placeholder = np.delete(path_placeholder,i,0)
-
-
-
-        print('-'*80)
-        for n in path_placeholder:
-            print(n)
-        print('-'*80)
-        path_placeholder = path_placeholder[:-1]
-        print('-'*80)
-        for n in path_placeholder:
-            print(n)
-        print('-'*80)
-        sys.exit()
-        """
         return path_placeholder
 
     #--------------------------------------------------------------------------
@@ -638,17 +591,11 @@ class StealthMode(object):
         current_waypoints = temp_waypoints
         
         boundary_points = []
-        #print(boundaries)
+
         fly_zone = boundaries[0].boundary_pts
         for i,n in enumerate(fly_zone):
             (x,y) = self.latlng2ft(n.latitude,n.longitude)
             boundary_points.append((x,y))
-        '''
-        boundary_points = [[-2000,-2000],[3000,-3000], ####### FIX!
-            [3000,4000],[-2000,1700]]
-        # print(boundary_points)
-        '''
-        print(current_waypoints)
 
         #######################################################################
         
@@ -661,7 +608,7 @@ class StealthMode(object):
         primary_waypoints   = current_waypoints.copy()
 
         # Create polygon of boundary
-        #geofence = Polygon(boundary_points)
+        geofence = Polygon(boundary_points)
 
         full_path = []
 
@@ -678,7 +625,7 @@ class StealthMode(object):
 
         current_waypoints = self.partition_path(current_waypoints)
 
-        #current_waypoints = self.apply_geofence(current_waypoints,geofence)
+        current_waypoints = self.apply_geofence(current_waypoints,geofence)
 
         
         steps = len(current_waypoints)-1
@@ -731,8 +678,9 @@ class StealthMode(object):
             if not np.equal(moving_obstacle_direction[i],[0,0]).all():
                 current_obstacles[i][2] = 8
 
-        current_waypoints = self.check_waypoints_obstacles(current_waypoints,
-            current_obstacles,moving_obstacle_direction)
+        if len(current_obstacles):
+            current_waypoints = self.check_waypoints_obstacles(current_waypoints,
+                current_obstacles,moving_obstacle_direction)
 
         for i in range(steps):
             start = current_waypoints[i]
@@ -742,6 +690,11 @@ class StealthMode(object):
 
             # Check if obstacle in way
             if self.check_if_collision(start,goal,current_obstacles):
+
+
+############################################################################################################################################################## 
+#-------------------------- RDP SECTION CAN GO HERE ----------------------------------------------------------------------------------------------------------
+##############################################################################################################################################################
                 #print('Start:',start,'\tGoal',goal)
                 #print(current_waypoints)
                 '''
@@ -778,6 +731,7 @@ class StealthMode(object):
                 print("FULL PATH")
                 print(full_path)
                 '''
+##############################################################################################################################################################
 
                 if len(full_path):
                     if not (np.equal(start,full_path[-1]).all()):
@@ -827,9 +781,6 @@ class StealthMode(object):
 
         self.prev_path = full_path
 
-        #self.segment_path(current_waypoints,primary_waypoints)
-
-
         rescale_up = lambda z: (np.asarray(z)*self.path_scale)
         original_obstacles = list(map(rescale_up,original_obstacles))
         current_obstacles = list(map(rescale_up,current_obstacles))
@@ -838,22 +789,12 @@ class StealthMode(object):
         boundary_points = list(map(rescale_up,boundary_points))
         full_path = list(map(rescale_up,full_path))
 
-        print(full_path,primary_waypoints,waypoint_altitudes)
-        full_path = self.create_altitude_points(full_path,primary_waypoints,waypoint_altitudes)
+        #print(full_path,primary_waypoints,waypoint_altitudes)
+        full_path = self.create_altitude_points(full_path,
+            primary_waypoints,waypoint_altitudes)
 
         self.prev_obstacles = original_obstacles
 
-        '''
-        print('-'*80)
-        print("Obstacles",current_obstacles)
-        print("mission_waypoints",current_waypoints)
-        print("current_position",current_position)
-        print("full_path",full_path)
-        print('-'*80)
-        '''
-        #print('='*80)
-        print(time.time()-start_time)
-        #print('='*80)
 
         if self.display:
 
@@ -868,27 +809,32 @@ class StealthMode(object):
 
             if len(current_obstacles):
                 for i,o in enumerate(original_obstacles):
-                    center = (int((o[0]+(display_size/2))/display_scale),int(((display_size/2)-o[1])/display_scale))
+                    center = (int((o[0]+(display_size/2))/display_scale),
+                        int(((display_size/2)-o[1])/display_scale))
                     r = int(o[2]/display_scale)
 
-                    #dir_line = tuple(list(map(int,np.add(np.asarray(center),10*(moving_obstacle_direction[i])))))
-                    dir_line = (center[0]+10*moving_obstacle_direction[i][0],center[1]-10*moving_obstacle_direction[i][1],)
+                    dir_line = (center[0]+10*moving_obstacle_direction[i][0],
+                        center[1]-10*moving_obstacle_direction[i][1],)
                     dir_line = tuple(map(int,dir_line))
 
                     cv2.line(frame,center,dir_line,(0,0,255),3)
 
-                    cv2.circle(frame,center,r,(0,255,0),thickness=3,lineType=8,shift=0)
+                    cv2.circle(frame,center,r,(0,255,0),thickness=3,
+                        lineType=8,shift=0)
                 #--------------------------------------------------------------
 
                 for i,o in enumerate(current_obstacles):
-                    center = (int((o[0]+(display_size/2))/display_scale),int(((display_size/2)-o[1])/display_scale))
+                    center = (int((o[0]+(display_size/2))/display_scale),
+                        int(((display_size/2)-o[1])/display_scale))
                     r = int(o[2]/display_scale)
 
-                    cv2.circle(frame,center,r,(0,255,0),thickness=2,lineType=8,shift=0)
+                    cv2.circle(frame,center,r,(0,255,0),thickness=2,
+                        lineType=8,shift=0)
 
                     r = int(o[2]/(display_scale*self.obstacle_scale))
 
-                    cv2.circle(frame,center,r,(0,0,255),thickness=4,lineType=8,shift=0)
+                    cv2.circle(frame,center,r,(0,0,255),thickness=4,
+                        lineType=8,shift=0)
 
             #------------------------------------------------------------------
             #'''
@@ -898,22 +844,27 @@ class StealthMode(object):
                 goal = boundary_points[(i+1)%n_boundary]
                 (x1,y1) = start
                 (x2,y2) = goal
-                (x1,y1) = (int((x1+(display_size/2))/display_scale),int(((display_size/2)-y1)/display_scale))
-                (x2,y2) = (int((x2+(display_size/2))/display_scale),int(((display_size/2)-y2)/display_scale))
-                cv2.line(frame,(int(x1),int(y1)),(int(x2),int(y2)),(255,255,255),1)
+                (x1,y1) = (int((x1+(display_size/2))/display_scale),
+                    int(((display_size/2)-y1)/display_scale))
+                (x2,y2) = (int((x2+(display_size/2))/display_scale),
+                    int(((display_size/2)-y2)/display_scale))
+                cv2.line(frame,(int(x1),int(y1)),(int(x2),int(y2)),
+                    (255,255,255),1)
 
             #'''
             #------------------------------------------------------------------
 
             for i,w in enumerate(current_waypoints):
-                center = (int((w[0]+(display_size/2))/display_scale),int(((display_size/2)-w[1])/display_scale))
+                center = (int((w[0]+(display_size/2))/display_scale),
+                    int(((display_size/2)-w[1])/display_scale))
                 r = 3
                 cv2.circle(frame,center,r,(255,0,0),thickness=3,lineType=8,shift=0)
 
             #------------------------------------------------------------------
 
             for i,w in enumerate(primary_waypoints):
-                center = (int((w[0]+(display_size/2))/display_scale),int(((display_size/2)-w[1])/display_scale))
+                center = (int((w[0]+(display_size/2))/display_scale),
+                    int(((display_size/2)-w[1])/display_scale))
                 r = 4
                 cv2.circle(frame,center,r,(255,255,0),thickness=3,lineType=8,shift=0)
 
@@ -923,13 +874,18 @@ class StealthMode(object):
                 (x1,y1,_) = display_path[i]
                 (x2,y2,_) = display_path[i+1]
                 
-                (x1,y1) = (int((x1+(display_size/2))/display_scale),int(((display_size/2)-y1)/display_scale))
-                (x2,y2) = (int((x2+(display_size/2))/display_scale),int(((display_size/2)-y2)/display_scale))
+                (x1,y1) = (int((x1+(display_size/2))/display_scale),
+                    int(((display_size/2)-y1)/display_scale))
+                (x2,y2) = (int((x2+(display_size/2))/display_scale),
+                    int(((display_size/2)-y2)/display_scale))
 
                 cv2.line(frame,(x1,y1),(x2,y2),(255,255,255),1)
             
             cv2.imshow("frame",frame)
             cv2.waitKey(0)
+
+        if self.display:
+            cv2.destroyAllWindows()
 
         output_path = []
         for (x,y,h) in full_path:
@@ -938,177 +894,11 @@ class StealthMode(object):
 
         return output_path
 
-        #sys.exit()
+"""
+===============================================================================
 
-
-
-
-
-
-
-
-
-
-        # Check to see if the current position is being relayed, else wait
-        '''
-        if not isinstance(current_position,np.ndarray):
-            while True:
-                if isinstance(current_position,np.ndarray):
-                    break
-                else:
-                    time.sleep(1e-2)
-
-        # See how long each iteration lasts by creating initial timestamp
-        start_time = time.time()
-
-
-
-        # Convert the current location from gps to feet
-        current_position = self.latlng2ft(current_position[0],
-            current_position[1])
-
-        #print("Current position:{}".format(current_position))
-        
-        # Insert the current position at the beginning of the waypoints
-        mission_waypoints  = np.insert(mission_waypoints,0,
-            current_position,axis=0)
-
-        # Convert the obstacles from gps to feet
-        #for i,n in enumerate(obstacles):
-        #    (lat_ft,lng_ft) = self.latlng2ft(n[0],n[1])
-        #    obstacles[i] = (lat_ft,lng_ft,n[2])
-        mission_waypoints = mission_waypoints.tolist()
-        mission_waypoints.append([-1000,-1000])
-        print(mission_waypoints)
-        #sys.exit()
-
-        mission_waypoints = np.asarray(mission_waypoints)/self.path_scale
-        obstacles = np.asarray(obstacles)/self.path_scale
-
-        original_obstacles = obstacles.copy()
-        # If there are any obstacles
-        if len(obstacles):
-
-            #print(obstacles)
-            # Direction of obstacles
-            moving_obstacle_direction = np.zeros((len(obstacles),2))
-            #if isinstance(self.prev_obstacles,list):
-            #    #print("Why is this not fucking working????")
-            print('-'*80)
-            #print(obstacles)
-            dir_obstacles = []
-            for i,n in enumerate(obstacles):
-                try:
-
-                    prev_o = self.prev_obstacles[i]
-
-                    r = np.linalg.norm(np.asarray(prev_o)-np.asarray(n))
-                    dx = (n[0]-prev_o[0])
-                    dy = (n[1]-prev_o[1])
-                    moving_obstacle_direction[i][0] = dx
-                    moving_obstacle_direction[i][1] = dy
-
-                    dir_line_point = tuple(list(map(int,np.asarray(n[:2])+2000*np.asarray(moving_obstacle_direction[i]))))
-
-                    dir_line = self.fetch_line(n[:2],dir_line_point,stride=5)
-                    print("dir_line",dir_line)
-
-                    #for p in dir_line:
-                    #    dir_obstacles.append((p[0],p[1],n[2]))
-
-                except Exception as e:
-                    print(e)
-
-            print('dir_obstacles',dir_obstacles)
-            obstacles = obstacles.tolist()
-
-            #for n in dir_obstacles:
-            #    print(obstacles,n)
-            #    obstacles.append(n)
-                #obstacles = np.concatenate((obstacles,list(n)))
-            obstacles = np.asarray(obstacles)
-            print("obstacles",obstacles)
-            # Check to see if there are any waypoints inside obstacles
-            updated_mission_waypoints = self.check_waypoints_obstacles(
-                mission_waypoints,obstacles)
-
-            # List to store all path waypoints
-            output_path = []
-
-            # Separate each qaypoint pair
-            for i in range(len(updated_mission_waypoints)-1):
-                starting_point = updated_mission_waypoints[i]
-                goal = updated_mission_waypoints[i+1]
-
-                # Check to see any collisions
-                if self.check_if_collision(starting_point,goal,obstacles):
-
-                    print("COLLISION!! RUN FOR YOUR FUCKING LIFE!!")
-
-                    # Apply RRT
-                    rrt = smoothed_RRT.RRT(
-                            start=starting_point,
-                            goal=goal,
-                            randArea=[int(-5280/self.path_scale),
-                                int(5280/self.path_scale)],
-                            obstacleList=list(np.asarray(
-                                obstacles)/self.path_scale))
-                    path = rrt.Planning(animation=False)      
-
-                    # Smoothen the path
-                    smoothedPath = smoothed_RRT.PathSmoothing(path,
-                        self.max_iterations,obstacles)
-
-                    rdp_path = rdp.rdp(smoothedPath)
-
-                    output_path = rdp_path
-
-                else:
-                    output_path = updated_mission_waypoints
-        else:
-            output_path = mission_waypoints
-
-
-        output_path = np.asarray(output_path)*self.path_scale
-
-        #print("Output path:{}".format(output_path))
-        self.prev_obstacles = original_obstacles
-        obstacles = np.asarray(obstacles)*self.path_scale
-
-        if self.display:
-            updated_mission_waypoints = updated_mission_waypoints*self.path_scale
-            
-            display_scale = 10
-            frame = np.ones((int(10560/display_scale),
-                int(10560/display_scale),3),dtype=np.uint8)*255
-            for i,o in enumerate(obstacles):
-                center = (int((o[0]+5280)/display_scale),int((o[1]+5280)/display_scale))
-                r = int(o[2]/display_scale)
-                #print(center,r)
-                dir_line = tuple(list(map(int,np.asarray(center)+2000*np.asarray(moving_obstacle_direction[i]))))
-                print(dir_line)
-                print(center)
-                cv2.line(frame,center,dir_line,(255,0,0),1)
-                cv2.circle(frame,center,r,(0,255,0),thickness=3,lineType=8,shift=0)
-            #print(mission_waypoints)
-            for i in range(len(output_path)-1):
-                (x1,y1) = output_path[i]
-                (x2,y2) = output_path[i+1]
-                
-                (x1,y1) = (int((x1+5280)/display_scale),int((y1+5280)/display_scale))
-                (x2,y2) = (int((x2+5280)/display_scale),int((y2+5280)/display_scale))
-
-                cv2.line(frame,(x1,y1),(x2,y2),(0,0,0),1)
-            
-            cv2.imshow("frame",frame)
-            cv2.waitKey(1)
-
-        return [self.ft2latlng(lat,lng) for (lat,lng) in output_path]
-        '''
-
-import re
-import sys
-
+===============================================================================
+"""
 
 class ClientBaseType(object):
     """ ClientBaseType is a simple base class which provides basic functions.

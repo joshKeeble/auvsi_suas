@@ -118,6 +118,7 @@ def deploy_payload(drop_zone):
     interface.add_waypoint(drop_zone[0],drop_zone[1],drop_zone[2])
     while (abs(cs.lat-drop_zone[0])>0.00005) and (abs(cs.lng-drop_zone[1])>0.00005) and (abs(cs.alt-drop_zone[2])>30):
         time.sleep(1e-1)
+    time.sleep(3)
     interface.open_payload()
     time.sleep(1)
     interface.close_payload()

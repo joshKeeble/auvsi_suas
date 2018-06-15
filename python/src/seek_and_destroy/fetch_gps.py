@@ -24,7 +24,7 @@ import auvsi_suas.python.src.interfaces.gpsd as gpsd
 ===============================================================================
 """
 
-class GPSEstimator(self):
+class GPSEstimator(object):
 
 	def __init__(self):
 		self.vehicle_gps = [0,0]
